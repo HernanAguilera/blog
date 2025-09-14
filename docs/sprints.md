@@ -2,11 +2,12 @@
 
 ## Sprint 0: Configuración del Proyecto
 
-- [ ] **Tarea 0.1: Configuración del Repositorio y Entorno**
-  - [ ] Inicializar el repositorio Git con un archivo `.gitignore` adecuado.
-  - [ ] Crear la estructura de directorios principal (`backend`, `frontend`).
-  - [ ] Configurar `docker-compose.yml` para el entorno de desarrollo local (Laravel, Nuxt, PostgreSQL, Redis).
-  - [ ] Crear los `Dockerfiles` base para los servicios.
+- [x] **Tarea 0.1: Configuración del Repositorio y Entorno**
+  - [x] Inicializar el repositorio Git con un archivo `.gitignore` adecuado.
+  - [x] Crear la estructura de directorios principal (`backend`, `frontend`).
+  - [x] Configurar `docker-compose.dev.yml` para el entorno de desarrollo local (Laravel, Nuxt, PostgreSQL, Redis).
+  - [x] Configurar `docker-compose.prod.yml` para el entorno de producción optimizado.
+  - [x] Crear los `Dockerfiles` base para los servicios de desarrollo y producción.
 
 - [ ] **Tarea 0.2: Andamiaje del Backend (Laravel)**
   - [ ] Instalar Laravel y sus dependencias.

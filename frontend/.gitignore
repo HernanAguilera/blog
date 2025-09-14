@@ -1,0 +1,7 @@
+# Node / Nuxt
+/node_modules/
+.nuxt
+dist
+.output
+npm-debug.log
+yarn-error.log

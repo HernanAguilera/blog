@@ -203,3 +203,7 @@ Al ejecutar el plan de acción debes crear un ToDo con los diferentes pasos del 
    * Si el plan de acción ya se ejecuto completamente. No hagas nada. Comunicalo al usuario.
    * Si el plan de acción ves que se comenzó a implementar pero está incompleto, notifica al usuario el estado avance y con cuales pasos vas a continuar dentro del plan de acción hasta completarlo
 3. Al ejecutar el plan de acción debes crear un ToDo con los diferentes pasos del plan de acción para que sirva de guía visual para el usuario para saber cual es el progreso que llevas
+
+## Una vez que se haya completado un plan de acción
+
+Debes revisar el archivo [sprints](./docs/sprints.md) y revisar si la acción realizada a completado alguna de las tareas, si es así, editar el archivo para agregarla como completada
