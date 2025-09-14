@@ -9,11 +9,11 @@
   - [x] Configurar `docker-compose.prod.yml` para el entorno de producción optimizado.
   - [x] Crear los `Dockerfiles` base para los servicios de desarrollo y producción.
 
-- [ ] **Tarea 0.2: Andamiaje del Backend (Laravel)**
+- [x] **Tarea 0.2: Andamiaje del Backend (Laravel)**
   - [x] Instalar Laravel y sus dependencias.
   - [x] Crear la estructura de directorios para la Arquitectura Limpia (`src/Domain`, `src/Application`, etc.).
   - [x] Configurar los Service Providers para la inyección de dependencias.
-  - [ ] Configurar herramientas de calidad de código (como PHPStan y Pest).
+  - [x] Configurar herramientas de calidad de código (PHPStan, PHP-CS-Fixer, PHPUnit mejorado).
 
 - [ ] **Tarea 0.3: Andamiaje del Frontend (Nuxt)**
   - [ ] Instalar Nuxt 3 y sus dependencias (Pinia, Tailwind CSS).
