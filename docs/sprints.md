@@ -15,11 +15,11 @@
   - [x] Configurar los Service Providers para la inyección de dependencias.
   - [x] Configurar herramientas de calidad de código (PHPStan, PHP-CS-Fixer, PHPUnit mejorado).
 
-- [ ] **Tarea 0.3: Andamiaje del Frontend (Nuxt)**
-  - [ ] Instalar Nuxt 3 y sus dependencias (Pinia, Tailwind CSS).
-  - [ ] Crear la estructura de directorios para la Arquitectura Limpia (`domain`, `application`, etc.).
-  - [ ] Configurar el contenedor de inyección de dependencias.
-  - [ ] Configurar herramientas de calidad de código (ESLint, Prettier).
+- [x] **Tarea 0.3: Andamiaje del Frontend (Nuxt)**
+  - [x] Instalar Nuxt 3 y sus dependencias (Pinia, Tailwind CSS) usando pnpm.
+  - [x] Crear la estructura de directorios para la Arquitectura Limpia (`domain`, `application`, etc.).
+  - [x] Configurar el contenedor de inyección de dependencias.
+  - [x] Configurar herramientas de calidad de código (ESLint, Prettier).
 
 ## Sprint 1 (Días 1-3): Base de Autenticación
 
