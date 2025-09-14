@@ -171,24 +171,24 @@ BlogV2 is a professional-grade, high-performance blogging platform built from th
 
 ### Quick Start with Docker
 
+These commands allow you to build and run the application using the Docker setup.
+
+#### Development Environment
+
+For local development with hot-reloading.
+
 ```bash
-# Clone the repository (when available)
-git clone https://github.com/your-username/BlogV2.git
-cd BlogV2
+# Build and start the development containers in the background
+docker compose -f docker-compose.dev.yml up -d --build
+```
 
-# Start all services
-docker-compose up -d
+#### Production Environment
 
-# Backend setup
-cd backend
-composer install
-php artisan key:generate
-php artisan migrate --seed
+To simulate and run the production-ready version of the application.
 
-# Frontend setup
-cd ../frontend
-npm install
-npm run dev
+```bash
+# Build and start the production containers in the background
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### Environment Configuration

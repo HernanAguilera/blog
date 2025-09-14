@@ -10,9 +10,9 @@
   - [x] Crear los `Dockerfiles` base para los servicios de desarrollo y producción.
 
 - [ ] **Tarea 0.2: Andamiaje del Backend (Laravel)**
-  - [ ] Instalar Laravel y sus dependencias.
-  - [ ] Crear la estructura de directorios para la Arquitectura Limpia (`src/Domain`, `src/Application`, etc.).
-  - [ ] Configurar los Service Providers para la inyección de dependencias.
+  - [x] Instalar Laravel y sus dependencias.
+  - [x] Crear la estructura de directorios para la Arquitectura Limpia (`src/Domain`, `src/Application`, etc.).
+  - [x] Configurar los Service Providers para la inyección de dependencias.
   - [ ] Configurar herramientas de calidad de código (como PHPStan y Pest).
 
 - [ ] **Tarea 0.3: Andamiaje del Frontend (Nuxt)**
