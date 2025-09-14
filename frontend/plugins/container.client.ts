@@ -1,16 +1,15 @@
-import { getContainer } from '~/shared/container/simple-container'
-import { configureContainer } from '~/shared/container/bindings'
+import { SimpleContainer } from '~/shared/container/simple-container';
+import { configureContainer } from '~/shared/container/bindings';
 
 export default defineNuxtPlugin(() => {
-  const container = getContainer()
+  const container = new SimpleContainer();
 
-  // Configure all service bindings
-  configureContainer(container)
+  // Configurar bindings
+  configureContainer(container);
 
-  // Make container available throughout the app
   return {
     provide: {
-      container,
-    },
-  }
-})
+      container
+    }
+  };
+});

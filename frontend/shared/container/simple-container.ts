@@ -1,61 +1,48 @@
-import type { Container } from '~/shared/types/container'
+import type { ContainerInterface, ServiceBinding } from '../types/container';
 
-export class SimpleContainer implements Container {
-  private services = new Map<string | symbol, any>()
-  private singletons = new Map<string | symbol, any>()
-  private factories = new Map<string | symbol, () => any>()
+export class SimpleContainer implements ContainerInterface {
+  private bindings = new Map<string, ServiceBinding>();
 
-  bind<T>(token: string | symbol, factory: () => T): void {
-    this.factories.set(token, factory)
+  bind<T>(key: string, factory: () => T): void {
+    this.bindings.set(key, {
+      factory,
+      singleton: false,
+    });
   }
 
-  singleton<T>(token: string | symbol, factory: () => T): void {
-    this.factories.set(token, factory)
-    // Mark as singleton
-    this.singletons.set(token, null)
+  singleton<T>(key: string, factory: () => T): void {
+    this.bindings.set(key, {
+      factory,
+      singleton: true,
+    });
   }
 
-  resolve<T>(token: string | symbol): T {
-    // Check if it's a singleton and already instantiated
-    if (this.singletons.has(token)) {
-      const instance = this.singletons.get(token)
-      if (instance !== null) {
-        return instance
+  get<T>(key: string): T {
+    const binding = this.bindings.get(key);
+
+    if (!binding) {
+      throw new Error(`Service '${key}' not found in container`);
+    }
+
+    if (binding.singleton) {
+      if (!binding.instance) {
+        binding.instance = binding.factory();
       }
+      return binding.instance as T;
     }
 
-    // Get factory
-    const factory = this.factories.get(token)
-    if (!factory) {
-      throw new Error(`Service not found: ${String(token)}`)
-    }
-
-    // Create instance
-    const instance = factory()
-
-    // Store singleton instance
-    if (this.singletons.has(token)) {
-      this.singletons.set(token, instance)
-    }
-
-    return instance
+    return binding.factory() as T;
   }
 
-  has(token: string | symbol): boolean {
-    return this.factories.has(token)
+  has(key: string): boolean {
+    return this.bindings.has(key);
   }
-}
 
-// Global container instance
-let containerInstance: Container | null = null
-
-export function getContainer(): Container {
-  if (!containerInstance) {
-    containerInstance = new SimpleContainer()
+  remove(key: string): void {
+    this.bindings.delete(key);
   }
-  return containerInstance
-}
 
-export function setContainer(container: Container): void {
-  containerInstance = container
+  clear(): void {
+    this.bindings.clear();
+  }
 }
