@@ -25,7 +25,7 @@ blog-platform/
 ├── backend/          # Laravel API (not yet created)
 ├── frontend/         # Nuxt 3 application (not yet created)
 ├── docker-compose.yml
-└── project-definitions/  # Planning documents (current content)
+└── docs/             # Planning documents and core context
 ```
 
 ## Key Features (MVP - Phase 1)
@@ -131,11 +131,11 @@ Key tables planned:
 
 All project documentation is organized within the `/docs/` directory:
 
-### `/docs/project-definitions/` - High-level Planning & Architecture
-- `Definition.md` - Complete technical specifications and architecture
-- `Plan de ejecución.md` - Implementation templates and guidelines
-- `Implementación conceptual.md` - Conceptual implementation details
-- `Detalles de implementación.md` - Technical implementation details
+### `/docs/core-context/` - Essential Technical Information
+- All critical technical specifications organized for optimal access
+- Architecture principles, database schema, API endpoints
+- Technology stack, security requirements, code templates (see /docs/templates/)
+- Domain entities, use cases, and service container setup
 
 ### `/docs/HU/` - User Stories (28 stories covering all phases)
 - Each story in a separate markdown file (e.g., `historia-1-autenticacion-y-gestion-de-usuarios.md`)
@@ -153,3 +153,53 @@ All project documentation is organized within the `/docs/` directory:
 - Organized in 3-day sprint cycles for MVP, longer for advanced features
 
 This consolidated structure provides both high-level architectural guidance and granular implementation details for development.
+
+
+# Cómo estar listo para aportar al proyecto
+
+Lee [Readme](./README.md) y luego lee:
+1. [Project overview](./docs/core-context/01-project-overview.md)
+2. [Database schema](./docs/core-context/02-database-schema.md)
+3. [Api endpoints](./docs/core-context/03-api-endpoints.md)
+4. [Architecture principles](./docs/core-context/04-architecture-principles.md)
+5. [Backend structure](./docs/core-context/05-backend-structure.md)
+6. [Frontend structure](./docs/core-context/06-frontend-structure.md)
+7. [Frontend service container](./docs/core-context/07-frontend-service-container.md)
+8. [Development plan](./docs/core-context/08-development-plan.md)
+9. [Technology stack](./docs/core-context/09-technology-stack.md)
+10. [Clean architecture principles](./docs/core-context/10-clean-architecture-principles.md)
+11. [Domain entities key](./docs/core-context/11-domain-entities-key.md)
+12. [Use cases critical](./docs/core-context/12-use-cases-critical.md)
+13. [Security requirements](./docs/core-context/13-security-requirements.md)
+14. [MVP features essential](./docs/core-context/14-mvp-features-essential.md)
+15. [Container service setup](./docs/core-context/15-container-services-setup.md)
+
+## Si te preguntan por estado del proyecto
+
+Revisa el archivo [sprints](./docs/sprints.md). Ahí deberias encontrar todo lo que necesitas para entender que se ha hecho y que no del proyecto.
+
+## Si te piden ejecutar una tarea en especifico
+
+1. Revisar en el proyecto si la tarea/HU ya se encuentra implementada.
+   * Si lo está coompletamente implementada, avisale al usuario y espera instrucciones.
+   * Sino no hay nada hecho de la funcionalidad, pasa a crear el plan de acción desde cero.
+   * Si no se ha implementado nada pero ya tiene un plan de acción creado, revisa si ese plan de acción tiene sentido en función de la tarea que se tiene que resolver, sino lo tiene notifica al usuario, si sí lo tiene pide permiso para ejecutar el plan de acción.
+   * Si lo está implementada a medias revisa si en el directorio docs/action-plans ya hay un plan de acción para la misma. Si hay un plan de acción examina si es correcto y si tiene sentido con el estado actual de la aplicación. Si tiene sentido, indicale al usuario como vas a proceder a partir de este punto. Si es incorrecto o no tiene sentido informale al usuario y espera instrucciones.
+
+## Creando el plan de acción
+
+Una vez el usuario te ha dado el visto bueno para procededr, debes crear dentro del directorio action-plans (dentro de docs, sino existe debes crearlo) un archivo .md con el plan de acción para llevar a cabo esa tarea/HU que el usuario te pidió. Al inicio de este archivo debes colocar una estimación en tiempo de cuanto crees que llevaría realizar las modificaciones.
+
+Una vez hayas terminado tu redacción debes avisar al usuario y esperar autorización para ejecutar el plan de acción.
+
+Al ejecutar el plan de acción debes crear un ToDo con los diferentes pasos del plan de acción para que sirva de guía visual para el usuario para saber cual es el progreso que llevas
+
+## Si te piden ejecutar un plan de acción no creado durante la conversación en curso
+
+1. Busca en [Historias](./docs/HU/) y [Tareas](./docs/task/) la historia/tarea que corresponda al plan de acción
+   * Revisa que exista consistencia entre la historia/tarea que hay en la documentación de tareas e historias y el plan de acción que te están pidiendo ejecutar.
+   * Si el plan de acción no tiene nada que ver, o muy poco, con la tarea/historia que está intentando implementar, no hagas nada y comunicalo al usuario. Espera instrucciones.
+2. Revisa si el plan de acción ya se ha ejecutado.
+   * Si el plan de acción ya se ejecuto completamente. No hagas nada. Comunicalo al usuario.
+   * Si el plan de acción ves que se comenzó a implementar pero está incompleto, notifica al usuario el estado avance y con cuales pasos vas a continuar dentro del plan de acción hasta completarlo
+3. Al ejecutar el plan de acción debes crear un ToDo con los diferentes pasos del plan de acción para que sirva de guía visual para el usuario para saber cual es el progreso que llevas

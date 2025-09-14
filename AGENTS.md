@@ -37,4 +37,4 @@
   - Validate all user input and sanitize HTML.
   - All forms must use Cloudflare Turnstile.
 
-Refer to `/project-definitions/Plan de ejecución.md` for detailed templates and `/project-definitions/Definition.md` for architecture rules.
+Refer to `/docs/templates/` directory for detailed code templates and `/docs/core-context/10-clean-architecture-principles.md` for architecture rules.
