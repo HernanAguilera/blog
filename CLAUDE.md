@@ -56,10 +56,10 @@ php artisan serve
 ### Frontend (Nuxt 3)
 ```bash
 cd frontend
-npm install
-npm run dev
-npm run build
-npm run generate
+pnpm install
+pnpm run dev
+pnpm run build
+pnpm run generate
 ```
 
 ### Development Environment

@@ -14,15 +14,18 @@ docker-compose -f docker-compose.dev.yml up database redis
 
 ### Características del entorno de desarrollo:
 - ✅ Hot reload para Laravel (`php artisan serve`)
-- ✅ Hot reload para Nuxt 3 (`npm run dev`)
+- ✅ Hot reload para Nuxt 3 (`pnpm run dev`)
+- ✅ Gestión de dependencias optimizada con **pnpm**
 - ✅ Volúmenes montados para cambios en tiempo real
+- ✅ Cache global de pnpm para instalaciones más rápidas
 - ✅ Logs detallados y debugging habilitado
 - ✅ Puertos expuestos: Frontend (3000), Backend (8000), DB (5432), Redis (6379)
 
 ### Requisitos previos para desarrollo:
 1. Instalar Laravel en `./backend/`
-2. Instalar Nuxt 3 en `./frontend/`
+2. Instalar Nuxt 3 en `./frontend/` (con pnpm)
 3. Los contenedores esperarán hasta que existan `composer.json` y `package.json`
+4. El frontend utilizará pnpm automáticamente para gestión de dependencias
 
 ## 🏭 Producción (optimizada)
 
@@ -81,7 +84,7 @@ docker-compose -f docker-compose.dev.yml restart backend
 
 # Ejecutar comandos dentro de contenedores
 docker-compose -f docker-compose.dev.yml exec backend php artisan migrate
-docker-compose -f docker-compose.dev.yml exec frontend npm run build
+docker-compose -f docker-compose.dev.yml exec frontend pnpm run build
 ```
 
 ### Producción

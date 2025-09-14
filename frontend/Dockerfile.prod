@@ -1,19 +1,22 @@
-# Multi-stage build para Nuxt 3 en producción
+# Multi-stage build para Nuxt 3 en producción con pnpm
 FROM node:18-alpine as build
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package*.json ./
+# Install pnpm globally
+RUN npm install -g pnpm
 
-# Install dependencies
-RUN npm ci --only=production --silent
+# Copy package files first for better caching
+COPY package*.json pnpm-lock.yaml ./
+
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile --prod=false
 
 # Copy source code
 COPY . .
 
 # Build the application for production (static generation)
-RUN npm run generate
+RUN pnpm run generate
 
 # Production stage with nginx
 FROM nginx:alpine as production

@@ -80,7 +80,7 @@ services:
     networks:
       - blogv2_dev_network
 
-  # Nuxt 3 Frontend - DESARROLLO (con hot reload)
+  # Nuxt 3 Frontend - DESARROLLO (con hot reload usando pnpm)
   frontend:
     image: node:18-alpine
     container_name: blogv2_dev_frontend
@@ -88,12 +88,13 @@ services:
     working_dir: /app
     command: >
       sh -c "
+        npm install -g pnpm &&
         if [ ! -f /app/package.json ]; then
           echo 'Nuxt no instalado aún, esperando...';
           sleep infinity;
         else
-          npm install &&
-          npm run dev;
+          pnpm install &&
+          pnpm run dev;
         fi
       "
     environment:
@@ -106,6 +107,7 @@ services:
       - "24678:24678" # Puerto para hot reload
     volumes:
       - ./frontend:/app
+      - pnpm_store:/root/.local/share/pnpm # Cache global de pnpm
       - /app/node_modules # Named volume para node_modules
     depends_on:
       - backend
@@ -116,6 +118,8 @@ volumes:
   postgres_dev_data:
     driver: local
   redis_dev_data:
+    driver: local
+  pnpm_store:
     driver: local
 
 networks:
