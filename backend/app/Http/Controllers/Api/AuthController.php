@@ -12,6 +12,8 @@ use App\src\Application\UseCases\Auth\RegisterUserUseCase;
 use App\src\Application\UseCases\Auth\LogoutUserUseCase;
 use App\src\Application\DTOs\Auth\LoginUserDTO;
 use App\src\Application\DTOs\Auth\RegisterUserDTO;
+use App\src\Application\Services\Security\SecurityLoggerInterface;
+use App\src\Application\Services\Security\IPBlockServiceInterface;
 use App\src\Domain\User\Exceptions\UserNotFoundException;
 use App\src\Domain\User\Exceptions\UserAlreadyExistsException;
 use App\src\Domain\User\Exceptions\AuthenticationException;
@@ -23,18 +25,37 @@ class AuthController extends Controller
     public function __construct(
         private readonly LoginUserUseCase $loginUserUseCase,
         private readonly RegisterUserUseCase $registerUserUseCase,
-        private readonly LogoutUserUseCase $logoutUserUseCase
+        private readonly LogoutUserUseCase $logoutUserUseCase,
+        private readonly SecurityLoggerInterface $securityLogger,
+        private readonly IPBlockServiceInterface $ipBlockService
     ) {}
 
     public function login(LoginRequest $request): JsonResponse
     {
+        $email = $request->validated('email');
+        $ip = $request->ip();
+
+        // Check if IP is blocked
+        if ($this->ipBlockService->isBlocked($ip)) {
+            $remainingTime = $this->ipBlockService->getRemainingBlockTime($ip);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'IP temporarily blocked due to too many failed attempts',
+                'errors' => ['ip_blocked' => ["IP blocked for {$remainingTime} more minutes"]]
+            ], 429);
+        }
+
         try {
             $dto = new LoginUserDTO(
-                email: $request->validated('email'),
+                email: $email,
                 password: $request->validated('password')
             );
 
             $result = $this->loginUserUseCase->execute($dto);
+
+            // Log successful login
+            $this->securityLogger->logSuccessfulLogin($email, $ip);
 
             return response()->json([
                 'success' => true,
@@ -54,6 +75,10 @@ class AuthController extends Controller
             ]);
 
         } catch (UserNotFoundException $e) {
+            // Log failed login and record attempt
+            $this->securityLogger->logFailedLogin($email, $ip, 'User not found');
+            $this->ipBlockService->recordFailedAttempt($ip, 'login');
+
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials',
@@ -61,6 +86,10 @@ class AuthController extends Controller
             ], 401);
 
         } catch (AuthenticationException $e) {
+            // Log failed login and record attempt
+            $this->securityLogger->logFailedLogin($email, $ip, $e->getMessage());
+            $this->ipBlockService->recordFailedAttempt($ip, 'login');
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
@@ -68,6 +97,10 @@ class AuthController extends Controller
             ], $e->getCode());
 
         } catch (\Exception $e) {
+            // Log failed login and record attempt for unexpected errors
+            $this->securityLogger->logFailedLogin($email, $ip, 'Unexpected error: ' . $e->getMessage());
+            $this->ipBlockService->recordFailedAttempt($ip, 'login');
+
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred during login',

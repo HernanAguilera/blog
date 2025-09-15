@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     // Traditional authentication
-    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login'])->middleware(['throttle:login', 'turnstile']);
+    Route::post('register', [AuthController::class, 'register'])->middleware('turnstile');
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth.jwt');
 
     // Social authentication

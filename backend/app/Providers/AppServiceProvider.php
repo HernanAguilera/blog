@@ -3,7 +3,13 @@
 namespace App\Providers;
 
 use App\src\Application\Services\Auth\SocialAuthServiceInterface;
+use App\src\Application\Services\Security\TurnstileServiceInterface;
+use App\src\Application\Services\Security\SecurityLoggerInterface;
+use App\src\Application\Services\Security\IPBlockServiceInterface;
 use App\src\Infrastructure\Services\SocialAuthService;
+use App\src\Infrastructure\Services\TurnstileService;
+use App\src\Infrastructure\Services\SecurityLogger;
+use App\src\Infrastructure\Services\IPBlockService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -18,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register Social Authentication Service
         $this->app->bind(SocialAuthServiceInterface::class, SocialAuthService::class);
+
+        // Register Turnstile Service
+        $this->app->bind(TurnstileServiceInterface::class, TurnstileService::class);
+
+        // Register Security Services
+        $this->app->bind(SecurityLoggerInterface::class, SecurityLogger::class);
+        $this->app->bind(IPBlockServiceInterface::class, IPBlockService::class);
     }
 
     /**

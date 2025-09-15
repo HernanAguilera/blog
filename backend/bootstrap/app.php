@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth.jwt' => \App\Http\Middleware\JwtAuthMiddleware::class,
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+            'turnstile' => \App\Http\Middleware\TurnstileMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

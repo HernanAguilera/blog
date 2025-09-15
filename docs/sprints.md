@@ -30,9 +30,9 @@
 
 ## Sprint 2 (Días 4-6): OAuth y Seguridad
 
-- [ ] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
+- [x] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
   - [x] [Tarea 1.3: OAuth Social (Backend)](./task/tarea-1-3-oauth-social-backend.md)
-  - [ ] [Tarea 1.5: Seguridad y Rate Limiting](./task/tarea-1-5-seguridad-y-rate-limiting.md)
+  - [x] [Tarea 1.5: Seguridad y Rate Limiting](./task/tarea-1-5-seguridad-y-rate-limiting.md)
 
 ## Sprint 3 (Días 7-9): Frontend Autenticación
 

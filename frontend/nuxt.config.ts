@@ -14,6 +14,10 @@ export default defineNuxtConfig({
     typeCheck: true
   },
 
+  devServer: {
+    host: '0.0.0.0'
+  },
+
 
   runtimeConfig: {
     public: {
