@@ -75,4 +75,9 @@ interface JwtServiceInterface
      * Expected format: "Bearer {token}"
      */
     public function extractTokenFromHeader(?string $authHeader): ?string;
+
+    /**
+     * Get token expiration date.
+     */
+    public function getTokenExpiration(string $token): \DateTimeImmutable;
 }

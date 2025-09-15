@@ -28,6 +28,7 @@ final class User
         $this->createdAt = $createdAt ?? new DateTimeImmutable();
     }
 
+
     public static function create(
         string $name,
         Email $email,

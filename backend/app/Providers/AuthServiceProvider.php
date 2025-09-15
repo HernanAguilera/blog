@@ -18,13 +18,13 @@ class AuthServiceProvider extends ServiceProvider
         // Register User Repository Interface
         $this->app->bind(
             UserRepositoryInterface::class,
-            \App\Infrastructure\Persistence\Eloquent\EloquentUserRepository::class
+            \App\src\Infrastructure\Persistence\Eloquent\EloquentUserRepository::class
         );
 
         // Register JWT Service Interface
         $this->app->bind(
             JwtServiceInterface::class,
-            \App\Infrastructure\Services\Auth\LaravelJwtService::class
+            \App\src\Infrastructure\Services\Auth\LaravelJwtService::class
         );
     }
 

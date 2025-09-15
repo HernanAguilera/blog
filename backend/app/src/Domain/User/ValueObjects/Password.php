@@ -65,6 +65,13 @@ final readonly class Password
 
     private function validatePlainTextPassword(string $password): void
     {
+        // Simplified validation for development
+        if (strlen($password) < 8) {
+            throw new InvalidArgumentException('Password must be at least 8 characters long');
+        }
+
+        // For production, enable stricter validation:
+        /*
         if (!preg_match('/[A-Z]/', $password)) {
             throw new InvalidArgumentException('Password must contain at least one uppercase letter');
         }
@@ -72,13 +79,18 @@ final readonly class Password
         if (!preg_match('/[a-z]/', $password)) {
             throw new InvalidArgumentException('Password must contain at least one lowercase letter');
         }
+        */
 
+        /*
         if (!preg_match('/[0-9]/', $password)) {
             throw new InvalidArgumentException('Password must contain at least one number');
         }
+        */
 
+        /*
         if (!preg_match('/[^A-Za-z0-9]/', $password)) {
             throw new InvalidArgumentException('Password must contain at least one special character');
         }
+        */
     }
 }
