@@ -84,7 +84,7 @@ docker-compose up -d
 
 ### Database Structure
 Key tables planned:
-- Users & Roles (Spatie Permission)
+- Users with role field (custom Permission system)
 - Posts with translations (multi-language)
 - Comments with moderation states
 - Newsletter subscribers
@@ -119,7 +119,7 @@ Key tables planned:
 
 ## Important Notes for Implementation
 
-- Use Spatie Permission package for roles/permissions
+- Use custom Permission enum system for roles/permissions
 - Implement auto-save every 30 seconds in editor
 - Posts URL structure: /{locale}/{year}/{month}/{slug}
 - All forms require Cloudflare Turnstile validation
@@ -207,3 +207,16 @@ Al ejecutar el plan de acción debes crear un ToDo con los diferentes pasos del 
 ## Una vez que se haya completado un plan de acción
 
 Debes revisar el archivo [sprints](./docs/sprints.md) y revisar si la acción realizada a completado alguna de las tareas, si es así, editar el archivo para agregarla como completada
+
+## Importante sobre archivos generados con php artisan make:*
+
+**REGLA CRÍTICA:** Todos los archivos generados con comandos `php artisan make:*` (make:request, make:controller, make:model, make:migration, make:middleware, etc.) tendrán ownership de root que impide editarlos directamente.
+
+**Protocolo obligatorio:**
+1. **NUNCA** intentes hacer `chmod` directamente, el problema es de ownership, no de permisos
+2. **INMEDIATAMENTE** después de ejecutar cualquier comando `make:*`, informa al usuario qué archivos fueron generados
+3. **SOLICITA** al usuario que ejecute `sudo chown $USER:$USER [archivo(s)]` para cambiar el ownership
+4. **ESPERA** confirmación del usuario antes de intentar editar esos archivos
+5. **NO** continúes con la implementación hasta que el ownership esté corregido
+
+Esta regla aplica para CUALQUIER archivo generado por artisan, sin excepción.

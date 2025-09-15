@@ -46,8 +46,8 @@ services:
         apt-get update &&
         apt-get install -y libpq-dev libzip-dev zip unzip git curl &&
         docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&
-        docker-php-ext-install pdo pdo_pgsql pgsql zip &&
-        pecl install redis && docker-php-ext-enable redis &&
+        (docker-php-ext-install pdo pdo_pgsql pgsql zip || echo 'Extensions already installed') &&
+        (pecl install redis && docker-php-ext-enable redis || echo 'Redis already installed') &&
         curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
         if [ ! -f /var/www/html/composer.json ]; then
           echo 'Laravel no instalado aún, esperando...';
