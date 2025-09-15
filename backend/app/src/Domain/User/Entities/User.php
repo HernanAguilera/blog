@@ -7,6 +7,8 @@ namespace App\src\Domain\User\Entities;
 use App\src\Domain\User\ValueObjects\Email;
 use App\src\Domain\User\ValueObjects\Password;
 use App\src\Domain\User\ValueObjects\Permission;
+use App\src\Domain\User\ValueObjects\SocialProvider;
+use App\src\Domain\User\ValueObjects\SocialUserData;
 use App\src\Domain\User\ValueObjects\UserId;
 use App\src\Domain\User\ValueObjects\UserRole;
 use DateTimeImmutable;
@@ -16,6 +18,8 @@ final class User
     private DateTimeImmutable $createdAt;
     private ?DateTimeImmutable $updatedAt = null;
     private ?DateTimeImmutable $emailVerifiedAt = null;
+    private ?string $socialId = null;
+    private ?SocialProvider $socialProvider = null;
 
     public function __construct(
         private ?UserId $id,
@@ -24,9 +28,13 @@ final class User
         private Password $password,
         private UserRole $role = UserRole::GUEST,
         private bool $isActive = true,
-        ?DateTimeImmutable $createdAt = null
+        ?DateTimeImmutable $createdAt = null,
+        ?string $socialId = null,
+        ?SocialProvider $socialProvider = null
     ) {
         $this->createdAt = $createdAt ?? new DateTimeImmutable();
+        $this->socialId = $socialId;
+        $this->socialProvider = $socialProvider;
     }
 
 
@@ -54,7 +62,9 @@ final class User
         bool $isActive = true,
         ?string $createdAt = null,
         ?string $updatedAt = null,
-        ?string $emailVerifiedAt = null
+        ?string $emailVerifiedAt = null,
+        ?string $socialId = null,
+        ?string $socialProvider = null
     ): self {
         $user = new self(
             id: $id ? new UserId($id) : null,
@@ -63,7 +73,9 @@ final class User
             password: Password::fromHash($hashedPassword),
             role: UserRole::from($role),
             isActive: $isActive,
-            createdAt: $createdAt ? new DateTimeImmutable($createdAt) : new DateTimeImmutable()
+            createdAt: $createdAt ? new DateTimeImmutable($createdAt) : new DateTimeImmutable(),
+            socialId: $socialId,
+            socialProvider: $socialProvider ? SocialProvider::from($socialProvider) : null
         );
 
         if ($updatedAt) {
@@ -228,7 +240,68 @@ final class User
             'created_at' => $this->createdAt->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
             'email_verified_at' => $this->emailVerifiedAt?->format('Y-m-d H:i:s'),
+            'social_id' => $this->socialId,
+            'social_provider' => $this->socialProvider?->value,
         ];
+    }
+
+    public static function createFromSocial(SocialUserData $socialData): self
+    {
+        $user = new self(
+            id: null,
+            name: $socialData->getName(),
+            email: new Email($socialData->getEmail()),
+            password: Password::fromPlainText(bin2hex(random_bytes(32))), // Random password for OAuth users
+            role: UserRole::GUEST,
+            isActive: true,
+            createdAt: new DateTimeImmutable(),
+            socialId: $socialData->getSocialId(),
+            socialProvider: $socialData->getProvider()
+        );
+
+        // OAuth users are auto-verified
+        $user->emailVerifiedAt = new DateTimeImmutable();
+
+        return $user;
+    }
+
+    public function linkSocialAccount(string $socialId, SocialProvider $provider): void
+    {
+        $this->socialId = $socialId;
+        $this->socialProvider = $provider;
+        $this->markAsUpdated();
+    }
+
+    public function unlinkSocialAccount(): void
+    {
+        $this->socialId = null;
+        $this->socialProvider = null;
+        $this->markAsUpdated();
+    }
+
+    public function hasSocialAccount(): bool
+    {
+        return $this->socialId !== null && $this->socialProvider !== null;
+    }
+
+    public function getSocialId(): ?string
+    {
+        return $this->socialId;
+    }
+
+    public function getSocialProvider(): ?SocialProvider
+    {
+        return $this->socialProvider;
+    }
+
+    public function isSocialUser(): bool
+    {
+        return $this->hasSocialAccount();
+    }
+
+    public function isLocalUser(): bool
+    {
+        return !$this->hasSocialAccount() || ($this->hasSocialAccount() && $this->password->getValue() !== null);
     }
 
     private function markAsUpdated(): void

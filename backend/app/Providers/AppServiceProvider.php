@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\src\Application\Services\Auth\SocialAuthServiceInterface;
+use App\src\Infrastructure\Services\SocialAuthService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register Social Authentication Service
+        $this->app->bind(SocialAuthServiceInterface::class, SocialAuthService::class);
     }
 
     /**
@@ -41,6 +44,21 @@ class AppServiceProvider extends ServiceProvider
                         'success' => false,
                         'message' => 'Too many login attempts. Please try again later.',
                         'errors' => ['rate_limit' => ['Too many attempts from this IP address']]
+                    ], 429, $headers);
+                });
+        });
+
+        // Social authentication rate limiting: 10 per minute
+        RateLimiter::for('social-auth', function (Request $request) {
+            $maxAttempts = app()->environment('production') ? 10 : 30;
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Too many social authentication attempts. Please try again later.',
+                        'errors' => ['rate_limit' => ['Too many social auth attempts from this IP address']]
                     ], 429, $headers);
                 });
         });

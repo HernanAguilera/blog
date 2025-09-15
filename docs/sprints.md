@@ -23,7 +23,7 @@
 
 ## Sprint 1 (Días 1-3): Base de Autenticación
 
-- [ ] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
+- [x] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
   - [x] [Tarea 1.1: Configuración Base de Autenticación](./task/tarea-1-1-configuracion-base-de-autenticacion.md)
   - [x] [Tarea 1.2: Autenticación Tradicional (Backend)](./task/tarea-1-2-autenticacion-tradicional-backend.md)
   - [x] [Tarea 1.4: Sistema de Roles (Backend)](./task/tarea-1-4-sistema-de-roles-backend.md)
@@ -31,7 +31,7 @@
 ## Sprint 2 (Días 4-6): OAuth y Seguridad
 
 - [ ] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
-  - [ ] [Tarea 1.3: OAuth Social (Backend)](./task/tarea-1-3-oauth-social-backend.md)
+  - [x] [Tarea 1.3: OAuth Social (Backend)](./task/tarea-1-3-oauth-social-backend.md)
   - [ ] [Tarea 1.5: Seguridad y Rate Limiting](./task/tarea-1-5-seguridad-y-rate-limiting.md)
 
 ## Sprint 3 (Días 7-9): Frontend Autenticación
