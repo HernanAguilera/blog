@@ -15,28 +15,37 @@ enum UserRole: string
     {
         return match($this) {
             self::SUPER_ADMIN => [
-                'manage_users',
-                'manage_posts',
-                'manage_comments',
-                'manage_settings',
-                'manage_system',
-                'moderate_content',
-                'view_analytics'
+                Permission::MANAGE_USERS,
+                Permission::MANAGE_POSTS,
+                Permission::MANAGE_COMMENTS,
+                Permission::MANAGE_SETTINGS,
+                Permission::MANAGE_SYSTEM,
+                Permission::MODERATE_COMMENTS,
+                Permission::VIEW_ANALYTICS,
+                Permission::MANAGE_NEWSLETTER,
+                Permission::MANAGE_MEDIA,
+                Permission::MANAGE_PAGES,
             ],
             self::ADMIN => [
-                'manage_posts',
-                'manage_comments',
-                'moderate_content',
-                'view_analytics'
+                Permission::MANAGE_POSTS,
+                Permission::MANAGE_COMMENTS,
+                Permission::MODERATE_COMMENTS,
+                Permission::VIEW_ANALYTICS,
+                Permission::MANAGE_NEWSLETTER,
+                Permission::UPLOAD_MEDIA,
+                Permission::CREATE_PAGES,
+                Permission::EDIT_PAGES,
             ],
             self::COLLABORATOR => [
-                'create_posts',
-                'edit_own_posts',
-                'view_own_analytics'
+                Permission::CREATE_POSTS,
+                Permission::EDIT_OWN_POSTS,
+                Permission::VIEW_OWN_ANALYTICS,
+                Permission::UPLOAD_MEDIA,
+                Permission::CREATE_COMMENTS,
             ],
             self::GUEST => [
-                'read_posts',
-                'create_comments'
+                Permission::READ_POSTS,
+                Permission::CREATE_COMMENTS,
             ]
         };
     }
@@ -51,24 +60,14 @@ enum UserRole: string
         };
     }
 
-    public function canManageUsers(): bool
+    public function hasPermission(Permission $permission): bool
     {
-        return $this === self::SUPER_ADMIN;
+        return in_array($permission, $this->getPermissions());
     }
 
-    public function canManagePosts(): bool
+    public function can(Permission $permission): bool
     {
-        return in_array($this, [self::SUPER_ADMIN, self::ADMIN]);
-    }
-
-    public function canModerateComments(): bool
-    {
-        return in_array($this, [self::SUPER_ADMIN, self::ADMIN]);
-    }
-
-    public function canCreatePosts(): bool
-    {
-        return in_array($this, [self::SUPER_ADMIN, self::ADMIN, self::COLLABORATOR]);
+        return $this->hasPermission($permission);
     }
 
     public function isHigherThan(UserRole $other): bool

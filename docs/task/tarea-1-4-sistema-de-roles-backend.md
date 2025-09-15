@@ -2,8 +2,10 @@
 
 #### **Tarea 1.4: Sistema de Roles (Backend)**
 
-- 1.4.1 Configurar Spatie Permission package
-- 1.4.2 Crear migraciones para roles y permisos
-- 1.4.3 Implementar UserRole value object con métodos de autorización
-- 1.4.4 Crear seeders para roles: SuperAdmin, Admin, Colaborador, Invitado
-- 1.4.5 Crear middleware de autorización por roles
+- 1.4.1 ✅ Implementar Permission enum con constantes escalables
+- 1.4.2 ✅ Usar migración existente (campo role en users table)
+- 1.4.3 ✅ Implementar UserRole value object con método can(Permission) genérico
+- 1.4.4 ✅ Crear seeders para roles: SuperAdmin, Admin, Colaborador, Invitado
+- 1.4.5 ✅ Crear PermissionMiddleware para autorización granular
+
+**Decisión Arquitectónica:** Sistema custom en lugar de Spatie Permission para mayor simplicidad, performance y escalabilidad controlada. La solución actual permite agregar/modificar permisos sin cambios en BD o middleware.

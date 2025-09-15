@@ -6,6 +6,7 @@ namespace App\src\Domain\User\Entities;
 
 use App\src\Domain\User\ValueObjects\Email;
 use App\src\Domain\User\ValueObjects\Password;
+use App\src\Domain\User\ValueObjects\Permission;
 use App\src\Domain\User\ValueObjects\UserId;
 use App\src\Domain\User\ValueObjects\UserRole;
 use DateTimeImmutable;
@@ -190,9 +191,14 @@ final class User
         return $this->password->verify($plainPassword);
     }
 
-    public function hasPermission(string $permission): bool
+    public function hasPermission(Permission $permission): bool
     {
-        return in_array($permission, $this->role->getPermissions());
+        return $this->role->hasPermission($permission);
+    }
+
+    public function can(Permission $permission): bool
+    {
+        return $this->hasPermission($permission);
     }
 
     public function canManageUser(User $targetUser): bool

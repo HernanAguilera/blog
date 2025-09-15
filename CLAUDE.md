@@ -84,7 +84,7 @@ docker-compose up -d
 
 ### Database Structure
 Key tables planned:
-- Users & Roles (Spatie Permission)
+- Users with role field (custom Permission system)
 - Posts with translations (multi-language)
 - Comments with moderation states
 - Newsletter subscribers
@@ -119,7 +119,7 @@ Key tables planned:
 
 ## Important Notes for Implementation
 
-- Use Spatie Permission package for roles/permissions
+- Use custom Permission enum system for roles/permissions
 - Implement auto-save every 30 seconds in editor
 - Posts URL structure: /{locale}/{year}/{month}/{slug}
 - All forms require Cloudflare Turnstile validation
