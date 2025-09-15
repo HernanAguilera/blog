@@ -88,6 +88,7 @@ Lee [Readme](./README.md) y luego lee:
 13. [Security requirements](./docs/core-context/13-security-requirements.md)
 14. [MVP features essential](./docs/core-context/14-mvp-features-essential.md)
 15. [Container service setup](./docs/core-context/15-container-services-setup.md)
+16. [Typscript conventions](./docs/core-context/16-typescript-conventions.md)
 
 ## Si te preguntan por estado del proyecto
 

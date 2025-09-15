@@ -173,6 +173,7 @@ Lee [Readme](./README.md) y luego lee:
 13. [Security requirements](./docs/core-context/13-security-requirements.md)
 14. [MVP features essential](./docs/core-context/14-mvp-features-essential.md)
 15. [Container service setup](./docs/core-context/15-container-services-setup.md)
+16. [Typscript conventions](./docs/core-context/16-typescript-conventions.md)
 
 ## Si te preguntan por estado del proyecto
 
@@ -220,3 +221,45 @@ Debes revisar el archivo [sprints](./docs/sprints.md) y revisar si la acción re
 5. **NO** continúes con la implementación hasta que el ownership esté corregido
 
 Esta regla aplica para CUALQUIER archivo generado por artisan, sin excepción.
+
+## Convenciones de TypeScript
+
+**REGLA CRÍTICA:** Separación estricta entre `interface` y `type`.
+
+### Interface vs Type Usage
+- **Interfaces**: SOLO para definir abstracciones y contratos de comportamiento
+- **Types**: SOLO para definir formas de datos y estructuras
+
+### Organización de archivos:
+- **Interfaces**: Cada interfaz en su propio archivo `[name].interface.ts`
+- **Types**: Tipos relacionados agrupados en archivos `[domain].types.ts`
+
+### Ejemplos:
+```typescript
+// ✅ Correcto - Abstracción
+// user-repository.interface.ts
+export interface UserRepositoryInterface {
+    save(user: User): Promise<void>;
+}
+
+// ✅ Correcto - Tipos de datos
+// auth.types.ts
+export type LoginCredentials = {
+    email: string;
+    password: string;
+};
+
+// ❌ Incorrecto - NO usar interface para datos
+export interface LoginCredentials {
+    email: string;
+    password: string;
+}
+```
+
+**Beneficios:**
+- Clara separación de responsabilidades
+- Mejor organización del código
+- Imports más claros y mantenibles
+- Aprovecha las fortalezas de cada construcción TypeScript
+
+Ver documentación completa: [TypeScript Conventions](./docs/core-context/16-typescript-conventions.md)

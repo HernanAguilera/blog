@@ -1,37 +1,57 @@
 import type { ContainerInterface } from '../types/container';
 
-export const configureContainer = (container: ContainerInterface) => {
-    // const config = useRuntimeConfig(); // Solo disponible en composables de Nuxt
+// Infrastructure imports
+import { LocalTokenStorage } from '../../infrastructure/storage/local-token.storage';
+import { HttpClientService } from '../../infrastructure/services/http-client.service';
+import { HttpUserRepository } from '../../infrastructure/repositories/http-user.repository';
 
+// Infrastructure types
+import type { TokenStorageInterface } from '../../infrastructure/storage/token-storage.interface';
+import type { HttpClientInterface } from '../../infrastructure/services/http-client.interface';
+import type { UserRepositoryInterface } from '../../domain/repositories/user-repository.interface';
+
+// Application imports
+import { AuthorizationService } from '../../application/services/authorization.service';
+import { LoginUserUseCase } from '../../application/use-cases/login-user.use-case';
+import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
+import { LogoutUserUseCase } from '../../application/use-cases/logout-user.use-case';
+
+export const configureContainer = (container: ContainerInterface) => {
     // ========== STORAGE SERVICES ==========
-    // container.singleton('TokenStorage', () => new LocalTokenStorage());
-    // container.singleton('CacheStorage', () => new BrowserCacheStorage());
-    // container.singleton('SessionStorage', () => new BrowserSessionStorage());
+    container.singleton('TokenStorage', () => new LocalTokenStorage());
 
     // ========== HTTP CLIENT ==========
-    // container.singleton('HttpClient', () =>
-    //     new HttpClient(
-    //         config.public.apiBaseUrl,
-    //         container.get('TokenStorage'),
-    //         {
-    //             timeout: 30000,
-    //             retries: 3,
-    //             retryDelay: 1000
-    //         }
-    //     )
-    // );
+    container.singleton('HttpClient', () => {
+        const tokenStorage = container.get('TokenStorage') as TokenStorageInterface;
+        return new HttpClientService(tokenStorage, {
+            timeout: 30000,
+            retries: 3,
+            retryDelay: 1000
+        });
+    });
 
     // ========== REPOSITORIES ==========
-    // container.singleton('UserRepository', () => new HttpUserRepository(/*...*/));
-    // container.singleton('PostRepository', () => new HttpPostRepository(/*...*/));
+    container.singleton('UserRepository', () => {
+        const httpClient = container.get('HttpClient') as HttpClientInterface;
+        return new HttpUserRepository(httpClient);
+    });
 
     // ========== SERVICES ==========
-    // container.singleton('ValidationService', () => new ValidationService());
-    // container.singleton('NotificationService', () => new NotificationService());
+    container.singleton('AuthorizationService', () => new AuthorizationService());
 
     // ========== USE CASES - AUTH ==========
-    // container.bind('LoginUseCase', () => new LoginUseCase(/*...*/));
-    // container.bind('LogoutUseCase', () => new LogoutUseCase(/*...*/));
+    container.bind('LoginUseCase', () => {
+        const userRepository = container.get('UserRepository') as UserRepositoryInterface;
+        return new LoginUserUseCase(userRepository);
+    });
 
-    // TODO: Implementar bindings cuando se desarrollen los servicios correspondientes
+    container.bind('RegisterUseCase', () => {
+        const userRepository = container.get('UserRepository') as UserRepositoryInterface;
+        return new RegisterUserUseCase(userRepository);
+    });
+
+    container.bind('LogoutUseCase', () => {
+        const userRepository = container.get('UserRepository') as UserRepositoryInterface;
+        return new LogoutUserUseCase(userRepository);
+    });
 };

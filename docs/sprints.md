@@ -36,8 +36,8 @@
 
 ## Sprint 3 (Días 7-9): Frontend Autenticación
 
-- [ ] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
-  - [ ] [Tarea 1.6: Frontend - Sistema de Autenticación](./task/tarea-1-6-frontend-sistema-de-autenticacion.md)
+- [x] **Historia de Usuario:** [Historia 1: Autenticación y Gestión de Usuarios](./HU/historia-1-autenticacion-y-gestion-de-usuarios.md)
+  - [x] [Tarea 1.6: Frontend - Sistema de Autenticación](./task/tarea-1-6-frontend-sistema-de-autenticacion.md)
 
 ## Sprint 4 (Días 10-12): Backend Posts
 
