@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Providers;
+
+use App\src\Application\Services\Auth\JwtServiceInterface;
+use App\src\Domain\User\Repositories\UserRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any authentication / authorization services.
+     */
+    public function register(): void
+    {
+        // Register User Repository Interface
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            \App\Infrastructure\Persistence\Eloquent\EloquentUserRepository::class
+        );
+
+        // Register JWT Service Interface
+        $this->app->bind(
+            JwtServiceInterface::class,
+            \App\Infrastructure\Services\Auth\LaravelJwtService::class
+        );
+    }
+
+    /**
+     * Bootstrap any authentication / authorization services.
+     */
+    public function boot(): void
+    {
+        //
+    }
+}
