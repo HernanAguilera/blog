@@ -4,14 +4,14 @@
  */
 import { useAuth } from '~/interface/composables/useAuth';
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   // Skip on server-side rendering to avoid hydration issues
   if (process.server) return;
 
   const { isAuthenticated, restoreSession } = useAuth();
 
-  // Try to restore session first
-  restoreSession();
+  // Try to restore session first (async)
+  await restoreSession();
 
   // If user is authenticated, redirect away from guest-only pages
   if (isAuthenticated.value) {

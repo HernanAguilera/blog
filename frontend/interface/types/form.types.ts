@@ -6,10 +6,10 @@ export type FormValidationRule = {
     message: string;
 };
 
-export type FormField = {
-    value: string;
+export type FormField<T = string> = {
+    value: T;
     error: string | null;
-    rules: FormValidationRule[];
+    rules?: FormValidationRule[];
     touched: boolean;
     dirty: boolean;
 };

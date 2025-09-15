@@ -4,7 +4,7 @@ import { LoginUserUseCase } from '../../application/use-cases/login-user.use-cas
 import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
 import { LogoutUserUseCase } from '../../application/use-cases/logout-user.use-case';
 import { AuthorizationService } from '../../application/services/authorization.service';
-import { LocalTokenStorage } from '../../infrastructure/storage/local-token.storage';
+import type { TokenStorageInterface } from '../../infrastructure/storage/token-storage.interface';
 import type { AuthState, LoginPayload, RegisterPayload } from '../types/auth-store.types';
 import type { PermissionType, RoleType } from '../../domain/types/permissions.types';
 
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
 
     getters: {
         // User info getters
-        currentUser: (state): User | null => state.user,
+        currentUser: (state): User | null => state.user as User | null,
 
         userRole: (state): string | null => state.user?.getRole().value() || null,
 
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('auth', {
         _registerUseCase: null as RegisterUserUseCase | null,
         _logoutUseCase: null as LogoutUserUseCase | null,
         _authService: null as AuthorizationService | null,
-        _tokenStorage: null as LocalTokenStorage | null,
+        _tokenStorage: null as TokenStorageInterface | null,
 
         // Initialize dependencies
         initializeDependencies(
@@ -83,7 +83,7 @@ export const useAuthStore = defineStore('auth', {
             registerUseCase: RegisterUserUseCase,
             logoutUseCase: LogoutUserUseCase,
             authService: AuthorizationService,
-            tokenStorage: LocalTokenStorage
+            tokenStorage: TokenStorageInterface
         ) {
             this._loginUseCase = loginUseCase;
             this._registerUseCase = registerUseCase;
@@ -172,7 +172,7 @@ export const useAuthStore = defineStore('auth', {
             this.isLoggingOut = true;
 
             try {
-                await this._logoutUseCase.execute(this.token);
+                await this._logoutUseCase.execute(this.token || undefined);
                 this.clearAuthenticatedUser();
                 return { success: true };
             } catch (error) {
@@ -217,22 +217,22 @@ export const useAuthStore = defineStore('auth', {
         // Authorization methods (delegated to AuthorizationService)
         can(permission: PermissionType): boolean {
             if (!this.user || !this._authService) return false;
-            return this._authService.can(this.user, permission);
+            return this._authService.can(this.user as User, permission);
         },
 
         is(role: RoleType): boolean {
             if (!this.user || !this._authService) return false;
-            return this._authService.is(this.user, role);
+            return this._authService.is(this.user as User, role);
         },
 
         canAny(permissions: PermissionType[]): boolean {
             if (!this.user || !this._authService) return false;
-            return this._authService.canAny(this.user, permissions);
+            return this._authService.canAny(this.user as User, permissions);
         },
 
         canAll(permissions: PermissionType[]): boolean {
             if (!this.user || !this._authService) return false;
-            return this._authService.canAll(this.user, permissions);
+            return this._authService.canAll(this.user as User, permissions);
         },
 
         // State management helpers

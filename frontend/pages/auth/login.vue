@@ -100,9 +100,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuth } from '../../interface/composables/useAuth';
-import LoginForm from '../../interface/components/auth/LoginForm.vue';
-import type { LoginPayload } from '../../interface/types/auth-store.types';
+import { useAuth } from '~/interface/composables/useAuth';
+import LoginForm from '~/interface/components/auth/LoginForm.vue';
+import type { LoginPayload } from '~/interface/types/auth-store.types';
 
 // Meta data
 definePageMeta({

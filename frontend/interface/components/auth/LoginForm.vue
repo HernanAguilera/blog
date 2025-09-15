@@ -199,9 +199,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue';
-import { useAuth } from '../composables/useAuth';
-import type { LoginPayload } from '../types/auth-store.types';
-import type { FormField } from '../types/form.types';
+import { useAuth } from '../../composables/useAuth';
+import type { LoginPayload } from '../../types/auth-store.types';
+import type { FormField } from '../../types/form.types';
 
 // Props
 interface Props {
@@ -230,19 +230,19 @@ const form = reactive({
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   password: {
     value: '',
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   remember: {
     value: false,
     error: null,
     touched: false,
     dirty: false
-  } as FormField
+  } as FormField<boolean>
 });
 
 // UI state
@@ -257,8 +257,8 @@ const generalError = computed(() => error.value);
 
 const isFormValid = computed(() => {
   return (
-    form.email.value.trim() !== '' &&
-    form.password.value.trim() !== '' &&
+    typeof form.email.value === 'string' && form.email.value.trim() !== '' &&
+    typeof form.password.value === 'string' && form.password.value.trim() !== '' &&
     !form.email.error &&
     !form.password.error &&
     turnstileToken.value !== null
@@ -272,22 +272,26 @@ const validateField = (fieldName: keyof typeof form) => {
 
   switch (fieldName) {
     case 'email':
-      if (!field.value.trim()) {
-        field.error = 'El email es requerido';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
-        field.error = 'Formato de email inválido';
-      } else {
-        field.error = null;
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'El email es requerido';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+          field.error = 'Formato de email inválido';
+        } else {
+          field.error = null;
+        }
       }
       break;
 
     case 'password':
-      if (!field.value.trim()) {
-        field.error = 'La contraseña es requerida';
-      } else if (field.value.length < 6) {
-        field.error = 'La contraseña debe tener al menos 6 caracteres';
-      } else {
-        field.error = null;
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'La contraseña es requerida';
+        } else if (field.value.length < 6) {
+          field.error = 'La contraseña debe tener al menos 6 caracteres';
+        } else {
+          field.error = null;
+        }
       }
       break;
   }
@@ -339,17 +343,17 @@ const handleSubmit = async () => {
 
   try {
     const result = await login({
-      email: form.email.value,
-      password: form.password.value,
-      remember: form.remember.value,
+      email: form.email.value as string,
+      password: form.password.value as string,
+      remember: form.remember.value as boolean,
       turnstileToken: turnstileToken.value || undefined
     });
 
     if (result.success) {
       emit('success', {
-        email: form.email.value,
-        password: form.password.value,
-        remember: form.remember.value,
+        email: form.email.value as string,
+        password: form.password.value as string,
+        remember: form.remember.value as boolean,
         turnstileToken: turnstileToken.value || undefined
       });
 

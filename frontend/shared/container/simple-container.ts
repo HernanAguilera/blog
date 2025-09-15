@@ -1,4 +1,4 @@
-import type { ContainerInterface, ServiceBinding } from '../types/container';
+import type { ContainerInterface, ServiceBinding } from '../contracts/container';
 
 export class SimpleContainer implements ContainerInterface {
   private bindings = new Map<string, ServiceBinding>();

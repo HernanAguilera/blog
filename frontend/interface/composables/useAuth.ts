@@ -1,6 +1,5 @@
 import { computed, type ComputedRef } from 'vue';
 import { useAuthStore } from '../stores/auth.store';
-import { initializeAuthDependencies } from './useContainer';
 import type { User } from '../../domain/entities/user.entity';
 import type { LoginPayload, RegisterPayload } from '../types/auth-store.types';
 import type { PermissionType, RoleType } from '../../domain/types/permissions.types';
@@ -58,11 +57,6 @@ export interface UseAuthReturn {
 export function useAuth(): UseAuthReturn {
     const authStore = useAuthStore();
 
-    // Initialize dependencies if not already done
-    if (!authStore._loginUseCase) {
-        initializeAuthDependencies();
-    }
-
     return {
         // Reactive state
         user: computed(() => authStore.currentUser),
@@ -115,11 +109,6 @@ export function useAuth(): UseAuthReturn {
 export function useAuthState() {
     const authStore = useAuthStore();
 
-    // Initialize dependencies if not already done
-    if (!authStore._loginUseCase) {
-        initializeAuthDependencies();
-    }
-
     return {
         user: computed(() => authStore.currentUser),
         isAuthenticated: computed(() => authStore.isAuthenticated),
@@ -136,11 +125,6 @@ export function useAuthState() {
  */
 export function useAuthz() {
     const authStore = useAuthStore();
-
-    // Initialize dependencies if not already done
-    if (!authStore._loginUseCase) {
-        initializeAuthDependencies();
-    }
 
     return {
         can: authStore.can,

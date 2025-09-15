@@ -243,9 +243,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue';
-import { useAuth } from '../composables/useAuth';
-import type { RegisterPayload } from '../types/auth-store.types';
-import type { FormField } from '../types/form.types';
+import { useAuth } from '../../composables/useAuth';
+import type { RegisterPayload } from '../../types/auth-store.types';
+import type { FormField } from '../../types/form.types';
 
 // Props
 interface Props {
@@ -273,31 +273,31 @@ const form = reactive({
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   email: {
     value: '',
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   password: {
     value: '',
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   confirmPassword: {
     value: '',
     error: null,
     touched: false,
     dirty: false
-  } as FormField,
+  } as FormField<string>,
   acceptTerms: {
     value: false,
     error: null,
     touched: false,
     dirty: false
-  } as FormField
+  } as FormField<boolean>
 });
 
 // UI state
@@ -375,53 +375,61 @@ const validateField = (fieldName: keyof typeof form) => {
 
   switch (fieldName) {
     case 'name':
-      if (!field.value.trim()) {
-        field.error = 'El nombre es requerido';
-      } else if (field.value.trim().length < 2) {
-        field.error = 'El nombre debe tener al menos 2 caracteres';
-      } else if (field.value.trim().length > 100) {
-        field.error = 'El nombre no puede exceder 100 caracteres';
-      } else {
-        field.error = null;
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'El nombre es requerido';
+        } else if (field.value.trim().length < 2) {
+          field.error = 'El nombre debe tener al menos 2 caracteres';
+        } else if (field.value.trim().length > 100) {
+          field.error = 'El nombre no puede exceder 100 caracteres';
+        } else {
+          field.error = null;
+        }
       }
       break;
 
     case 'email':
-      if (!field.value.trim()) {
-        field.error = 'El email es requerido';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
-        field.error = 'Formato de email inválido';
-      } else if (field.value.length > 254) {
-        field.error = 'El email es demasiado largo';
-      } else {
-        field.error = null;
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'El email es requerido';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+          field.error = 'Formato de email inválido';
+        } else if (field.value.length > 254) {
+          field.error = 'El email es demasiado largo';
+        } else {
+          field.error = null;
+        }
       }
       break;
 
     case 'password':
-      if (!field.value.trim()) {
-        field.error = 'La contraseña es requerida';
-      } else if (field.value.length < 8) {
-        field.error = 'La contraseña debe tener al menos 8 caracteres';
-      } else if (passwordStrengthLevel.value < 3) {
-        field.error = 'La contraseña debe contener al menos 3 de: mayúsculas, minúsculas, números, caracteres especiales';
-      } else {
-        field.error = null;
-      }
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'La contraseña es requerida';
+        } else if (field.value.length < 8) {
+          field.error = 'La contraseña debe tener al menos 8 caracteres';
+        } else if (passwordStrengthLevel.value < 3) {
+          field.error = 'La contraseña debe contener al menos 3 de: mayúsculas, minúsculas, números, caracteres especiales';
+        } else {
+          field.error = null;
+        }
 
-      // Re-validate confirm password if it has a value
-      if (form.confirmPassword.value && form.confirmPassword.touched) {
-        validateField('confirmPassword');
+        // Re-validate confirm password if it has a value
+        if (typeof form.confirmPassword.value === 'string' && form.confirmPassword.value && form.confirmPassword.touched) {
+          validateField('confirmPassword');
+        }
       }
       break;
 
     case 'confirmPassword':
-      if (!field.value.trim()) {
-        field.error = 'Debes confirmar la contraseña';
-      } else if (field.value !== form.password.value) {
-        field.error = 'Las contraseñas no coinciden';
-      } else {
-        field.error = null;
+      if (typeof field.value === 'string') {
+        if (!field.value.trim()) {
+          field.error = 'Debes confirmar la contraseña';
+        } else if (field.value !== form.password.value) {
+          field.error = 'Las contraseñas no coinciden';
+        } else {
+          field.error = null;
+        }
       }
       break;
 

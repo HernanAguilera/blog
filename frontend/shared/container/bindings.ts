@@ -1,4 +1,4 @@
-import type { ContainerInterface } from '../types/container';
+import type { ContainerInterface } from '../contracts/container';
 
 // Infrastructure imports
 import { LocalTokenStorage } from '../../infrastructure/storage/local-token.storage';
