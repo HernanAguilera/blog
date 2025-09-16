@@ -25,11 +25,13 @@ class PostModel extends Model
         'featured_image',
         'reading_time',
         'published_at',
+        'scheduled_at',
     ];
 
     protected $casts = [
         'reading_time' => 'integer',
         'published_at' => 'datetime',
+        'scheduled_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

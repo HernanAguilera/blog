@@ -11,11 +11,13 @@ final readonly class PostStatus
     public const DRAFT = 'draft';
     public const PUBLISHED = 'published';
     public const ARCHIVED = 'archived';
+    public const SCHEDULED = 'scheduled';
 
     private const VALID_STATUSES = [
         self::DRAFT,
         self::PUBLISHED,
         self::ARCHIVED,
+        self::SCHEDULED,
     ];
 
     public function __construct(
@@ -67,6 +69,11 @@ final readonly class PostStatus
         return $this->value === self::ARCHIVED;
     }
 
+    public function isScheduled(): bool
+    {
+        return $this->value === self::SCHEDULED;
+    }
+
     public static function draft(): self
     {
         return new self(self::DRAFT);
@@ -80,5 +87,10 @@ final readonly class PostStatus
     public static function archived(): self
     {
         return new self(self::ARCHIVED);
+    }
+
+    public static function scheduled(): self
+    {
+        return new self(self::SCHEDULED);
     }
 }

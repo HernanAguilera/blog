@@ -188,6 +188,13 @@ interface PostRepositoryInterface
     public function findReadyToPublish(): array;
 
     /**
+     * Find scheduled posts ready to be published (scheduled_at <= now).
+     *
+     * @return Post[]
+     */
+    public function findScheduledReadyToPublish(): array;
+
+    /**
      * Check if slug is unique for a specific post (excluding the post itself).
      */
     public function isSlugUniqueForPost(PostSlug $slug, ?PostId $excludePostId = null): bool;

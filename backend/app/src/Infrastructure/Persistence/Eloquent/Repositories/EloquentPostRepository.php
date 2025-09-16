@@ -370,6 +370,16 @@ final class EloquentPostRepository implements PostRepositoryInterface
         return PostMapper::toDomainCollection($models);
     }
 
+    public function findScheduledReadyToPublish(): array
+    {
+        $models = PostModel::where('status', 'scheduled')
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '<=', now())
+            ->get();
+
+        return PostMapper::toDomainCollection($models);
+    }
+
     public function isSlugUniqueForPost(PostSlug $slug, ?PostId $excludePostId = null): bool
     {
         $query = PostModel::where('slug', $slug->value());

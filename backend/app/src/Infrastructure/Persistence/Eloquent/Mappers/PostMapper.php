@@ -22,7 +22,8 @@ final class PostMapper
             metaDescription: $model->meta_description,
             createdAt: $model->created_at?->format('Y-m-d H:i:s'),
             updatedAt: $model->updated_at?->format('Y-m-d H:i:s'),
-            publishedAt: $model->published_at?->format('Y-m-d H:i:s')
+            publishedAt: $model->published_at?->format('Y-m-d H:i:s'),
+            scheduledAt: $model->scheduled_at?->format('Y-m-d H:i:s')
         );
     }
 
@@ -46,6 +47,7 @@ final class PostMapper
         $model->meta_description = $primitives['meta_description'];
         $model->reading_time = $primitives['reading_time'];
         $model->published_at = $primitives['published_at'];
+        $model->scheduled_at = $primitives['scheduled_at'];
 
         return $model;
     }
@@ -62,6 +64,7 @@ final class PostMapper
         $model->meta_description = $primitives['meta_description'];
         $model->reading_time = $primitives['reading_time'];
         $model->published_at = $primitives['published_at'];
+        $model->scheduled_at = $primitives['scheduled_at'];
 
         return $model;
     }

@@ -11,6 +11,7 @@ use App\src\Domain\Post\ValueObjects\PostContent;
 use App\src\Domain\Post\ValueObjects\PostStatus;
 use App\src\Domain\Post\ValueObjects\ReadingTime;
 use App\src\Domain\Post\ValueObjects\MetaDescription;
+use App\src\Domain\Post\Services\PostStateValidator;
 use App\src\Domain\User\ValueObjects\UserId;
 use DateTimeImmutable;
 
@@ -19,6 +20,7 @@ final class Post
     private DateTimeImmutable $createdAt;
     private ?DateTimeImmutable $updatedAt = null;
     private ?DateTimeImmutable $publishedAt = null;
+    private ?DateTimeImmutable $scheduledAt = null;
     private ReadingTime $readingTime;
 
     public function __construct(
@@ -69,7 +71,8 @@ final class Post
         ?string $metaDescription = null,
         ?string $createdAt = null,
         ?string $updatedAt = null,
-        ?string $publishedAt = null
+        ?string $publishedAt = null,
+        ?string $scheduledAt = null
     ): self {
         $post = new self(
             id: $id ? new PostId($id) : null,
@@ -88,6 +91,10 @@ final class Post
 
         if ($publishedAt) {
             $post->publishedAt = new DateTimeImmutable($publishedAt);
+        }
+
+        if ($scheduledAt) {
+            $post->scheduledAt = new DateTimeImmutable($scheduledAt);
         }
 
         return $post;
@@ -157,6 +164,11 @@ final class Post
         return $this->publishedAt;
     }
 
+    public function getScheduledAt(): ?DateTimeImmutable
+    {
+        return $this->scheduledAt;
+    }
+
     // Business methods
     public function updateTitle(PostTitle $title): void
     {
@@ -195,8 +207,12 @@ final class Post
             return; // Already published
         }
 
+        $validator = new PostStateValidator();
+        $validator->validateTransition($this, PostStatus::published());
+
         $this->status = PostStatus::published();
         $this->publishedAt = new DateTimeImmutable();
+        $this->scheduledAt = null; // Clear scheduled date when publishing
         $this->markAsUpdated();
     }
 
@@ -205,6 +221,9 @@ final class Post
         if ($this->status->isArchived()) {
             return; // Already archived
         }
+
+        $validator = new PostStateValidator();
+        $validator->validateTransition($this, PostStatus::archived());
 
         $this->status = PostStatus::archived();
         $this->markAsUpdated();
@@ -216,8 +235,28 @@ final class Post
             return; // Already draft
         }
 
+        $validator = new PostStateValidator();
+        $validator->validateTransition($this, PostStatus::draft());
+
         $this->status = PostStatus::draft();
         $this->publishedAt = null; // Clear published date when reverting to draft
+        $this->scheduledAt = null; // Clear scheduled date when reverting to draft
+        $this->markAsUpdated();
+    }
+
+    public function schedule(DateTimeImmutable $scheduledAt): void
+    {
+        $validator = new PostStateValidator();
+
+        // Validate the scheduling constraints
+        $validator->validateScheduling($this, $scheduledAt);
+
+        // Validate the status transition
+        $validator->validateTransition($this, PostStatus::scheduled());
+
+        $this->status = PostStatus::scheduled();
+        $this->scheduledAt = $scheduledAt;
+        $this->publishedAt = null; // Clear published date when scheduling
         $this->markAsUpdated();
     }
 
@@ -237,9 +276,27 @@ final class Post
         return $this->status->isArchived();
     }
 
+    public function isScheduled(): bool
+    {
+        return $this->status->isScheduled();
+    }
+
     public function isPublic(): bool
     {
         return $this->isPublished() && $this->publishedAt !== null;
+    }
+
+    public function isReadyToPublish(): bool
+    {
+        return $this->isScheduled()
+            && $this->scheduledAt !== null
+            && $this->scheduledAt <= new DateTimeImmutable();
+    }
+
+    public function getAvailableTransitions(): array
+    {
+        $validator = new PostStateValidator();
+        return $validator->getAvailableTransitions($this);
     }
 
     // Utility methods
@@ -272,6 +329,7 @@ final class Post
             'created_at' => $this->createdAt->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
             'published_at' => $this->publishedAt?->format('Y-m-d H:i:s'),
+            'scheduled_at' => $this->scheduledAt?->format('Y-m-d H:i:s'),
         ];
     }
 
