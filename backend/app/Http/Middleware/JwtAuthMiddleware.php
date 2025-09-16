@@ -75,6 +75,13 @@ class JwtAuthMiddleware
         $request->attributes->set('auth_user', $user);
         $request->attributes->set('auth_token', $token);
 
+        // IMPORTANT: Set user in Laravel Auth context for FormRequest authorization
+        // Load the Eloquent model for Laravel Auth compatibility
+        $eloquentUser = \App\Models\User::find($user->getId()->value());
+        if ($eloquentUser) {
+            \Illuminate\Support\Facades\Auth::setUser($eloquentUser);
+        }
+
         return $next($request);
     }
 }

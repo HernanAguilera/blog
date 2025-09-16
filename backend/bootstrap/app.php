@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.jwt' => \App\Http\Middleware\JwtAuthMiddleware::class,
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
             'turnstile' => \App\Http\Middleware\TurnstileMiddleware::class,
+            'sanitize.html' => \App\src\Interface\Http\Middleware\SanitizeHtmlInput::class,
         ]);
 
         // Configure CORS for API routes

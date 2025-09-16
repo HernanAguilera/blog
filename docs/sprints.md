@@ -48,7 +48,7 @@
 ## Sprint 5 (Días 13-15): Editor Avanzado
 
 - [ ] **Historia de Usuario:** [Historia 2: Gestión de Posts y Contenido](./HU/historia-2-gestion-de-posts-y-contenido.md)
-  - [ ] [Tarea 2.3: Editor Avanzado (Backend)](./task/tarea-2-3-editor-avanzado-backend.md)
+  - [x] [Tarea 2.3: Editor Avanzado (Backend)](./task/tarea-2-3-editor-avanzado-backend.md)
   - [ ] [Tarea 2.4: Gestión de Estados](./task/tarea-2-4-gestion-de-estados.md)
 
 ## Sprint 6 (Días 16-18): Frontend Posts

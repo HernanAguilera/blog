@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SocialAuthController;
 use App\src\Interface\Http\Controllers\PostController;
+use App\src\Interface\Http\Controllers\EditorController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -29,6 +30,11 @@ Route::prefix('posts')->group(function () {
     Route::get('{slug}', [PostController::class, 'show']);
 });
 
+// Public preview route (no auth required)
+Route::get('preview/{token}', [EditorController::class, 'showPreview'])
+    ->where('token', '[a-f0-9]{64}')
+    ->middleware('throttle:preview-access');
+
 // Admin posts routes
 Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
     Route::prefix('posts')->group(function () {
@@ -37,5 +43,22 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
         Route::get('{id}', [PostController::class, 'adminShow'])->where('id', '[0-9]+');
         Route::put('{id}', [PostController::class, 'update'])->where('id', '[0-9]+')->middleware('throttle:posts');
         Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
+
+        // Editor endpoints
+        Route::post('autosave', [EditorController::class, 'autoSave'])->middleware('throttle:autosave');
+        Route::post('preview', [EditorController::class, 'generatePreview'])->middleware('throttle:preview');
+
+        // Debug endpoint
+        Route::get('debug-auth', function() {
+            return response()->json([
+                'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'user' => \Illuminate\Support\Facades\Auth::user(),
+                'token_valid' => \Illuminate\Support\Facades\Auth::check()
+            ]);
+        });
+
+        // Draft management
+        Route::get('drafts', [EditorController::class, 'getDrafts']);
+        Route::get('drafts/{id}', [EditorController::class, 'restoreDraft'])->where('id', '[0-9]+');
     });
 });

@@ -90,6 +90,48 @@ class AppServiceProvider extends ServiceProvider
                 });
         });
 
+        // Auto-save rate limiting: 30 per minute (configurable)
+        RateLimiter::for('autosave', function (Request $request) {
+            $maxAttempts = config('editor.autosave_rate_limit', 30);
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->user()?->id ?: $request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'message' => 'Too many auto-save attempts. Please slow down.',
+                        'error' => 'Auto-save rate limit exceeded'
+                    ], 429, $headers);
+                });
+        });
+
+        // Preview generation rate limiting: 5 per minute (configurable)
+        RateLimiter::for('preview', function (Request $request) {
+            $maxAttempts = config('editor.preview_rate_limit', 5);
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->user()?->id ?: $request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'message' => 'Too many preview generation attempts. Please wait before creating another preview.',
+                        'error' => 'Preview generation rate limit exceeded'
+                    ], 429, $headers);
+                });
+        });
+
+        // Preview access rate limiting: 60 per minute (for public access)
+        RateLimiter::for('preview-access', function (Request $request) {
+            $maxAttempts = config('editor.preview_access_rate_limit', 60);
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'message' => 'Too many preview access attempts. Please try again later.',
+                        'error' => 'Preview access rate limit exceeded'
+                    ], 429, $headers);
+                });
+        });
+
         // General API rate limiting
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());

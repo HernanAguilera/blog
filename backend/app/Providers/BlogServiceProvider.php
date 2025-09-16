@@ -12,6 +12,12 @@ use App\src\Application\UseCases\Post\GetPublishedPostsUseCase;
 use App\src\Application\UseCases\Post\GetAllPostsUseCase;
 use App\src\Application\UseCases\Post\GetDraftPostsUseCase;
 use App\src\Application\UseCases\Post\GetArchivedPostsUseCase;
+use App\src\Application\UseCases\Post\AutoSavePostUseCase;
+use App\src\Application\UseCases\Post\PreviewPostUseCase;
+use App\src\Domain\Post\Services\HtmlSanitizerInterface;
+use App\src\Infrastructure\Services\HtmlSanitizerService;
+use App\src\Interface\Console\Commands\CleanupDraftsCommand;
+use App\src\Interface\Console\Commands\CleanupPreviewsCommand;
 use Illuminate\Support\ServiceProvider;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -28,6 +34,12 @@ class BlogServiceProvider extends ServiceProvider
         $this->app->bind(
             PostRepositoryInterface::class,
             EloquentPostRepository::class
+        );
+
+        // Service bindings
+        $this->app->bind(
+            HtmlSanitizerInterface::class,
+            HtmlSanitizerService::class
         );
 
         // Use Cases bindings
@@ -82,6 +94,19 @@ class BlogServiceProvider extends ServiceProvider
             );
         });
 
+        // Editor Use Cases bindings
+        $this->app->bind(AutoSavePostUseCase::class, function ($app) {
+            return new AutoSavePostUseCase(
+                $app->make(HtmlSanitizerInterface::class)
+            );
+        });
+
+        $this->app->bind(PreviewPostUseCase::class, function ($app) {
+            return new PreviewPostUseCase(
+                $app->make(HtmlSanitizerInterface::class)
+            );
+        });
+
         // Register Event Dispatcher - convert Laravel dispatcher to PSR compatible
         $this->app->bind(EventDispatcherInterface::class, function () {
             // Create a simple adapter that implements PSR EventDispatcherInterface
@@ -102,6 +127,12 @@ class BlogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Register Artisan commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CleanupDraftsCommand::class,
+                CleanupPreviewsCommand::class,
+            ]);
+        }
     }
 }
