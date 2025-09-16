@@ -2,19 +2,19 @@
  * Authentication middleware - protects routes that require authentication
  * Redirects unauthenticated users to login page
  */
-import { useAuth } from '~/interface/composables/useAuth';
+import { useAuthStore } from '~/interface/stores/auth.store';
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   // Skip on server-side rendering to avoid hydration issues
   if (process.server) return;
 
-  const { isAuthenticated, restoreSession } = useAuth();
+  const authStore = useAuthStore();
 
   // Try to restore session first
-  restoreSession();
+  await authStore.restoreSession();
 
   // If user is not authenticated, redirect to login
-  if (!isAuthenticated.value) {
+  if (!authStore.isAuthenticated) {
     // Store the intended destination for redirect after login
     const redirectPath = to.fullPath;
 

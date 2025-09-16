@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth, useAuthz } from '../interface/composables/useAuth';
+import { useAuthStore } from '../interface/stores/auth.store';
 import { ROLE } from '../domain/types/permissions.types';
 
 // Meta data
@@ -138,15 +138,15 @@ useHead({
 
 // Composables
 const router = useRouter();
-const { user, logout } = useAuth();
-const { is } = useAuthz();
+const authStore = useAuthStore();
 
 // State
 const isLoggingOut = ref(false);
 
 // Computed
+const user = computed(() => authStore.currentUser);
 const canAccessAdmin = computed(() => {
-  return is(ROLE.ADMIN) || is(ROLE.SUPER_ADMIN);
+  return user.value && (user.value.hasRole(ROLE.ADMIN) || user.value.hasRole(ROLE.SUPER_ADMIN));
 });
 
 // Methods
@@ -164,7 +164,7 @@ const handleLogout = async () => {
   isLoggingOut.value = true;
 
   try {
-    await logout();
+    await authStore.logout();
     await router.push('/');
   } catch (error) {
     console.error('Error during logout:', error);

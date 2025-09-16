@@ -1,18 +1,17 @@
 export class UserId {
     private readonly _value: string;
 
-    constructor(value: string) {
-        if (!value || value.trim() === '') {
+    constructor(value: string | number) {
+        // Convert to string and validate
+        const idString = typeof value === 'string' ? value : String(value);
+
+        if (!idString || idString.length === 0) {
             throw new Error('User ID cannot be empty');
         }
 
-        // Validate UUID format (basic validation)
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(value)) {
-            throw new Error('User ID must be a valid UUID');
-        }
-
-        this._value = value;
+        // For now, accept both numeric IDs and UUIDs to be compatible with the backend
+        // In the future, this could be migrated to only accept UUIDs
+        this._value = idString;
     }
 
     public value(): string {

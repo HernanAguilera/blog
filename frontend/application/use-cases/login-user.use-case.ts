@@ -56,21 +56,24 @@ export class LoginUserUseCase {
     }
 
     private validateCredentials(credentials: LoginCredentials): void {
-        if (!credentials.email || credentials.email.trim() === '') {
+        const email = typeof credentials.email === 'string' ? credentials.email : '';
+        const password = typeof credentials.password === 'string' ? credentials.password : '';
+
+        if (!email || email.length === 0) {
             throw new Error('Email is required');
         }
 
-        if (!credentials.password || credentials.password.trim() === '') {
+        if (!password || password.length === 0) {
             throw new Error('Password is required');
         }
 
         // Basic email format validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(credentials.email.trim())) {
+        if (!emailRegex.test(email)) {
             throw new Error('Invalid email format');
         }
 
-        if (credentials.password.length < 6) {
+        if (password.length < 6) {
             throw new Error('Password must be at least 6 characters');
         }
     }

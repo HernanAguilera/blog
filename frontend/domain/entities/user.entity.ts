@@ -18,15 +18,18 @@ export class User {
     }
 
     private validateName(name: string): void {
-        if (!name || name.trim() === '') {
+        // Ensure name is a string and not null/undefined
+        const nameStr = typeof name === 'string' ? name : String(name || '');
+
+        if (!nameStr || nameStr.length === 0) {
             throw new Error('User name cannot be empty');
         }
 
-        if (name.trim().length < 2) {
+        if (nameStr.length < 2) {
             throw new Error('User name must be at least 2 characters long');
         }
 
-        if (name.trim().length > 100) {
+        if (nameStr.length > 100) {
             throw new Error('User name cannot exceed 100 characters');
         }
     }
@@ -88,12 +91,13 @@ export class User {
 
     // Utility methods
     public getDisplayName(): string {
-        return this.name.trim();
+        const nameStr = typeof this.name === 'string' ? this.name : String(this.name || '');
+        return nameStr;
     }
 
     public getInitials(): string {
-        return this.name
-            .trim()
+        const nameStr = typeof this.name === 'string' ? this.name : String(this.name || '');
+        return nameStr
             .split(' ')
             .map(part => part.charAt(0).toUpperCase())
             .slice(0, 2)

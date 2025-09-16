@@ -6,7 +6,7 @@ import type { LoginCredentials, RegisterData, AuthResponse } from '../../domain/
 export class HttpUserRepository implements UserRepositoryInterface {
     constructor(
         private readonly httpClient: HttpClientInterface,
-        private readonly baseUrl: string = '/auth'
+        private readonly baseUrl: string = 'auth'
     ) {}
 
     async login(credentials: LoginCredentials): Promise<AuthResponse> {

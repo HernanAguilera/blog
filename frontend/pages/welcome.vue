@@ -193,7 +193,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useAuth } from '../interface/composables/useAuth';
+import { useAuthStore } from '../interface/stores/auth.store';
 import { ROLE } from '../domain/types/permissions.types';
 
 // Meta data
@@ -215,12 +215,13 @@ useHead({
 // Composables
 const route = useRoute();
 const router = useRouter();
-const { user, isAuthenticated } = useAuth();
+const authStore = useAuthStore();
 
 // State
 const isResendingEmail = ref(false);
 
 // Computed
+const user = computed(() => authStore.currentUser);
 const isNewUser = computed(() => {
   return route.query.newUser === 'true';
 });
@@ -271,7 +272,7 @@ const resendVerificationEmail = async () => {
 // Lifecycle
 onMounted(() => {
   // If user is not authenticated, redirect to login
-  if (!isAuthenticated.value) {
+  if (!authStore.isAuthenticated) {
     router.push('/auth/login');
   }
 });

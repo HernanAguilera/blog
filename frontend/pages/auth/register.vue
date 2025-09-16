@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuth } from '../../interface/composables/useAuth';
+import { useAuthStore } from '../../interface/stores/auth.store';
 import RegisterForm from '../../interface/components/auth/RegisterForm.vue';
 import type { RegisterPayload } from '../../interface/types/auth-store.types';
 
@@ -155,7 +155,7 @@ useHead({
 // Composables
 const router = useRouter();
 const route = useRoute();
-const { isAuthenticated, restoreSession } = useAuth();
+const authStore = useAuthStore();
 
 // State
 const successMessage = ref<string | null>(null);
@@ -198,13 +198,13 @@ const clearMessages = () => {
 // Lifecycle
 onMounted(async () => {
   // Check if user is already authenticated
-  if (isAuthenticated.value) {
+  if (authStore.isAuthenticated) {
     await router.push(redirectTo.value);
     return;
   }
 
   // Try to restore session
-  const restored = await restoreSession();
+  const restored = await authStore.restoreSession();
   if (restored) {
     await router.push(redirectTo.value);
     return;
@@ -228,7 +228,7 @@ onMounted(async () => {
 });
 
 // Watch for authentication changes
-watch(isAuthenticated, async (newValue) => {
+watch(() => authStore.isAuthenticated, async (newValue) => {
   if (newValue) {
     // For new registrations, go to welcome page
     const welcomeUrl = '/welcome?newUser=true';

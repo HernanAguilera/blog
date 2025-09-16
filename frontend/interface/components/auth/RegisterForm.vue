@@ -243,7 +243,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue';
-import { useAuth } from '../../composables/useAuth';
+import { useAuthStore } from '../../stores/auth.store';
 import type { RegisterPayload } from '../../types/auth-store.types';
 import type { FormField } from '../../types/form.types';
 
@@ -263,7 +263,7 @@ const emit = defineEmits<{
 }>();
 
 // Composables
-const { register, isRegistering, error, errors, clearErrors } = useAuth();
+const authStore = useAuthStore();
 const config = useRuntimeConfig();
 
 // Form state
@@ -308,8 +308,8 @@ const turnstileToken = ref<string | null>(null);
 const turnstileWidgetId = ref<string | null>(null);
 
 // Computed
-const isSubmitting = computed(() => isRegistering.value);
-const generalError = computed(() => error.value);
+const isSubmitting = computed(() => authStore.isRegistering);
+const generalError = computed(() => authStore.error);
 
 const passwordStrengthLevel = computed(() => {
   const password = form.password.value;
@@ -488,10 +488,10 @@ const handleSubmit = async () => {
     return;
   }
 
-  clearErrors();
+  authStore.clearErrors();
 
   try {
-    const result = await register({
+    const result = await authStore.register({
       name: form.name.value,
       email: form.email.value,
       password: form.password.value,

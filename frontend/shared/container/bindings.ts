@@ -23,7 +23,10 @@ export const configureContainer = (container: ContainerInterface) => {
     // ========== HTTP CLIENT ==========
     container.singleton('HttpClient', () => {
         const tokenStorage = container.get('TokenStorage') as TokenStorageInterface;
+        // Get API base URL from environment or use default
+        const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8000/api';
         return new HttpClientService(tokenStorage, {
+            baseURL: apiBaseUrl,
             timeout: 30000,
             retries: 3,
             retryDelay: 1000

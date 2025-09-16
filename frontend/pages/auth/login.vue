@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuth } from '~/interface/composables/useAuth';
+import { useAuthStore } from '~/interface/stores/auth.store';
 import LoginForm from '~/interface/components/auth/LoginForm.vue';
 import type { LoginPayload } from '~/interface/types/auth-store.types';
 
@@ -128,7 +128,7 @@ useHead({
 // Composables
 const router = useRouter();
 const route = useRoute();
-const { isAuthenticated, restoreSession } = useAuth();
+const authStore = useAuthStore();
 
 // State
 const successMessage = ref<string | null>(null);
@@ -192,13 +192,13 @@ const clearMessages = () => {
 // Lifecycle
 onMounted(async () => {
   // Check if user is already authenticated
-  if (isAuthenticated.value) {
+  if (authStore.isAuthenticated) {
     await router.push(redirectTo.value);
     return;
   }
 
   // Try to restore session
-  const restored = await restoreSession();
+  const restored = await authStore.restoreSession();
   if (restored) {
     await router.push(redirectTo.value);
     return;
@@ -222,7 +222,7 @@ onMounted(async () => {
 });
 
 // Watch for authentication changes
-watch(isAuthenticated, async (newValue) => {
+watch(() => authStore.isAuthenticated, async (newValue) => {
   if (newValue) {
     await router.push(redirectTo.value);
   }

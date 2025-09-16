@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# ⚠️ REGLA CRÍTICA - RESPONDER PREGUNTAS DIRECTAS ⚠️
+
+**SIEMPRE RESPONDE CUANDO EL USUARIO HACE UNA PREGUNTA DIRECTA**
+
+- Si el usuario hace una pregunta, respóndela INMEDIATAMENTE
+- No ignores preguntas por estar ocupado con tareas técnicas
+- Las preguntas del usuario tienen prioridad ABSOLUTA sobre cualquier otra actividad
+- Responde primero, luego continúa con las tareas técnicas si es necesario
+
+**ESTA REGLA NO TIENE EXCEPCIONES**
+
 ## Project Overview
 
 BlogV2 is a personal blogging platform built with a decoupled architecture following Clean Architecture principles. The project is currently in the planning phase - **NO CODE HAS BEEN IMPLEMENTED YET**. This repository contains comprehensive planning documents and architectural definitions.

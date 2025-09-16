@@ -194,7 +194,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useAuthz } from '../../interface/composables/useAuth';
+import { useAuthStore } from '../../interface/stores/auth.store';
 import { ROLE } from '../../domain/types/permissions.types';
 
 // Meta data
@@ -218,8 +218,9 @@ useHead({
 });
 
 // Composables
-const { is } = useAuthz();
+const authStore = useAuthStore();
 
 // Computed
-const isSuperAdmin = computed(() => is(ROLE.SUPER_ADMIN));
+const user = computed(() => authStore.currentUser);
+const isSuperAdmin = computed(() => user.value && user.value.hasRole(ROLE.SUPER_ADMIN));
 </script>

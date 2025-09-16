@@ -199,16 +199,15 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue';
-import { useAuth } from '../../composables/useAuth';
+import { useAuthStore } from '../../stores/auth.store';
 import type { LoginPayload } from '../../types/auth-store.types';
-import type { FormField } from '../../types/form.types';
 
 // Props
 interface Props {
   redirectTo?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   redirectTo: '/dashboard'
 });
 
@@ -220,29 +219,29 @@ const emit = defineEmits<{
 }>();
 
 // Composables
-const { login, isLoggingIn, error, errors, clearErrors } = useAuth();
+const authStore = useAuthStore();
 const config = useRuntimeConfig();
 
 // Form state
 const form = reactive({
   email: {
-    value: '',
-    error: null,
+    value: '' as string,
+    error: null as string | null,
     touched: false,
     dirty: false
-  } as FormField<string>,
+  },
   password: {
-    value: '',
-    error: null,
+    value: '' as string,
+    error: null as string | null,
     touched: false,
     dirty: false
-  } as FormField<string>,
+  },
   remember: {
-    value: false,
-    error: null,
+    value: false as boolean,
+    error: null as string | null,
     touched: false,
     dirty: false
-  } as FormField<boolean>
+  }
 });
 
 // UI state
@@ -252,13 +251,20 @@ const turnstileToken = ref<string | null>(null);
 const turnstileWidgetId = ref<string | null>(null);
 
 // Computed
-const isSubmitting = computed(() => isLoggingIn.value);
-const generalError = computed(() => error.value);
+const isSubmitting = computed(() => authStore.isLoggingIn);
+const generalError = computed(() => authStore.error);
 
 const isFormValid = computed(() => {
+  const emailValue = form.email.value;
+  const passwordValue = form.password.value;
+
+  // Type guards para asegurar que son strings y no están vacíos
+  const isEmailValid = typeof emailValue === 'string' && emailValue.length > 0;
+  const isPasswordValid = typeof passwordValue === 'string' && passwordValue.length > 0;
+
   return (
-    typeof form.email.value === 'string' && form.email.value.trim() !== '' &&
-    typeof form.password.value === 'string' && form.password.value.trim() !== '' &&
+    isEmailValid &&
+    isPasswordValid &&
     !form.email.error &&
     !form.password.error &&
     turnstileToken.value !== null
@@ -272,26 +278,24 @@ const validateField = (fieldName: keyof typeof form) => {
 
   switch (fieldName) {
     case 'email':
-      if (typeof field.value === 'string') {
-        if (!field.value.trim()) {
-          field.error = 'El email es requerido';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
-          field.error = 'Formato de email inválido';
-        } else {
-          field.error = null;
-        }
+      const emailValue = field.value;
+      if (typeof emailValue !== 'string' || emailValue.length === 0) {
+        field.error = 'El email es requerido';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        field.error = 'Formato de email inválido';
+      } else {
+        field.error = null;
       }
       break;
 
     case 'password':
-      if (typeof field.value === 'string') {
-        if (!field.value.trim()) {
-          field.error = 'La contraseña es requerida';
-        } else if (field.value.length < 6) {
-          field.error = 'La contraseña debe tener al menos 6 caracteres';
-        } else {
-          field.error = null;
-        }
+      const passwordValue = field.value;
+      if (typeof passwordValue !== 'string' || passwordValue.length === 0) {
+        field.error = 'La contraseña es requerida';
+      } else if (passwordValue.length < 6) {
+        field.error = 'La contraseña debe tener al menos 6 caracteres';
+      } else {
+        field.error = null;
       }
       break;
   }
@@ -339,10 +343,10 @@ const handleSubmit = async () => {
     return;
   }
 
-  clearErrors();
+  authStore.clearErrors();
 
   try {
-    const result = await login({
+    const result = await authStore.login({
       email: form.email.value as string,
       password: form.password.value as string,
       remember: form.remember.value as boolean,
@@ -356,7 +360,6 @@ const handleSubmit = async () => {
         remember: form.remember.value as boolean,
         turnstileToken: turnstileToken.value || undefined
       });
-
       // Redirect will be handled by the parent component or router
     } else {
       emit('error', result.message);
