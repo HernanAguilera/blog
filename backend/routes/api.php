@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SocialAuthController;
+use App\src\Interface\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -19,5 +20,22 @@ Route::prefix('auth')->group(function () {
         Route::get('{provider}/callback', [SocialAuthController::class, 'callback'])
             ->where('provider', 'google|facebook|twitter')
             ->middleware('throttle:social-auth');
+    });
+});
+
+// Public posts routes
+Route::prefix('posts')->group(function () {
+    Route::get('/', [PostController::class, 'index']);
+    Route::get('{slug}', [PostController::class, 'show']);
+});
+
+// Admin posts routes
+Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
+    Route::prefix('posts')->group(function () {
+        Route::get('/', [PostController::class, 'adminIndex']);
+        Route::post('/', [PostController::class, 'store'])->middleware('throttle:posts');
+        Route::get('{id}', [PostController::class, 'adminShow'])->where('id', '[0-9]+');
+        Route::put('{id}', [PostController::class, 'update'])->where('id', '[0-9]+')->middleware('throttle:posts');
+        Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });

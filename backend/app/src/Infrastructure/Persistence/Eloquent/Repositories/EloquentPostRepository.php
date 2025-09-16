@@ -1,0 +1,383 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\src\Infrastructure\Persistence\Eloquent\Repositories;
+
+use App\src\Domain\Post\Entities\Post;
+use App\src\Domain\Post\Repositories\PostRepositoryInterface;
+use App\src\Domain\Post\ValueObjects\PostId;
+use App\src\Domain\Post\ValueObjects\PostSlug;
+use App\src\Domain\Post\ValueObjects\PostStatus;
+use App\src\Domain\User\ValueObjects\UserId;
+use App\src\Infrastructure\Persistence\Eloquent\Models\PostModel;
+use App\src\Infrastructure\Persistence\Eloquent\Mappers\PostMapper;
+use DateTimeInterface;
+
+final class EloquentPostRepository implements PostRepositoryInterface
+{
+    public function findById(PostId $id): ?Post
+    {
+        $model = PostModel::find($id->value());
+
+        return $model ? PostMapper::toDomain($model) : null;
+    }
+
+    public function findBySlug(PostSlug $slug): ?Post
+    {
+        $model = PostModel::where('slug', $slug->value())->first();
+
+        return $model ? PostMapper::toDomain($model) : null;
+    }
+
+    public function save(Post $post): Post
+    {
+        if ($post->getId() === null) {
+            // Create new post
+            $model = PostMapper::toEloquent($post);
+            $model->save();
+
+            // Set the generated ID back to the entity
+            $post->setId(new PostId($model->id));
+
+            return $post;
+        } else {
+            // Update existing post
+            $model = PostModel::findOrFail($post->getId()->value());
+            $model = PostMapper::updateEloquentFromDomain($model, $post);
+            $model->save();
+
+            return PostMapper::toDomain($model);
+        }
+    }
+
+    public function delete(PostId $id): bool
+    {
+        return PostModel::destroy($id->value()) > 0;
+    }
+
+    public function existsBySlug(PostSlug $slug): bool
+    {
+        return PostModel::where('slug', $slug->value())->exists();
+    }
+
+    public function findAll(int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::count();
+
+        $models = PostModel::orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findByStatus(PostStatus $status, int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('status', $status->value())->count();
+
+        $models = PostModel::where('status', $status->value())
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findPublished(int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->count();
+
+        $models = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findDrafts(int $page = 1, int $perPage = 15): array
+    {
+        return $this->findByStatus(new PostStatus('draft'), $page, $perPage);
+    }
+
+    public function findArchived(int $page = 1, int $perPage = 15): array
+    {
+        return $this->findByStatus(new PostStatus('archived'), $page, $perPage);
+    }
+
+    public function findByAuthor(UserId $authorId, int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('author_id', $authorId->value())->count();
+
+        $models = PostModel::where('author_id', $authorId->value())
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findByAuthorAndStatus(
+        UserId $authorId,
+        PostStatus $status,
+        int $page = 1,
+        int $perPage = 15
+    ): array {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('author_id', $authorId->value())
+            ->where('status', $status->value())
+            ->count();
+
+        $models = PostModel::where('author_id', $authorId->value())
+            ->where('status', $status->value())
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function search(string $query, int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+
+        $queryBuilder = PostModel::where(function($q) use ($query) {
+            $q->where('title', 'LIKE', "%{$query}%")
+              ->orWhere('content', 'LIKE', "%{$query}%")
+              ->orWhere('excerpt', 'LIKE', "%{$query}%");
+        });
+
+        $total = $queryBuilder->count();
+
+        $models = $queryBuilder->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function searchPublished(string $query, int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+
+        $queryBuilder = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->where(function($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('content', 'LIKE', "%{$query}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$query}%");
+            });
+
+        $total = $queryBuilder->count();
+
+        $models = $queryBuilder->orderBy('published_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findRecentPublished(int $limit = 10): array
+    {
+        $models = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return PostMapper::toDomainCollection($models);
+    }
+
+    public function findPopular(int $limit = 10): array
+    {
+        // For now, consider popular as most recently published
+        // In the future, this could include views, likes, comments, etc.
+        return $this->findRecentPublished($limit);
+    }
+
+    public function count(): int
+    {
+        return PostModel::count();
+    }
+
+    public function countByStatus(PostStatus $status): int
+    {
+        return PostModel::where('status', $status->value())->count();
+    }
+
+    public function countPublished(): int
+    {
+        return PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->count();
+    }
+
+    public function countByAuthor(UserId $authorId): int
+    {
+        return PostModel::where('author_id', $authorId->value())->count();
+    }
+
+    public function countByAuthorAndStatus(UserId $authorId, PostStatus $status): int
+    {
+        return PostModel::where('author_id', $authorId->value())
+            ->where('status', $status->value())
+            ->count();
+    }
+
+    public function findCreatedBetween(
+        DateTimeInterface $from,
+        DateTimeInterface $to,
+        int $page = 1,
+        int $perPage = 15
+    ): array {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::whereBetween('created_at', [$from, $to])->count();
+
+        $models = PostModel::whereBetween('created_at', [$from, $to])
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findPublishedBetween(
+        DateTimeInterface $from,
+        DateTimeInterface $to,
+        int $page = 1,
+        int $perPage = 15
+    ): array {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->whereBetween('published_at', [$from, $to])
+            ->count();
+
+        $models = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->whereBetween('published_at', [$from, $to])
+            ->orderBy('published_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function findScheduled(int $page = 1, int $perPage = 15): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $total = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '>', now())
+            ->count();
+
+        $models = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '>', now())
+            ->orderBy('published_at', 'asc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage
+        ];
+    }
+
+    public function nextIdentity(): PostId
+    {
+        // Generate a temporary ID - the real ID will be set after save
+        return new PostId(0);
+    }
+
+    public function findReadyToPublish(): array
+    {
+        $models = PostModel::where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->get();
+
+        return PostMapper::toDomainCollection($models);
+    }
+
+    public function isSlugUniqueForPost(PostSlug $slug, ?PostId $excludePostId = null): bool
+    {
+        $query = PostModel::where('slug', $slug->value());
+
+        if ($excludePostId !== null) {
+            $query->where('id', '!=', $excludePostId->value());
+        }
+
+        return !$query->exists();
+    }
+}

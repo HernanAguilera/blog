@@ -41,9 +41,9 @@
 
 ## Sprint 4 (Días 10-12): Backend Posts
 
-- [ ] **Historia de Usuario:** [Historia 2: Gestión de Posts y Contenido](./HU/historia-2-gestion-de-posts-y-contenido.md)
-  - [ ] [Tarea 2.1: Dominio de Posts (Backend)](./task/tarea-2-1-dominio-de-posts-backend.md)
-  - [ ] [Tarea 2.2: CRUD de Posts (Backend)](./task/tarea-2-2-crud-de-posts-backend.md)
+- [x] **Historia de Usuario:** [Historia 2: Gestión de Posts y Contenido](./HU/historia-2-gestion-de-posts-y-contenido.md)
+  - [x] [Tarea 2.1: Dominio de Posts (Backend)](./task/tarea-2-1-dominio-de-posts-backend.md)
+  - [x] [Tarea 2.2: CRUD de Posts (Backend)](./task/tarea-2-2-crud-de-posts-backend.md)
 
 ## Sprint 5 (Días 13-15): Editor Avanzado
 

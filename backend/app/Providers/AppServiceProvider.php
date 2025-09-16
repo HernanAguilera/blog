@@ -76,6 +76,20 @@ class AppServiceProvider extends ServiceProvider
                 });
         });
 
+        // Posts rate limiting: 3 per minute for creation/modification
+        RateLimiter::for('posts', function (Request $request) {
+            $maxAttempts = app()->environment('production') ? 3 : 15;
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->user()?->id ?: $request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'message' => 'Too many post operations. Please try again later.',
+                        'error' => 'Rate limit exceeded for post operations'
+                    ], 429, $headers);
+                });
+        });
+
         // General API rate limiting
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
