@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import { User } from '../../domain/entities/user.entity';
-import { LoginUserUseCase } from '../../application/use-cases/login-user.use-case';
-import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
-import { LogoutUserUseCase } from '../../application/use-cases/logout-user.use-case';
-import { AuthorizationService } from '../../application/services/authorization.service';
+import type { LoginUserUseCase } from '../../application/use-cases/login-user.use-case';
+import type { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
+import type { LogoutUserUseCase } from '../../application/use-cases/logout-user.use-case';
+import type { AuthorizationService } from '../../application/services/authorization.service';
 import type { TokenStorageInterface } from '../../infrastructure/storage/token-storage.interface';
 import type { AuthState, LoginPayload, RegisterPayload } from '../types/auth-store.types';
 import type { PermissionType, RoleType } from '../../domain/types/permissions.types';

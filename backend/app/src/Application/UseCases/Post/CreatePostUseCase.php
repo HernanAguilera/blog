@@ -14,9 +14,9 @@ use App\src\Domain\Post\ValueObjects\PostStatus;
 use App\src\Domain\Post\ValueObjects\MetaDescription;
 use App\src\Domain\User\ValueObjects\UserId;
 use App\src\Domain\Post\Events\PostCreated;
+use App\src\Domain\Shared\Events\EventDispatcherInterface;
 use DateTimeImmutable;
 use Illuminate\Support\Str;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 final readonly class CreatePostUseCase
 {

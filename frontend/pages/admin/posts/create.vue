@@ -80,7 +80,7 @@
             <template #fallback>
               <div class="flex items-center justify-center h-96">
                 <div class="text-center">
-                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"/>
                   <p class="mt-2 text-sm text-gray-500">Cargando editor...</p>
                 </div>
               </div>
@@ -91,9 +91,9 @@
         <!-- Manual save button (fallback) -->
         <div class="mt-6 flex justify-end">
           <button
-            @click="handleManualSave"
             :disabled="!hasChanges || isSaving"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            @click="handleManualSave"
           >
             <svg
               v-if="isSaving"
@@ -126,8 +126,7 @@
 
 <script setup lang="ts">
 import { ref, computed, getCurrentInstance } from 'vue';
-import { useRouter } from 'vue-router';
-import { onBeforeRouteLeave } from 'vue-router';
+import { useRouter, onBeforeRouteLeave  } from 'vue-router';
 import { usePostsStore } from '~/interface/stores/posts.store';
 import PostEditor from '~/interface/components/posts/PostEditor.vue';
 
@@ -142,7 +141,7 @@ definePageMeta({
 const router = useRouter();
 const instance = getCurrentInstance();
 const toast = instance?.appContext.config.globalProperties.$toast;
-const postsStore = process.client ? usePostsStore() : null;
+const postsStore = import.meta.client ? usePostsStore() : null;
 
 // Reactive state
 const hasChanges = ref(false);

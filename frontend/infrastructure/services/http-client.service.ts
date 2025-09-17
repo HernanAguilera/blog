@@ -29,6 +29,10 @@ export class HttpClientService implements HttpClientInterface {
         return this.request<T>('PUT', url, data, options);
     }
 
+    async patch<T>(url: string, data: any = {}, options: any = {}): Promise<T> {
+        return this.request<T>('PATCH', url, data, options);
+    }
+
     async delete<T>(url: string, options: any = {}): Promise<T> {
         return this.request<T>('DELETE', url, undefined, options);
     }

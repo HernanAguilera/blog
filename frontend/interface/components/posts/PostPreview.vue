@@ -7,9 +7,9 @@
           Vista previa
         </h3>
         <button
-          @click="$emit('close')"
           type="button"
           class="text-gray-400 hover:text-gray-500"
+          @click="$emit('close')"
         >
           <svg
             class="h-5 w-5"
@@ -61,8 +61,8 @@
         <!-- Content -->
         <div
           v-if="content"
-          v-html="sanitizedContent"
           class="prose-content"
+          v-html="sanitizedContent"
         />
         <div
           v-else
@@ -82,18 +82,18 @@
 
         <div class="flex space-x-3">
           <button
-            @click="$emit('edit')"
             type="button"
             class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            @click="$emit('edit')"
           >
             Editar
           </button>
 
           <button
             v-if="canPublish"
-            @click="$emit('publish')"
             type="button"
             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            @click="$emit('publish')"
           >
             Publicar ahora
           </button>

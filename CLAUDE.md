@@ -42,22 +42,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 BlogV2 is a personal blogging platform built with a decoupled architecture following Clean Architecture principles. The project is currently in active development with significant progress made.
 
-**Current Status:** 4 sprints completed, currently in Sprint 5 (Editor Avanzado)
-
 ## Implementation Progress
 
-### ✅ **COMPLETED SPRINTS (0-4)**
-- **Sprint 0:** Project setup, Docker configuration, Laravel & Nuxt scaffolding
-- **Sprint 1-3:** Complete authentication system with roles, OAuth, and security
-- **Sprint 4:** Full backend posts domain with CRUD operations
-
-### 🔄 **CURRENT SPRINT (5)**
-- **Sprint 5:** Advanced editor features (backend completed, pending: state management)
-
-### ⏳ **UPCOMING SPRINTS (6-19)**
-- **Sprint 6:** Frontend posts management and Quill.js editor
-- **Sprint 7:** Comments system with moderation
-- **Sprint 8+:** Multi-language, newsletter, static pages, and advanced features
+Para el estado actual del proyecto, consulta el archivo [sprints.md](./docs/sprints.md).
 
 ## Architecture & Technology Stack
 

@@ -1,3 +1,11 @@
+import type {
+    BaseFilter,
+    DateRangeFilter,
+    StatusFilter,
+    AuthorFilter,
+    PaginatedResponse
+} from '../../shared/types/common.types';
+
 export type PostData = {
     id: string;
     title: string;
@@ -24,14 +32,6 @@ export type UpdatePostData = {
     status?: string;
     scheduledAt?: string;
 };
-
-import type {
-    BaseFilter,
-    DateRangeFilter,
-    StatusFilter,
-    AuthorFilter,
-    PaginatedResponse
-} from '../../shared/types/common.types';
 
 export type PostFilters = BaseFilter & DateRangeFilter & StatusFilter & AuthorFilter;
 

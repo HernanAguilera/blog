@@ -53,9 +53,32 @@
 
 ## Sprint 6 (Días 16-18): Frontend Posts
 
-- [ ] **Historia de Usuario:** [Historia 2: Gestión de Posts y Contenido](./HU/historia-2-gestion-de-posts-y-contenido.md)
-  - [ ] [Tarea 2.6: Frontend - Gestión de Posts](./task/tarea-2-6-frontend-gestion-de-posts.md)
-  - [ ] [Tarea 2.7: Editor Quill.js y Highlight.js](./task/tarea-2-7-editor-quill-js-y-highlight-js.md)
+- [x] **Historia de Usuario:** [Historia 2: Gestión de Posts y Contenido](./HU/historia-2-gestion-de-posts-y-contenido.md)
+  - [x] [Tarea 2.6: Frontend - Gestión de Posts](./task/tarea-2-6-frontend-gestion-de-posts.md)
+    - [x] Implementado store de posts con Pinia
+    - [x] Componentes PostList y PostEditor
+    - [x] Páginas admin para gestión de posts
+    - [x] Sistema de toasts para notificaciones
+    - [x] Integración completa frontend-backend
+  - [x] [Tarea 2.7: Editor Quill.js y Highlight.js](./task/tarea-2-7-editor-quill-js-y-highlight-js.md)
+    - [x] Editor Quill.js completamente funcional
+    - [x] Auto-save y preview capabilities
+    - [x] Manejo de estados de guardado
+    - [x] Validación y sanitización de contenido
+
+## ✅ Sprint 6.5 (COMPLETADO): Frontend Público - MVP Completado
+
+- [x] **COMPLETADO:** [Plan de Acción Sprint 6.5](./action-plans/sprint-6-5-frontend-publico.md)
+  - [x] **Tarea 6.5.1: Layout Público Base** - Header, Footer, Navigation responsivos
+  - [x] **Tarea 6.5.2: Página de Inicio** - Lista de posts publicados con paginación
+  - [x] **Tarea 6.5.3: Página Post Individual** - Routing dinámico `/{year}/{month}/{slug}`
+  - [x] **Tarea 6.5.4: SEO y Meta Tags** - Open Graph, meta description, structured data
+  - [x] **Tarea 6.5.5: Error Pages** - 404 y páginas de error amigables
+  - [x] **Tarea 6.5.6: Testing y Optimización** - Performance, responsive, SEO
+
+**🎯 RESULTADO:** Blog público completamente funcional. MVP del blog finalizado.
+
+**✅ LOGROS:** Visitantes pueden ahora leer posts publicados, navegar el sitio, y disfrutar de una experiencia optimizada con SEO completo.
 
 ## Sprint 7: Comentarios y Moderación
 

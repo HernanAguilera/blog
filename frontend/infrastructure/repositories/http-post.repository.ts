@@ -168,10 +168,10 @@ export class HttpPostRepository implements PostRepositoryInterface {
     // Admin endpoints - Status management
     async changePostStatus(data: PostStatusChangeData, token: string): Promise<Post> {
         try {
-            const response = await this.httpClient.post<{ data: any }>(
+            const response = await this.httpClient.patch<{ data: any }>(
                 `${this.adminBaseUrl}/${data.postId}/transition`,
                 {
-                    new_status: data.newStatus,
+                    status: data.newStatus,
                     scheduled_at: data.scheduledAt
                 },
                 {

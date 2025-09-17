@@ -134,8 +134,8 @@
           <p class="mt-1 text-sm text-gray-500">{{ errorMessage }}</p>
           <div class="mt-6">
             <button
-              @click="loadPost"
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              @click="loadPost"
             >
               Intentar de nuevo
             </button>
@@ -243,8 +243,8 @@
 
               <!-- Content -->
               <div
-                v-html="currentPost.getContent().value()"
                 class="prose-content"
+                v-html="currentPost.getContent().value()"
               />
             </article>
           </div>

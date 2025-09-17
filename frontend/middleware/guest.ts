@@ -6,7 +6,7 @@ import { useAuthStore } from '~/interface/stores/auth.store';
 
 export default defineNuxtRouteMiddleware(async (to) => {
   // Skip on server-side rendering to avoid hydration issues
-  if (process.server) return;
+  if (import.meta.server) return;
 
   const authStore = useAuthStore();
 

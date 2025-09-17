@@ -16,9 +16,9 @@ use App\src\Domain\Post\ValueObjects\MetaDescription;
 use App\src\Domain\Post\Events\PostUpdated;
 use App\src\Domain\Post\Exceptions\PostNotFoundException;
 use App\src\Domain\Post\Exceptions\PostValidationException;
+use App\src\Domain\Shared\Events\EventDispatcherInterface;
 use DateTimeImmutable;
 use Illuminate\Support\Str;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 final readonly class UpdatePostUseCase
 {

@@ -8,7 +8,7 @@ use App\src\Domain\Post\Repositories\PostRepositoryInterface;
 use App\src\Domain\Post\ValueObjects\PostId;
 use App\src\Domain\Post\Events\PostDeleted;
 use App\src\Domain\Post\Exceptions\PostNotFoundException;
-use Psr\EventDispatcher\EventDispatcherInterface;
+use App\src\Domain\Shared\Events\EventDispatcherInterface;
 
 final readonly class DeletePostUseCase
 {

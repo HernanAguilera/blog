@@ -1,15 +1,6 @@
-import { createConfigForNuxt } from '@nuxt/eslint'
+import withNuxt from './.nuxt/eslint.config.mjs'
 
-export default createConfigForNuxt({
-  features: {
-    typescript: true,
-    stylistic: {
-      indent: 2,
-      quotes: 'single',
-      semi: true,
-    }
-  }
-}).append({
+export default withNuxt({
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',

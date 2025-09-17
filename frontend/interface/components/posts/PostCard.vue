@@ -73,8 +73,8 @@
 
           <button
             v-if="canPreview"
-            @click="handlePreview"
             class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200"
+            @click="handlePreview"
           >
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -99,11 +99,11 @@
         <!-- Secondary actions -->
         <div class="flex items-center space-x-1">
           <!-- Quick status change -->
-          <div class="relative" v-if="quickActions.length > 0">
+          <div v-if="quickActions.length > 0" class="relative">
             <button
-              @click="showQuickActions = !showQuickActions"
               class="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors duration-200"
               :class="{ 'bg-gray-100': showQuickActions }"
+              @click="showQuickActions = !showQuickActions"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
@@ -113,25 +113,25 @@
             <!-- Quick actions dropdown -->
             <div
               v-if="showQuickActions"
-              @click.away="showQuickActions = false"
               class="absolute right-0 mt-1 w-36 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10"
+              @click.away="showQuickActions = false"
             >
               <div class="py-1">
                 <button
                   v-for="action in quickActions"
                   :key="action.status"
-                  @click="handleQuickAction(action.status)"
                   class="block w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
+                  @click="handleQuickAction(action.status)"
                 >
                   {{ action.label }}
                 </button>
 
-                <hr class="my-1" v-if="canDelete">
+                <hr v-if="canDelete" class="my-1">
 
                 <button
                   v-if="canDelete"
-                  @click="handleDelete"
                   class="block w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50"
+                  @click="handleDelete"
                 >
                   Eliminar
                 </button>

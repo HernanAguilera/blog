@@ -10,6 +10,7 @@ export default {
     "./interface/**/*.{js,vue,ts}",
     "./shared/**/*.{js,vue,ts}"
   ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },

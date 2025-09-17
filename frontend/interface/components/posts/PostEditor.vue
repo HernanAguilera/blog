@@ -22,11 +22,11 @@
       <div class="px-6 pt-6 pb-2">
         <input
           v-model="title"
-          @input="handleTitleChange"
           type="text"
           placeholder="Título del post..."
           class="block w-full text-3xl font-bold border-0 border-b border-transparent pb-2 placeholder-gray-400 focus:border-gray-300 focus:ring-0 focus:outline-none"
-        />
+          @input="handleTitleChange"
+        >
       </div>
 
       <!-- Quill editor -->

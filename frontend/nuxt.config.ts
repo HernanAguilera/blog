@@ -6,8 +6,28 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    '@nuxtjs/color-mode'
   ],
+
+  colorMode: {
+    preference: 'system', // default theme
+    dataValue: 'theme', // activate data-theme in <html> tag
+    classSuffix: ''
+  },
+
+  components: [
+    {
+      path: '~/interface/components',
+      pathPrefix: false
+    }
+  ],
+
+  imports: {
+    dirs: [
+      'interface/composables'
+    ]
+  },
 
   typescript: {
     strict: true,
@@ -22,6 +42,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:8000/api',
+      baseUrl: process.env.BASE_URL || 'http://localhost:3000',
       turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || ''
     }
   }

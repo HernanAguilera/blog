@@ -25,26 +25,26 @@
           <!-- View mode toggle -->
           <div class="flex rounded-md shadow-sm">
             <button
-              @click="viewMode = 'grid'"
               :class="[
                 'px-3 py-2 text-sm font-medium rounded-l-md border',
                 viewMode === 'grid'
                   ? 'bg-blue-50 border-blue-200 text-blue-700'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               ]"
+              @click="viewMode = 'grid'"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
               </svg>
             </button>
             <button
-              @click="viewMode = 'list'"
               :class="[
                 'px-3 py-2 text-sm font-medium rounded-r-md border-t border-r border-b',
                 viewMode === 'list'
                   ? 'bg-blue-50 border-blue-200 text-blue-700'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               ]"
+              @click="viewMode = 'list'"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -68,11 +68,11 @@
             <input
               id="search"
               v-model="searchQuery"
-              @input="debouncedSearch"
               type="text"
               placeholder="Buscar por título o contenido..."
               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            />
+              @input="debouncedSearch"
+            >
           </div>
         </div>
 
@@ -82,8 +82,8 @@
           <select
             id="status-filter"
             v-model="statusFilter"
-            @change="applyFilters"
             class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+            @change="applyFilters"
           >
             <option value="">Todos los estados</option>
             <option value="draft">Borradores</option>
@@ -99,8 +99,8 @@
           <select
             id="sort-filter"
             v-model="sortBy"
-            @change="applyFilters"
             class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+            @change="applyFilters"
           >
             <option value="updated_at">Última modificación</option>
             <option value="created_at">Fecha de creación</option>
@@ -112,8 +112,8 @@
         <!-- Clear filters -->
         <button
           v-if="hasActiveFilters"
-          @click="clearFilters"
           class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          @click="clearFilters"
         >
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -157,8 +157,8 @@
       <p class="mt-1 text-sm text-gray-500">{{ errorMessage }}</p>
       <div class="mt-6">
         <button
-          @click="retryLoad"
           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          @click="retryLoad"
         >
           Intentar de nuevo
         </button>
@@ -176,7 +176,7 @@
       <p class="mt-1 text-sm text-gray-500">
         {{ hasActiveFilters ? 'Intenta cambiar los filtros de búsqueda.' : 'Comienza creando tu primer post.' }}
       </p>
-      <div class="mt-6" v-if="!hasActiveFilters">
+      <div v-if="!hasActiveFilters" class="mt-6">
         <NuxtLink
           to="/admin/posts/create"
           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -224,16 +224,16 @@
         <nav class="flex items-center justify-between">
           <div class="flex-1 flex justify-between sm:hidden">
             <button
-              @click="goToPage(pagination.current_page - 1)"
               :disabled="pagination.current_page <= 1"
               class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="goToPage(pagination.current_page - 1)"
             >
               Anterior
             </button>
             <button
-              @click="goToPage(pagination.current_page + 1)"
               :disabled="pagination.current_page >= pagination.last_page"
               class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="goToPage(pagination.current_page + 1)"
             >
               Siguiente
             </button>
@@ -256,9 +256,9 @@
               <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 <!-- Previous page -->
                 <button
-                  @click="goToPage(pagination.current_page - 1)"
                   :disabled="pagination.current_page <= 1"
                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  @click="goToPage(pagination.current_page - 1)"
                 >
                   <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -269,22 +269,22 @@
                 <button
                   v-for="page in visiblePages"
                   :key="page"
-                  @click="goToPage(page)"
                   :class="[
                     'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
                     page === pagination.current_page
                       ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
                       : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                   ]"
+                  @click="goToPage(page)"
                 >
                   {{ page }}
                 </button>
 
                 <!-- Next page -->
                 <button
-                  @click="goToPage(pagination.current_page + 1)"
                   :disabled="pagination.current_page >= pagination.last_page"
                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  @click="goToPage(pagination.current_page + 1)"
                 >
                   <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -487,14 +487,14 @@ const handleDelete = async (post: any) => {
 // Watchers
 watch(viewMode, () => {
   // Save view mode preference (only on client)
-  if (process.client) {
+  if (import.meta.client) {
     localStorage.setItem('posts-view-mode', viewMode.value);
   }
 });
 
 // Load view mode preference (only on client)
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     const savedViewMode = localStorage.getItem('posts-view-mode') as 'grid' | 'list';
     if (savedViewMode && ['grid', 'list'].includes(savedViewMode)) {
       viewMode.value = savedViewMode;

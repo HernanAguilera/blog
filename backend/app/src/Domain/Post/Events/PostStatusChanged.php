@@ -60,7 +60,7 @@ final readonly class PostStatusChanged implements DomainEvent
         return 'post.status_changed';
     }
 
-    public function toPrimitives(): array
+    public function toArray(): array
     {
         return [
             'post_id' => $this->postId,
@@ -71,6 +71,11 @@ final readonly class PostStatusChanged implements DomainEvent
             'new_status' => $this->newStatus,
             'occurred_on' => $this->occurredOn->format('Y-m-d H:i:s'),
         ];
+    }
+
+    public function toPrimitives(): array
+    {
+        return $this->toArray();
     }
 
     public static function fromPrimitives(array $data): self

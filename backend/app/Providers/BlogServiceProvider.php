@@ -14,12 +14,13 @@ use App\src\Application\UseCases\Post\GetDraftPostsUseCase;
 use App\src\Application\UseCases\Post\GetArchivedPostsUseCase;
 use App\src\Application\UseCases\Post\AutoSavePostUseCase;
 use App\src\Application\UseCases\Post\PreviewPostUseCase;
+use App\src\Application\UseCases\Post\ChangePostStatusUseCase;
 use App\src\Domain\Post\Services\HtmlSanitizerInterface;
 use App\src\Infrastructure\Services\HtmlSanitizerService;
 use App\src\Interface\Console\Commands\CleanupDraftsCommand;
 use App\src\Interface\Console\Commands\CleanupPreviewsCommand;
+use App\src\Domain\Shared\Events\EventDispatcherInterface;
 use Illuminate\Support\ServiceProvider;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -107,14 +108,21 @@ class BlogServiceProvider extends ServiceProvider
             );
         });
 
-        // Register Event Dispatcher - convert Laravel dispatcher to PSR compatible
+        $this->app->bind(ChangePostStatusUseCase::class, function ($app) {
+            return new ChangePostStatusUseCase(
+                $app->make(PostRepositoryInterface::class),
+                $app->make(EventDispatcherInterface::class)
+            );
+        });
+
+        // Register Event Dispatcher - convert Laravel dispatcher to Domain interface
         $this->app->bind(EventDispatcherInterface::class, function () {
-            // Create a simple adapter that implements PSR EventDispatcherInterface
+            // Create a simple adapter that implements Domain EventDispatcherInterface
             return new class(app('events')) implements EventDispatcherInterface {
                 public function __construct(private $dispatcher) {}
 
-                public function dispatch(object $event) {
-                    return $this->dispatcher->dispatch($event);
+                public function dispatch(object $event): void {
+                    $this->dispatcher->dispatch($event);
                 }
             };
         });

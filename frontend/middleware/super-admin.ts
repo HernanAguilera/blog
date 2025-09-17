@@ -7,7 +7,7 @@ import { ROLE } from '~/domain/types/permissions.types';
 
 export default defineNuxtRouteMiddleware(() => {
   // Skip on server-side rendering to avoid hydration issues
-  if (process.server) return;
+  if (import.meta.server) return;
 
   const authStore = useAuthStore();
 

@@ -7,10 +7,10 @@
       <div class="flex items-center space-x-2">
         <!-- Save button -->
         <button
-          @click="$emit('save')"
           :disabled="isSaving || !hasChanges"
           type="button"
           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          @click="$emit('save')"
         >
           <svg
             v-if="isSaving"
@@ -38,10 +38,10 @@
 
         <!-- Preview button -->
         <button
-          @click="$emit('preview')"
           :disabled="isGeneratingPreview"
           type="button"
           class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          @click="$emit('preview')"
         >
           <svg
             v-if="isGeneratingPreview"
@@ -114,11 +114,11 @@
     <!-- Right side: Status actions -->
     <div class="flex items-center space-x-2">
       <!-- Status change dropdown -->
-      <div class="relative" v-if="availableTransitions.length > 0">
+      <div v-if="availableTransitions.length > 0" class="relative">
         <button
-          @click="showStatusMenu = !showStatusMenu"
           type="button"
           class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          @click="showStatusMenu = !showStatusMenu"
         >
           Cambiar estado
           <svg
@@ -138,15 +138,15 @@
         <!-- Dropdown menu -->
         <div
           v-if="showStatusMenu"
-          @click.away="showStatusMenu = false"
           class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+          @click.away="showStatusMenu = false"
         >
           <div class="py-1">
             <button
               v-for="transition in availableTransitions"
               :key="transition"
-              @click="handleStatusChange(transition)"
               class="block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-100"
+              @click="handleStatusChange(transition)"
             >
               {{ getStatusLabel(transition) }}
             </button>
@@ -156,9 +156,9 @@
 
       <!-- Settings button -->
       <button
-        @click="$emit('settings')"
         type="button"
         class="inline-flex items-center p-1.5 border border-gray-300 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        @click="$emit('settings')"
       >
         <svg
           class="h-4 w-4"

@@ -67,8 +67,8 @@
             <!-- Actions Menu -->
             <div class="relative">
               <button
-                @click="showUserMenu = !showUserMenu"
                 class="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                @click="showUserMenu = !showUserMenu"
               >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
@@ -78,8 +78,8 @@
               <!-- User Menu Dropdown -->
               <div
                 v-if="showUserMenu"
-                @click.away="showUserMenu = false"
                 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10"
+                @click.away="showUserMenu = false"
               >
                 <div class="py-1">
                   <NuxtLink
@@ -98,8 +98,8 @@
                   </NuxtLink>
                   <hr class="my-1">
                   <button
-                    @click="handleLogout"
                     class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    @click="handleLogout"
                   >
                     Cerrar sesión
                   </button>
@@ -110,8 +110,8 @@
             <!-- Mobile menu button -->
             <div class="md:hidden">
               <button
-                @click="mobileMenuOpen = !mobileMenuOpen"
                 class="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
+                @click="mobileMenuOpen = !mobileMenuOpen"
               >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

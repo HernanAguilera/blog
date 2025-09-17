@@ -14,10 +14,10 @@
       <!-- Loading State -->
       <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6 mb-8">
         <div class="flex items-center space-x-4">
-          <div class="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
+          <div class="h-12 w-12 bg-gray-200 rounded-full animate-pulse"/>
           <div>
-            <div class="h-6 bg-gray-200 rounded animate-pulse w-32 mb-2"></div>
-            <div class="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+            <div class="h-6 bg-gray-200 rounded animate-pulse w-32 mb-2"/>
+            <div class="h-4 bg-gray-200 rounded animate-pulse w-24"/>
           </div>
         </div>
       </div>
@@ -107,11 +107,11 @@
         <!-- Admin Panel Loading -->
         <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center space-x-3 mb-4">
-            <div class="h-10 w-10 bg-gray-200 rounded-lg animate-pulse"></div>
-            <div class="h-5 bg-gray-200 rounded animate-pulse w-24"></div>
+            <div class="h-10 w-10 bg-gray-200 rounded-lg animate-pulse"/>
+            <div class="h-5 bg-gray-200 rounded animate-pulse w-24"/>
           </div>
-          <div class="h-4 bg-gray-200 rounded animate-pulse w-32 mb-4"></div>
-          <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-32 mb-4"/>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-20"/>
         </div>
 
         <!-- Admin Panel Fallback (when no user data but authenticated) -->
@@ -164,9 +164,9 @@
       <!-- Logout Button -->
       <div class="text-center">
         <button
-          @click="handleLogout"
           :disabled="isLoggingOut"
           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+          @click="handleLogout"
         >
           {{ isLoggingOut ? 'Cerrando sesión...' : 'Cerrar Sesión' }}
         </button>

@@ -126,8 +126,8 @@
           <p class="mt-1 text-sm text-gray-500">{{ errorMessage }}</p>
           <div class="mt-6">
             <button
-              @click="loadPost"
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              @click="loadPost"
             >
               Intentar de nuevo
             </button>
@@ -156,8 +156,8 @@
               </h3>
               <div class="mt-4">
                 <button
-                  @click="showSuccessMessage = false"
                   class="bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                  @click="showSuccessMessage = false"
                 >
                   Cerrar
                 </button>
@@ -204,7 +204,7 @@
               </svg>
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+              <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900">
                 Eliminar post
               </h3>
               <div class="mt-2">
@@ -216,18 +216,18 @@
           </div>
           <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <button
-              @click="confirmDelete"
               :disabled="isDeleting"
               type="button"
               class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="confirmDelete"
             >
               {{ isDeleting ? 'Eliminando...' : 'Eliminar' }}
             </button>
             <button
-              @click="showDeleteModal = false"
               :disabled="isDeleting"
               type="button"
               class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="showDeleteModal = false"
             >
               Cancelar
             </button>

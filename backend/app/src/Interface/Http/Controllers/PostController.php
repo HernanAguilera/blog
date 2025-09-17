@@ -7,18 +7,22 @@ namespace App\src\Interface\Http\Controllers;
 use App\src\Application\DTOs\Post\CreatePostDTO;
 use App\src\Application\DTOs\Post\UpdatePostDTO;
 use App\src\Application\DTOs\Post\PostFilterDTO;
+use App\src\Application\DTOs\Post\ChangePostStatusDTO;
 use App\src\Application\UseCases\Post\CreatePostUseCase;
 use App\src\Application\UseCases\Post\UpdatePostUseCase;
 use App\src\Application\UseCases\Post\DeletePostUseCase;
 use App\src\Application\UseCases\Post\GetPostUseCase;
 use App\src\Application\UseCases\Post\GetPublishedPostsUseCase;
 use App\src\Application\UseCases\Post\GetAllPostsUseCase;
+use App\src\Application\UseCases\Post\ChangePostStatusUseCase;
 use App\src\Interface\Http\Requests\CreatePostRequest;
 use App\src\Interface\Http\Requests\UpdatePostRequest;
+use App\Http\Requests\ChangePostStatusRequest;
 use App\src\Interface\Http\Resources\PostResource;
 use App\src\Interface\Http\Resources\PostCollection;
 use App\src\Domain\Post\Exceptions\PostNotFoundException;
 use App\src\Domain\Post\Exceptions\PostValidationException;
+use App\src\Domain\Post\Exceptions\PostAccessDeniedException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -31,7 +35,8 @@ class PostController
         private DeletePostUseCase $deletePostUseCase,
         private GetPostUseCase $getPostUseCase,
         private GetPublishedPostsUseCase $getPublishedPostsUseCase,
-        private GetAllPostsUseCase $getAllPostsUseCase
+        private GetAllPostsUseCase $getAllPostsUseCase,
+        private ChangePostStatusUseCase $changePostStatusUseCase
     ) {}
 
     /**
@@ -258,6 +263,52 @@ class PostController
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error deleting post',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Change post status (transition)
+     */
+    public function changeStatus(int $id, ChangePostStatusRequest $request): JsonResponse
+    {
+        try {
+            $dto = new ChangePostStatusDTO(
+                postId: $id,
+                userId: $request->getUserId(),
+                newStatus: $request->validated('status')
+            );
+
+            $this->changePostStatusUseCase->execute($dto);
+
+            // Get the updated post to return it
+            $updatedPost = $this->getPostUseCase->executeById($id);
+
+            return response()->json([
+                'message' => 'Post status changed successfully',
+                'data' => new PostResource($updatedPost)
+            ]);
+
+        } catch (PostNotFoundException $e) {
+            return response()->json([
+                'message' => 'Post not found'
+            ], Response::HTTP_NOT_FOUND);
+
+        } catch (PostAccessDeniedException $e) {
+            return response()->json([
+                'message' => 'Access denied. You cannot change the status of this post.'
+            ], Response::HTTP_FORBIDDEN);
+
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'message' => 'Invalid status',
+                'error' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error changing post status',
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
