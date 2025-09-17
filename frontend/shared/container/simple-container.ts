@@ -46,3 +46,7 @@ export class SimpleContainer implements ContainerInterface {
     this.bindings.clear();
   }
 }
+
+// Create and export default instance
+const container = new SimpleContainer();
+export default container;

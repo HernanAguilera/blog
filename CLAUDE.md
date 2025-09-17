@@ -2,7 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# ⚠️ REGLA CRÍTICA - RESPONDER PREGUNTAS DIRECTAS ⚠️
+# 🚨 REGLAS CRÍTICAS ABSOLUTAS 🚨
+
+## ⚠️ REGLA CRÍTICA 1 - RESPONDER PREGUNTAS DIRECTAS ⚠️
 
 **SIEMPRE RESPONDE CUANDO EL USUARIO HACE UNA PREGUNTA DIRECTA**
 
@@ -12,6 +14,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Responde primero, luego continúa con las tareas técnicas si es necesario
 
 **ESTA REGLA NO TIENE EXCEPCIONES**
+
+## 🚨 REGLA CRÍTICA 2 - JAMÁS ELIMINAR ARCHIVOS SIN AUTORIZACIÓN 🚨
+
+**NUNCA, BAJO NINGUNA CIRCUNSTANCIA, ELIMINES UN ARCHIVO SIN AUTORIZACIÓN EXPLÍCITA**
+
+- **ANTES** de eliminar cualquier archivo, SIEMPRE pregunta al usuario
+- **EXPLICA** por qué consideras que el archivo debe eliminarse
+- **MUESTRA** el contenido del archivo que planeas eliminar
+- **ESPERA** autorización explícita del usuario
+- **DOCUMENTA** la eliminación después de obtener autorización
+
+**ELIMINAR ARCHIVOS SIN AVISAR ES DESTRUCTIVO Y PELIGROSO**
+
+### Protocolo obligatorio para eliminación de archivos:
+1. **DETENTE** - No elimines nada automáticamente
+2. **INFORMA** al usuario sobre el archivo problemático
+3. **MUESTRA** el contenido del archivo
+4. **EXPLICA** el problema y la solución propuesta
+5. **PREGUNTA** si debe eliminarse o hay alternativas
+6. **ESPERA** respuesta antes de proceder
+7. **DOCUMENTA** la acción realizada
+
+**ESTA REGLA NO TIENE EXCEPCIONES - CUALQUIER VIOLACIÓN ES CRÍTICA**
 
 ## Project Overview
 

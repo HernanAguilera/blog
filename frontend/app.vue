@@ -1,7 +1,8 @@
 <template>
   <div>
-    <!-- This will render the matched page component -->
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 
