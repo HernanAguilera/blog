@@ -162,12 +162,12 @@ export class Post {
         }
 
         return new Post(
-            new PostId(data.id),
+            new PostId(String(data.id)),
             new PostTitle(data.title),
             new PostContent(data.content),
             new PostSlug(data.slug),
             new PostStatus(data.status),
-            new UserId(data.author_id),
+            new UserId(String(data.author_id)),
             data.scheduled_at ? new Date(data.scheduled_at) : undefined,
             data.published_at ? new Date(data.published_at) : undefined,
             data.created_at ? new Date(data.created_at) : undefined,

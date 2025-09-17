@@ -115,6 +115,9 @@ export const useAuthStore = defineStore('auth', {
                         expiresAt: result.expiresAt.toISOString()
                     });
 
+                    // Store user data separately for restoration
+                    this.storeUserData(result.user);
+
                     return { success: true, message: result.message };
                 } else {
                     this.setError(result.message, result.errors);
@@ -152,6 +155,9 @@ export const useAuthStore = defineStore('auth', {
                         expiresAt: result.expiresAt.toISOString()
                     });
 
+                    // Store user data separately for restoration
+                    this.storeUserData(result.user);
+
                     return { success: true, message: result.message };
                 } else {
                     this.setError(result.message, result.errors);
@@ -184,9 +190,89 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
+        // JWT Helper
+        decodeUserFromToken(token: string): User | null {
+            try {
+                // Decode JWT payload (second part of token)
+                const tokenParts = token.split('.');
+                if (tokenParts.length !== 3) {
+                    throw new Error('Invalid JWT format');
+                }
+
+                const payloadPart = tokenParts[1];
+                if (!payloadPart) {
+                    throw new Error('JWT payload missing');
+                }
+
+                const payload = JSON.parse(atob(payloadPart));
+
+                // Extract user data from JWT
+                if (payload.user_id && payload.email && payload.role) {
+                    // Create User entity from JWT data
+                    const userData = {
+                        id: payload.user_id,
+                        name: payload.name || 'Usuario', // Fallback si no está en JWT
+                        email: payload.email,
+                        role: payload.role,
+                        is_active: true, // Assuming active if JWT is valid
+                        email_verified: true // Assuming verified if JWT is valid
+                    };
+
+                    return User.fromApiResponse(userData);
+                }
+
+                return null;
+            } catch (error) {
+                return null;
+            }
+        },
+
+        // User data persistence helpers
+        storeUserData(user: User): void {
+            if (typeof window === 'undefined') return;
+
+            try {
+                const userData = user.toPlainObject();
+                localStorage.setItem('user_data', JSON.stringify(userData));
+            } catch (error) {
+                console.error('Error storing user data:', error);
+            }
+        },
+
+        getStoredUserData(): User | null {
+            if (typeof window === 'undefined') return null;
+
+            try {
+                const userDataString = localStorage.getItem('user_data');
+                if (!userDataString) {
+                    return null;
+                }
+
+                const userData = JSON.parse(userDataString);
+                return User.fromApiResponse(userData);
+            } catch (error) {
+                console.error('Error retrieving user data:', error);
+                // Clean up corrupted data
+                localStorage.removeItem('user_data');
+                return null;
+            }
+        },
+
+        clearStoredUserData(): void {
+            if (typeof window === 'undefined') return;
+
+            try {
+                localStorage.removeItem('user_data');
+            } catch (error) {
+                console.error('Error clearing user data:', error);
+            }
+        },
+
         // Session management
         async restoreSession() {
-            if (!this._tokenStorage) return false;
+            if (!this._tokenStorage) {
+                return false;
+            }
 
             this.isLoading = true;
 
@@ -198,12 +284,24 @@ export const useAuthStore = defineStore('auth', {
                     return false;
                 }
 
-                // TODO: Validate token with server and get user data
-                // For now, we'll need to implement getCurrentUser in the repository
-                this.token = tokenData.token;
-                this.expiresAt = new Date(tokenData.expiresAt);
-                this.isAuthenticated = true;
-                this.updateLastActivity();
+                // Try to get user data from localStorage first
+                let userFromStorage = this.getStoredUserData();
+
+                // If no stored user data, try to decode from JWT
+                if (!userFromStorage) {
+                    userFromStorage = this.decodeUserFromToken(tokenData.token);
+                }
+
+                if (userFromStorage) {
+                    // Restore complete session with user data
+                    this.setAuthenticatedUser(userFromStorage, tokenData.token, new Date(tokenData.expiresAt));
+                } else {
+                    // Fallback: restore only token (previous behavior)
+                    this.token = tokenData.token;
+                    this.expiresAt = new Date(tokenData.expiresAt);
+                    this.isAuthenticated = true;
+                    this.updateLastActivity();
+                }
 
                 return true;
             } catch (error) {
@@ -252,6 +350,7 @@ export const useAuthStore = defineStore('auth', {
             this.isAuthenticated = false;
             this.lastActivity = null;
             this._tokenStorage?.removeToken();
+            this.clearStoredUserData(); // Clear user data from localStorage
             this.clearErrors();
         },
 

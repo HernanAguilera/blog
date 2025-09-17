@@ -94,14 +94,16 @@ export class HttpPostRepository implements PostRepositoryInterface {
 
     async createPost(data: CreatePostData, token: string): Promise<Post> {
         try {
+            const requestPayload = {
+                title: data.title.trim(),
+                content: data.content,
+                status: data.status || 'draft',
+                scheduled_at: data.scheduledAt
+            };
+
             const response = await this.httpClient.post<{ data: any }>(
                 this.adminBaseUrl,
-                {
-                    title: data.title.trim(),
-                    content: data.content,
-                    status: data.status || 'draft',
-                    scheduled_at: data.scheduledAt
-                },
+                requestPayload,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -111,7 +113,9 @@ export class HttpPostRepository implements PostRepositoryInterface {
                 }
             );
 
-            return Post.fromApiResponse(response.data);
+            const post = Post.fromApiResponse(response.data);
+
+            return post;
         } catch (error) {
             throw new Error(`Failed to create post: ${this.getErrorMessage(error)}`);
         }

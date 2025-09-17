@@ -36,9 +36,10 @@ final class Post
         $this->createdAt = $createdAt ?? new DateTimeImmutable();
         $this->readingTime = ReadingTime::fromContent($content);
 
-        if ($this->metaDescription === null) {
-            $this->metaDescription = MetaDescription::fromContent($content);
-        }
+        // Don't auto-generate meta description - let it be null if not provided
+        // if ($this->metaDescription === null) {
+        //     $this->metaDescription = MetaDescription::fromContent($content);
+        // }
     }
 
     public static function create(

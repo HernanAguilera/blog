@@ -74,9 +74,12 @@ final readonly class UpdatePostUseCase
             }
         }
 
-        // Update meta description if provided
+        // Update meta description if provided - treat empty strings as null
         if ($dto->metaDescription !== null) {
-            $metaDescription = new MetaDescription($dto->metaDescription);
+            $metaDescription = null;
+            if (!empty(trim($dto->metaDescription))) {
+                $metaDescription = new MetaDescription($dto->metaDescription);
+            }
             $post->updateMetaDescription($metaDescription);
         }
 

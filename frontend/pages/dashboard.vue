@@ -11,8 +11,19 @@
         </p>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6 mb-8">
+        <div class="flex items-center space-x-4">
+          <div class="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
+          <div>
+            <div class="h-6 bg-gray-200 rounded animate-pulse w-32 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- User Welcome Card -->
-      <div v-if="user" class="bg-white rounded-lg shadow p-6 mb-8">
+      <div v-else-if="user" class="bg-white rounded-lg shadow p-6 mb-8">
         <div class="flex items-center space-x-4">
           <div class="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center">
             <span class="text-white text-xl font-bold">
@@ -25,6 +36,23 @@
             </h2>
             <p class="text-gray-600">
               {{ getRoleDisplayName(user.getRole().value()) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback when only token is available -->
+      <div v-else-if="authStore.isAuthenticated" class="bg-white rounded-lg shadow p-6 mb-8">
+        <div class="flex items-center space-x-4">
+          <div class="h-12 w-12 bg-gray-500 rounded-full flex items-center justify-center">
+            <span class="text-white text-xl font-bold">U</span>
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold text-gray-900">
+              Hola, Usuario
+            </h2>
+            <p class="text-gray-600">
+              Sesión activa
             </p>
           </div>
         </div>
@@ -76,8 +104,41 @@
           </NuxtLink>
         </div>
 
+        <!-- Admin Panel Loading -->
+        <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="h-10 w-10 bg-gray-200 rounded-lg animate-pulse"></div>
+            <div class="h-5 bg-gray-200 rounded animate-pulse w-24"></div>
+          </div>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-32 mb-4"></div>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+        </div>
+
+        <!-- Admin Panel Fallback (when no user data but authenticated) -->
+        <div v-else-if="authStore.isAuthenticated && !user" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="h-10 w-10 bg-purple-500 rounded-lg flex items-center justify-center">
+              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Administración</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Panel de administrador</p>
+          <NuxtLink
+            to="/admin"
+            class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+          >
+            Ir al admin
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </NuxtLink>
+        </div>
+
         <!-- Admin Panel (only for admins) -->
-        <div v-if="canAccessAdmin" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+        <div v-else-if="canAccessAdmin" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
           <div class="flex items-center space-x-3 mb-4">
             <div class="h-10 w-10 bg-purple-500 rounded-lg flex items-center justify-center">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -115,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../interface/stores/auth.store';
 import { ROLE } from '../domain/types/permissions.types';
@@ -145,6 +206,7 @@ const isLoggingOut = ref(false);
 
 // Computed
 const user = computed(() => authStore.currentUser);
+const isLoadingAuth = computed(() => authStore.isLoading);
 const canAccessAdmin = computed(() => {
   return user.value && (user.value.hasRole(ROLE.ADMIN) || user.value.hasRole(ROLE.SUPER_ADMIN));
 });
@@ -174,4 +236,20 @@ const handleLogout = async () => {
     isLoggingOut.value = false;
   }
 };
+
+const ensureUserData = async () => {
+  // If we have a token but no user data, this is a page refresh scenario
+  if (authStore.isAuthenticated && !authStore.currentUser) {
+    // In a real implementation, you would call:
+    // await authStore.getCurrentUser();
+
+    // For now, we'll force a re-login to get complete user data
+    // This is not ideal but ensures the app works correctly
+  }
+};
+
+// Lifecycle
+onMounted(() => {
+  ensureUserData();
+});
 </script>

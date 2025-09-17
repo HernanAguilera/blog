@@ -67,82 +67,25 @@
     <!-- Main content -->
     <div class="py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Success message -->
-        <div
-          v-if="showSuccessMessage"
-          class="rounded-md bg-green-50 p-4 mb-6"
-        >
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-green-800">
-                Post creado exitosamente
-              </h3>
-              <div class="mt-2 text-sm text-green-700">
-                <p>El post ha sido guardado como borrador. Puedes continuar editándolo o publicarlo cuando esté listo.</p>
-              </div>
-              <div class="mt-4">
-                <div class="-mx-2 -my-1.5 flex">
-                  <NuxtLink
-                    v-if="createdPostId"
-                    :to="`/admin/posts/${createdPostId}/edit`"
-                    class="bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                  >
-                    Continuar editando
-                  </NuxtLink>
-                  <button
-                    @click="showSuccessMessage = false"
-                    class="ml-3 bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Error message -->
-        <div
-          v-if="errorMessage"
-          class="rounded-md bg-red-50 p-4 mb-6"
-        >
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800">
-                Error al crear el post
-              </h3>
-              <div class="mt-2 text-sm text-red-700">
-                <p>{{ errorMessage }}</p>
-              </div>
-              <div class="mt-4">
-                <button
-                  @click="errorMessage = ''"
-                  class="bg-red-50 px-2 py-1.5 rounded-md text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600"
-                >
-                  Cerrar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Toast notifications will be handled by a global toast system -->
 
         <!-- Editor -->
         <div class="bg-white shadow rounded-lg">
-          <PostEditor
-            :auto-save="true"
-            @save="handleSave"
-            @change="handleChange"
-          />
+          <ClientOnly>
+            <PostEditor
+              :auto-save="true"
+              @save="handleSave"
+              @change="handleChange"
+            />
+            <template #fallback>
+              <div class="flex items-center justify-center h-96">
+                <div class="text-center">
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <p class="mt-2 text-sm text-gray-500">Cargando editor...</p>
+                </div>
+              </div>
+            </template>
+          </ClientOnly>
         </div>
 
         <!-- Manual save button (fallback) -->
@@ -182,8 +125,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { usePostsStore } from '~/interface/stores/posts.store';
 import PostEditor from '~/interface/components/posts/PostEditor.vue';
 
@@ -196,12 +140,11 @@ definePageMeta({
 
 // Composables
 const router = useRouter();
-const postsStore = usePostsStore();
+const instance = getCurrentInstance();
+const toast = instance?.appContext.config.globalProperties.$toast;
+const postsStore = process.client ? usePostsStore() : null;
 
 // Reactive state
-const showSuccessMessage = ref(false);
-const errorMessage = ref('');
-const createdPostId = ref<string | null>(null);
 const hasChanges = ref(false);
 const postData = ref({
   title: '',
@@ -209,7 +152,7 @@ const postData = ref({
 });
 
 // Computed
-const isSaving = computed(() => postsStore.isSaving);
+const isSaving = computed(() => postsStore?.isSaving || false);
 
 // Methods
 const handleChange = (data: { title: string; content: string }) => {
@@ -228,11 +171,14 @@ const handleManualSave = async () => {
 
 const createPost = async (data: { title: string; content: string }) => {
   try {
-    errorMessage.value = '';
+    if (!postsStore) {
+      toast?.error('Store not available. Please refresh the page.');
+      return;
+    }
 
     // Validate minimum requirements
     if (!data.title.trim()) {
-      errorMessage.value = 'El título es requerido para crear un post.';
+      toast?.error('El título es requerido para crear un post.');
       return;
     }
 
@@ -244,22 +190,15 @@ const createPost = async (data: { title: string; content: string }) => {
 
     if (newPost) {
       hasChanges.value = false;
-      createdPostId.value = newPost.getId().value();
-      showSuccessMessage.value = true;
 
-      // Scroll to top to show success message
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Show success toast
+      toast?.success('Post creado exitosamente como borrador');
 
-      // Optional: Auto-redirect after a delay
-      setTimeout(() => {
-        if (createdPostId.value) {
-          router.push(`/admin/posts/${createdPostId.value}/edit`);
-        }
-      }, 3000);
+      // Immediate redirect to posts list
+      await router.push('/admin/posts');
     }
   } catch (error) {
-    console.error('Error creating post:', error);
-    errorMessage.value = error instanceof Error ? error.message : 'Error desconocido al crear el post';
+    toast?.error(error instanceof Error ? error.message : 'Error desconocido al crear el post');
   }
 };
 
@@ -276,7 +215,7 @@ useHead({
 
 // Warn about unsaved changes when leaving the page
 onBeforeRouteLeave((to, from, next) => {
-  if (hasChanges.value && !showSuccessMessage.value) {
+  if (hasChanges.value) {
     const answer = window.confirm(
       'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?'
     );

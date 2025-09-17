@@ -42,7 +42,11 @@ final readonly class CreatePostUseCase
         $content = new PostContent($dto->content, $dto->excerpt);
         $status = new PostStatus($dto->status);
         $authorId = new UserId($dto->authorId);
-        $metaDescription = $dto->metaDescription ? new MetaDescription($dto->metaDescription) : null;
+        // Handle meta description - treat empty strings as null
+        $metaDescription = null;
+        if (!empty(trim($dto->metaDescription ?? ''))) {
+            $metaDescription = new MetaDescription($dto->metaDescription);
+        }
 
         // Create post entity
         $post = new Post(
@@ -65,7 +69,7 @@ final readonly class CreatePostUseCase
 
         // Dispatch domain event
         $this->eventDispatcher->dispatch(
-            new PostCreated($savedPost->getId(), $savedPost->getTitle(), $savedPost->getAuthorId())
+            new PostCreated($savedPost)
         );
 
         return $savedPost;

@@ -40,7 +40,9 @@ export class CreatePostUseCase {
                 scheduledAt: data.scheduledAt
             };
 
-            return await this.postRepository.createPost(createData, token);
+            const result = await this.postRepository.createPost(createData, token);
+
+            return result;
         } catch (error) {
             throw new Error(`Failed to create post: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }

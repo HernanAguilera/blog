@@ -22,19 +22,19 @@ import type { PostFormData, PostUpdateData, AutoSaveConfig } from '../types/post
 export const usePostsStore = defineStore('posts', () => {
     // Dependencies
     const authStore = useAuthStore();
-    const { $container } = useNuxtApp();
+    const nuxtApp = useNuxtApp();
 
-    // Use cases - injected via container
-    const getPostsUseCase = $container.get<GetPostsUseCase>('GetPostsUseCase');
-    const getPostUseCase = $container.get<GetPostUseCase>('GetPostUseCase');
-    const getPublicPostsUseCase = $container.get<GetPublicPostsUseCase>('GetPublicPostsUseCase');
-    const getPublicPostUseCase = $container.get<GetPublicPostUseCase>('GetPublicPostUseCase');
-    const createPostUseCase = $container.get<CreatePostUseCase>('CreatePostUseCase');
-    const updatePostUseCase = $container.get<UpdatePostUseCase>('UpdatePostUseCase');
-    const deletePostUseCase = $container.get<DeletePostUseCase>('DeletePostUseCase');
-    const changePostStatusUseCase = $container.get<ChangePostStatusUseCase>('ChangePostStatusUseCase');
-    const getPostTransitionsUseCase = $container.get<GetPostTransitionsUseCase>('GetPostTransitionsUseCase');
-    const savePostAsDraftUseCase = $container.get<SavePostAsDraftUseCase>('SavePostAsDraftUseCase');
+    // Use cases - injected via container (safe for SSR)
+    const getPostsUseCase = nuxtApp.$container?.get<GetPostsUseCase>('GetPostsUseCase');
+    const getPostUseCase = nuxtApp.$container?.get<GetPostUseCase>('GetPostUseCase');
+    const getPublicPostsUseCase = nuxtApp.$container?.get<GetPublicPostsUseCase>('GetPublicPostsUseCase');
+    const getPublicPostUseCase = nuxtApp.$container?.get<GetPublicPostUseCase>('GetPublicPostUseCase');
+    const createPostUseCase = nuxtApp.$container?.get<CreatePostUseCase>('CreatePostUseCase');
+    const updatePostUseCase = nuxtApp.$container?.get<UpdatePostUseCase>('UpdatePostUseCase');
+    const deletePostUseCase = nuxtApp.$container?.get<DeletePostUseCase>('DeletePostUseCase');
+    const changePostStatusUseCase = nuxtApp.$container?.get<ChangePostStatusUseCase>('ChangePostStatusUseCase');
+    const getPostTransitionsUseCase = nuxtApp.$container?.get<GetPostTransitionsUseCase>('GetPostTransitionsUseCase');
+    const savePostAsDraftUseCase = nuxtApp.$container?.get<SavePostAsDraftUseCase>('SavePostAsDraftUseCase');
 
     // State
     const posts = ref<Post[]>([]);
@@ -101,6 +101,10 @@ export const usePostsStore = defineStore('posts', () => {
         try {
             loading.value = 'loading';
             clearError();
+
+            if (!getPostsUseCase) {
+                throw new Error('PostsUseCase not available');
+            }
 
             const token = authStore.token;
             if (!token) {
@@ -183,6 +187,10 @@ export const usePostsStore = defineStore('posts', () => {
             saving.value = 'loading';
             clearError();
             clearValidationErrors();
+
+            if (!createPostUseCase) {
+                throw new Error('CreatePostUseCase not available');
+            }
 
             const token = authStore.token;
             if (!token) {

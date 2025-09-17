@@ -467,29 +467,38 @@ const publishPost = async (post: any) => {
 };
 
 const handleStatusChange = async (post: any, status: string) => {
-  // Refresh the list to show updated status
-  await loadPosts();
+  // The store is automatically updated by changePostStatus action
+  // No need to reload the entire list
+  console.log(`Post ${post.getId().value()} status changed to ${status}`);
 };
 
 const handleDelete = async (post: any) => {
-  // Refresh the list after deletion
-  await loadPosts();
+  // The store is automatically updated by deletePost action
+  // No need to reload the entire list
+  console.log(`Post ${post.getId().value()} deleted`);
 };
 
 // Lifecycle
-onMounted(() => {
-  loadPosts();
-});
+// Note: Posts are loaded by the parent component (admin/posts/index.vue)
+// onMounted(() => {
+//   loadPosts();
+// });
 
 // Watchers
 watch(viewMode, () => {
-  // Save view mode preference
-  localStorage.setItem('posts-view-mode', viewMode.value);
+  // Save view mode preference (only on client)
+  if (process.client) {
+    localStorage.setItem('posts-view-mode', viewMode.value);
+  }
 });
 
-// Load view mode preference
-const savedViewMode = localStorage.getItem('posts-view-mode') as 'grid' | 'list';
-if (savedViewMode && ['grid', 'list'].includes(savedViewMode)) {
-  viewMode.value = savedViewMode;
-}
+// Load view mode preference (only on client)
+onMounted(() => {
+  if (process.client) {
+    const savedViewMode = localStorage.getItem('posts-view-mode') as 'grid' | 'list';
+    if (savedViewMode && ['grid', 'list'].includes(savedViewMode)) {
+      viewMode.value = savedViewMode;
+    }
+  }
+});
 </script>

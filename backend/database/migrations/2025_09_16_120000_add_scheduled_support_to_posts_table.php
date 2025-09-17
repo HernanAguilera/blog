@@ -21,10 +21,13 @@ return new class extends Migration
             $table->index(['status', 'scheduled_at']);
         });
 
-        // Update enum to include 'scheduled' status
-        // Note: For PostgreSQL, we need to add the new value to the enum
+        // Update enum constraint to include 'scheduled' status
+        // For both PostgreSQL and MySQL, we need to recreate the constraint
         if (DB::getDriverName() === 'pgsql') {
-            DB::statement("ALTER TYPE post_status ADD VALUE IF NOT EXISTS 'scheduled'");
+            // Drop existing check constraint
+            DB::statement("ALTER TABLE posts DROP CONSTRAINT IF EXISTS posts_status_check");
+            // Add new check constraint with 'scheduled' value
+            DB::statement("ALTER TABLE posts ADD CONSTRAINT posts_status_check CHECK (status IN ('draft', 'published', 'archived', 'scheduled'))");
         } else {
             // For MySQL
             DB::statement("ALTER TABLE posts MODIFY COLUMN status ENUM('draft', 'published', 'archived', 'scheduled') DEFAULT 'draft'");
@@ -45,8 +48,16 @@ return new class extends Migration
             $table->dropColumn('scheduled_at');
         });
 
-        // Note: Removing enum values is complex and risky in production
-        // It's recommended to leave the 'scheduled' value for data integrity
-        // If absolutely necessary, create a separate migration to handle this
+        // Restore original enum constraint (remove 'scheduled' status)
+        // Note: This is risky if there are posts with 'scheduled' status
+        if (DB::getDriverName() === 'pgsql') {
+            // Drop current constraint
+            DB::statement("ALTER TABLE posts DROP CONSTRAINT IF EXISTS posts_status_check");
+            // Restore original constraint
+            DB::statement("ALTER TABLE posts ADD CONSTRAINT posts_status_check CHECK (status IN ('draft', 'published', 'archived'))");
+        } else {
+            // For MySQL
+            DB::statement("ALTER TABLE posts MODIFY COLUMN status ENUM('draft', 'published', 'archived') DEFAULT 'draft'");
+        }
     }
 };

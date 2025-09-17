@@ -72,8 +72,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from 'vue';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
 import { usePostsStore } from '../../stores/posts.store';
 import { useAuthStore } from '../../stores/auth.store';
 import PostToolbar from './PostToolbar.vue';
@@ -105,7 +103,7 @@ const authStore = useAuthStore();
 
 // Reactive state
 const editorContainer = ref<HTMLElement>();
-const quillInstance = ref<Quill>();
+const quillInstance = ref<any>();
 const title = ref(props.initialTitle || '');
 const content = ref(props.initialContent || '');
 const showPreview = ref(false);
@@ -157,6 +155,10 @@ const initializeEditor = async () => {
     console.error('Editor container not found');
     return;
   }
+
+  // Dynamic import of Quill to avoid SSR issues
+  const { default: Quill } = await import('quill');
+  await import('quill/dist/quill.snow.css');
 
   quillInstance.value = new Quill(editorContainer.value, quillConfig);
 
