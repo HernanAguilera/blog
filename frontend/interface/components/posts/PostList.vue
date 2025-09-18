@@ -4,8 +4,8 @@
     <div class="mb-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-2xl font-bold text-gray-900">Posts</h2>
-          <p class="text-sm text-gray-600 mt-1">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Posts</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
             {{ totalPosts }} posts en total
           </p>
         </div>
@@ -28,8 +28,8 @@
               :class="[
                 'px-3 py-2 text-sm font-medium rounded-l-md border',
                 viewMode === 'grid'
-                  ? 'bg-blue-50 border-blue-200 text-blue-700'
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-200 dark:border-blue-600 text-blue-700 dark:text-blue-400'
+                  : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
               ]"
               @click="viewMode = 'grid'"
             >
@@ -41,8 +41,8 @@
               :class="[
                 'px-3 py-2 text-sm font-medium rounded-r-md border-t border-r border-b',
                 viewMode === 'list'
-                  ? 'bg-blue-50 border-blue-200 text-blue-700'
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-200 dark:border-blue-600 text-blue-700 dark:text-blue-400'
+                  : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
               ]"
               @click="viewMode = 'list'"
             >
@@ -55,13 +55,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+      <div class="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
         <!-- Search -->
         <div class="flex-1">
           <label for="search" class="sr-only">Buscar posts</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -70,7 +70,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Buscar por título o contenido..."
-              class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
               @input="debouncedSearch"
             >
           </div>
@@ -82,7 +82,7 @@
           <select
             id="status-filter"
             v-model="statusFilter"
-            class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+            class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
             @change="applyFilters"
           >
             <option value="">Todos los estados</option>
@@ -99,7 +99,7 @@
           <select
             id="sort-filter"
             v-model="sortBy"
-            class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+            class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
             @change="applyFilters"
           >
             <option value="updated_at">Última modificación</option>
@@ -112,7 +112,7 @@
         <!-- Clear filters -->
         <button
           v-if="hasActiveFilters"
-          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           @click="clearFilters"
         >
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +145,7 @@
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
         />
       </svg>
-      <p class="text-gray-500 mt-2">Cargando posts...</p>
+      <p class="text-gray-500 dark:text-gray-400 mt-2">Cargando posts...</p>
     </div>
 
     <!-- Error state -->
@@ -153,8 +153,8 @@
       <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">Error al cargar posts</h3>
-      <p class="mt-1 text-sm text-gray-500">{{ errorMessage }}</p>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Error al cargar posts</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ errorMessage }}</p>
       <div class="mt-6">
         <button
           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -170,10 +170,10 @@
       <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
         {{ hasActiveFilters ? 'No se encontraron posts' : 'No hay posts aún' }}
       </h3>
-      <p class="mt-1 text-sm text-gray-500">
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         {{ hasActiveFilters ? 'Intenta cambiar los filtros de búsqueda.' : 'Comienza creando tu primer post.' }}
       </p>
       <div v-if="!hasActiveFilters" class="mt-6">
@@ -225,14 +225,14 @@
           <div class="flex-1 flex justify-between sm:hidden">
             <button
               :disabled="pagination.current_page <= 1"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="goToPage(pagination.current_page - 1)"
             >
               Anterior
             </button>
             <button
               :disabled="pagination.current_page >= pagination.last_page"
-              class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="goToPage(pagination.current_page + 1)"
             >
               Siguiente
@@ -241,7 +241,7 @@
 
           <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
-              <p class="text-sm text-gray-700">
+              <p class="text-sm text-gray-700 dark:text-gray-300">
                 Mostrando
                 <span class="font-medium">{{ (pagination.current_page - 1) * pagination.per_page + 1 }}</span>
                 a
@@ -257,7 +257,7 @@
                 <!-- Previous page -->
                 <button
                   :disabled="pagination.current_page <= 1"
-                  class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="goToPage(pagination.current_page - 1)"
                 >
                   <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -272,8 +272,8 @@
                   :class="[
                     'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
                     page === pagination.current_page
-                      ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                      : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                      ? 'z-10 bg-blue-50 dark:bg-blue-900/50 border-blue-500 dark:border-blue-600 text-blue-600 dark:text-blue-400'
+                      : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600'
                   ]"
                   @click="goToPage(page)"
                 >
@@ -283,7 +283,7 @@
                 <!-- Next page -->
                 <button
                   :disabled="pagination.current_page >= pagination.last_page"
-                  class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="goToPage(pagination.current_page + 1)"
                 >
                   <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -312,7 +312,7 @@
           @click="closePreview"
         />
 
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <PostPreview
             :title="previewPost.getTitle().value()"
             :content="previewPost.getContent().value()"

@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
     <!-- Card header -->
     <div class="p-6">
       <!-- Title and status -->
       <div class="flex items-start justify-between mb-2">
-        <h3 class="text-lg font-semibold text-gray-900 line-clamp-2 flex-1 mr-3">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1 mr-3">
           <NuxtLink
             :to="editUrl"
-            class="hover:text-blue-600 transition-colors duration-200"
+            class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
           >
             {{ post.getTitle().value() || 'Sin título' }}
           </NuxtLink>
@@ -16,12 +16,12 @@
       </div>
 
       <!-- Excerpt -->
-      <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
         {{ post.getExcerpt(150) || 'Sin contenido' }}
       </p>
 
       <!-- Meta information -->
-      <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+      <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
         <div class="flex items-center space-x-4">
           <span class="flex items-center">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
             {{ publishedDate }}
           </span>
 
-          <span v-else-if="scheduledDate" class="flex items-center text-yellow-600">
+          <span v-else-if="scheduledDate" class="flex items-center text-yellow-600 dark:text-yellow-400">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -52,18 +52,18 @@
           </span>
         </div>
 
-        <div v-if="readingTime" class="text-gray-400">
+        <div v-if="readingTime" class="text-gray-400 dark:text-gray-500">
           {{ readingTime }} min lectura
         </div>
       </div>
 
       <!-- Actions -->
-      <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+      <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
         <!-- Primary actions -->
         <div class="flex items-center space-x-2">
           <NuxtLink
             :to="editUrl"
-            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors duration-200"
+            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/70 transition-colors duration-200"
           >
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -73,7 +73,7 @@
 
           <button
             v-if="canPreview"
-            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200"
+            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
             @click="handlePreview"
           >
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@
             v-if="canViewPublic"
             :to="publicUrl"
             target="_blank"
-            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-600 bg-green-50 rounded-md hover:bg-green-100 transition-colors duration-200"
+            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/50 rounded-md hover:bg-green-100 dark:hover:bg-green-900/70 transition-colors duration-200"
           >
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -101,8 +101,8 @@
           <!-- Quick status change -->
           <div v-if="quickActions.length > 0" class="relative">
             <button
-              class="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors duration-200"
-              :class="{ 'bg-gray-100': showQuickActions }"
+              class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+              :class="{ 'bg-gray-100 dark:bg-gray-700': showQuickActions }"
               @click="showQuickActions = !showQuickActions"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

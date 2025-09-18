@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Admin Header -->
-    <header class="bg-white shadow">
+    <header class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
           <!-- Logo and Title -->
@@ -13,7 +13,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <span class="text-xl font-bold text-gray-900">Panel Admin</span>
+              <span class="text-xl font-bold text-gray-900 dark:text-white">Panel Admin</span>
             </NuxtLink>
           </div>
 
@@ -21,29 +21,29 @@
           <nav class="hidden md:flex space-x-6">
             <NuxtLink
               to="/admin"
-              class="text-gray-600 hover:text-gray-900 text-sm font-medium"
-              :class="{ 'text-purple-600': $route.path === '/admin' }"
+              class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm font-medium"
+              :class="{ 'text-purple-600 dark:text-purple-400': $route.path === '/admin' }"
             >
               Dashboard
             </NuxtLink>
             <NuxtLink
               to="/admin/posts"
-              class="text-gray-600 hover:text-gray-900 text-sm font-medium"
-              :class="{ 'text-purple-600': $route.path.startsWith('/admin/posts') }"
+              class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm font-medium"
+              :class="{ 'text-purple-600 dark:text-purple-400': $route.path.startsWith('/admin/posts') }"
             >
               Posts
             </NuxtLink>
             <NuxtLink
               to="/admin/users"
-              class="text-gray-600 hover:text-gray-900 text-sm font-medium"
-              :class="{ 'text-purple-600': $route.path.startsWith('/admin/users') }"
+              class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm font-medium"
+              :class="{ 'text-purple-600 dark:text-purple-400': $route.path.startsWith('/admin/users') }"
             >
               Usuarios
             </NuxtLink>
             <NuxtLink
               to="/admin/comments"
-              class="text-gray-600 hover:text-gray-900 text-sm font-medium"
-              :class="{ 'text-purple-600': $route.path.startsWith('/admin/comments') }"
+              class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm font-medium"
+              :class="{ 'text-purple-600 dark:text-purple-400': $route.path.startsWith('/admin/comments') }"
             >
               Comentarios
             </NuxtLink>
@@ -54,11 +54,11 @@
             <!-- User Info -->
             <div v-if="user" class="hidden sm:flex items-center space-x-3">
               <div class="flex flex-col text-right">
-                <span class="text-sm font-medium text-gray-900">{{ user.getName() }}</span>
-                <span class="text-xs text-gray-500">{{ user.getRole().value() }}</span>
+                <span class="text-sm font-medium text-gray-900 dark:text-white">{{ user.getName() }}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{ user.getRole().value() }}</span>
               </div>
-              <div class="h-8 w-8 bg-gray-300 rounded-full flex items-center justify-center">
-                <span class="text-sm font-medium text-gray-700">
+              <div class="h-8 w-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">
                   {{ user.getName().charAt(0).toUpperCase() }}
                 </span>
               </div>
@@ -67,7 +67,7 @@
             <!-- Actions Menu -->
             <div class="relative">
               <button
-                class="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                 @click="showUserMenu = !showUserMenu"
               >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,27 +78,55 @@
               <!-- User Menu Dropdown -->
               <div
                 v-if="showUserMenu"
-                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10"
+                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-600 z-10"
                 @click.away="showUserMenu = false"
               >
                 <div class="py-1">
                   <NuxtLink
                     to="/"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     @click="showUserMenu = false"
                   >
                     Ver sitio público
                   </NuxtLink>
                   <NuxtLink
                     to="/dashboard"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     @click="showUserMenu = false"
                   >
                     Mi dashboard
                   </NuxtLink>
+                  <button
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+                    @click="toggleDarkMode"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        v-if="isDarkMode"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                      ></path>
+                      <path
+                        v-else
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                      ></path>
+                    </svg>
+                    {{ isDarkMode ? 'Modo claro' : 'Modo oscuro' }}
+                  </button>
                   <hr class="my-1">
                   <button
-                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    class="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                     @click="handleLogout"
                   >
                     Cerrar sesión
@@ -110,7 +138,7 @@
             <!-- Mobile menu button -->
             <div class="md:hidden">
               <button
-                class="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
+                class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
                 @click="mobileMenuOpen = !mobileMenuOpen"
               >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,32 +150,32 @@
         </div>
 
         <!-- Mobile Navigation -->
-        <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200 py-4">
+        <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200 dark:border-gray-600 py-4">
           <nav class="space-y-2">
             <NuxtLink
               to="/admin"
-              class="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
+              class="block text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-base font-medium py-2"
               @click="mobileMenuOpen = false"
             >
               Dashboard
             </NuxtLink>
             <NuxtLink
               to="/admin/posts"
-              class="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
+              class="block text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-base font-medium py-2"
               @click="mobileMenuOpen = false"
             >
               Posts
             </NuxtLink>
             <NuxtLink
               to="/admin/users"
-              class="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
+              class="block text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-base font-medium py-2"
               @click="mobileMenuOpen = false"
             >
               Usuarios
             </NuxtLink>
             <NuxtLink
               to="/admin/comments"
-              class="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
+              class="block text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-base font-medium py-2"
               @click="mobileMenuOpen = false"
             >
               Comentarios
@@ -180,7 +208,16 @@ const showUserMenu = ref(false);
 // Computed
 const user = computed(() => authStore.currentUser);
 
+// Dark mode
+const colorMode = useColorMode();
+const isDarkMode = computed(() => colorMode.value === 'dark');
+
 // Methods
+const toggleDarkMode = () => {
+  colorMode.preference = isDarkMode.value ? 'light' : 'dark';
+  showUserMenu.value = false;
+};
+
 const handleLogout = async () => {
   showUserMenu.value = false;
   try {

@@ -1,16 +1,16 @@
 <template>
   <div class="admin-posts-page">
     <!-- Page header -->
-    <div class="bg-white shadow">
+    <div class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700">
       <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:lg:border-gray-600">
           <div class="flex-1 min-w-0">
             <!-- Breadcrumb -->
             <nav class="flex mb-4" aria-label="Breadcrumb">
               <ol class="flex items-center space-x-4">
                 <li>
                   <div>
-                    <NuxtLink to="/admin" class="text-gray-400 hover:text-gray-500">
+                    <NuxtLink to="/admin" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400">
                       <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                       </svg>
@@ -20,20 +20,20 @@
                 </li>
                 <li>
                   <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <span class="ml-4 text-sm font-medium text-gray-500">Posts</span>
+                    <span class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400">Posts</span>
                   </div>
                 </li>
               </ol>
             </nav>
 
             <!-- Page title -->
-            <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+            <h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
               Gestión de Posts
             </h1>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Administra todos los posts del blog
             </p>
           </div>
@@ -60,20 +60,20 @@
         <!-- Quick stats -->
         <div v-if="!postsStore.isLoading" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <!-- Total posts -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow dark:shadow-gray-700 rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
                 <div class="ml-5 w-0 flex-1">
                   <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                       Total de Posts
                     </dt>
-                    <dd class="text-lg font-medium text-gray-900">
+                    <dd class="text-lg font-medium text-gray-900 dark:text-white">
                       {{ totalStats.total }}
                     </dd>
                   </dl>
@@ -83,7 +83,7 @@
           </div>
 
           <!-- Published posts -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow dark:shadow-gray-700 rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -93,10 +93,10 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                   <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                       Publicados
                     </dt>
-                    <dd class="text-lg font-medium text-gray-900">
+                    <dd class="text-lg font-medium text-gray-900 dark:text-white">
                       {{ totalStats.published }}
                     </dd>
                   </dl>
@@ -106,7 +106,7 @@
           </div>
 
           <!-- Draft posts -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow dark:shadow-gray-700 rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -116,10 +116,10 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                   <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                       Borradores
                     </dt>
-                    <dd class="text-lg font-medium text-gray-900">
+                    <dd class="text-lg font-medium text-gray-900 dark:text-white">
                       {{ totalStats.drafts }}
                     </dd>
                   </dl>
@@ -129,7 +129,7 @@
           </div>
 
           <!-- Scheduled posts -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow dark:shadow-gray-700 rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -139,10 +139,10 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                   <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                       Programados
                     </dt>
-                    <dd class="text-lg font-medium text-gray-900">
+                    <dd class="text-lg font-medium text-gray-900 dark:text-white">
                       {{ totalStats.scheduled }}
                     </dd>
                   </dl>
@@ -176,13 +176,13 @@
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              <p class="text-gray-500 mt-2">Cargando posts...</p>
+              <p class="text-gray-500 dark:text-gray-400 mt-2">Cargando posts...</p>
             </div>
           </div>
         </div>
 
         <!-- Posts list -->
-        <div v-else class="bg-white shadow rounded-lg">
+        <div v-else class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700 rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <PostList />
           </div>
@@ -250,6 +250,6 @@ useHead({
 <style scoped>
 .admin-posts-page {
   min-height: 100vh;
-  background-color: #f9fafb;
+  @apply bg-gray-50 dark:bg-gray-900;
 }
 </style>
