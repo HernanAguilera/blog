@@ -14,7 +14,7 @@
           autocomplete="email"
           required
           :disabled="isSubmitting"
-          class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+          class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           :class="{
             'border-red-300 focus:border-red-500 focus:ring-red-500': form.email.error
           }"
@@ -42,7 +42,7 @@
           autocomplete="current-password"
           required
           :disabled="isSubmitting"
-          class="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+          class="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           :class="{
             'border-red-300 focus:border-red-500 focus:ring-red-500': form.password.error
           }"
@@ -58,7 +58,7 @@
         >
           <svg
             v-if="showPassword"
-            class="h-5 w-5 text-gray-400"
+            class="h-5 w-5 text-gray-400 dark:text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -68,7 +68,7 @@
           </svg>
           <svg
             v-else
-            class="h-5 w-5 text-gray-400"
+            class="h-5 w-5 text-gray-400 dark:text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -101,7 +101,7 @@
       <div class="text-sm">
         <NuxtLink
           to="/auth/forgot-password"
-          class="font-medium text-blue-600 hover:text-blue-500"
+          class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
         >
           ¿Olvidaste tu contraseña?
         </NuxtLink>
@@ -112,15 +112,15 @@
     <div ref="turnstileRef" class="flex justify-center"/>
 
     <!-- Error Messages -->
-    <div v-if="generalError" class="rounded-md bg-red-50 p-4">
+    <div v-if="generalError" class="rounded-md bg-red-50 dark:bg-red-900/50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+          <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
           </svg>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
             {{ generalError }}
           </h3>
         </div>
@@ -148,10 +148,10 @@
     <div class="mt-6">
       <div class="relative">
         <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-gray-300" />
+          <div class="w-full border-t border-gray-300 dark:border-gray-600" />
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white text-gray-500">O continúa con</span>
+          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">O continúa con</span>
         </div>
       </div>
     </div>
@@ -160,7 +160,7 @@
     <div class="mt-6 grid grid-cols-3 gap-3">
       <button
         type="button"
-        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
         @click="handleSocialLogin('google')"
       >
         <span class="sr-only">Iniciar sesión con Google</span>
@@ -174,7 +174,7 @@
 
       <button
         type="button"
-        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
         @click="handleSocialLogin('facebook')"
       >
         <span class="sr-only">Iniciar sesión con Facebook</span>
@@ -185,7 +185,7 @@
 
       <button
         type="button"
-        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
         @click="handleSocialLogin('twitter')"
       >
         <span class="sr-only">Iniciar sesión con Twitter</span>

@@ -1,29 +1,45 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Theme Toggle -->
+      <div class="flex justify-end mb-4">
+        <button
+          @click="toggleDarkMode"
+          class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+          title="Cambiar tema"
+        >
+          <svg v-if="isDarkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+
       <!-- Dashboard Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Dashboard
         </h1>
-        <p class="text-gray-600">
+        <p class="text-gray-600 dark:text-gray-400">
           Bienvenido a tu panel de control personal
         </p>
       </div>
 
       <!-- Loading State -->
-      <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6 mb-8">
+      <div v-if="isLoadingAuth" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 mb-8">
         <div class="flex items-center space-x-4">
-          <div class="h-12 w-12 bg-gray-200 rounded-full animate-pulse"/>
+          <div class="h-12 w-12 bg-gray-200 dark:bg-gray-600 rounded-full animate-pulse"/>
           <div>
-            <div class="h-6 bg-gray-200 rounded animate-pulse w-32 mb-2"/>
-            <div class="h-4 bg-gray-200 rounded animate-pulse w-24"/>
+            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-32 mb-2"/>
+            <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-24"/>
           </div>
         </div>
       </div>
 
       <!-- User Welcome Card -->
-      <div v-else-if="user" class="bg-white rounded-lg shadow p-6 mb-8">
+      <div v-else-if="user" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 mb-8">
         <div class="flex items-center space-x-4">
           <div class="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center">
             <span class="text-white text-xl font-bold">
@@ -31,10 +47,10 @@
             </span>
           </div>
           <div>
-            <h2 class="text-xl font-semibold text-gray-900">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
               Hola, {{ user.getName() }}
             </h2>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-400">
               {{ getRoleDisplayName(user.getRole().value()) }}
             </p>
           </div>
@@ -42,16 +58,16 @@
       </div>
 
       <!-- Fallback when only token is available -->
-      <div v-else-if="authStore.isAuthenticated" class="bg-white rounded-lg shadow p-6 mb-8">
+      <div v-else-if="authStore.isAuthenticated" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 mb-8">
         <div class="flex items-center space-x-4">
           <div class="h-12 w-12 bg-gray-500 rounded-full flex items-center justify-center">
             <span class="text-white text-xl font-bold">U</span>
           </div>
           <div>
-            <h2 class="text-xl font-semibold text-gray-900">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
               Hola, Usuario
             </h2>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-400">
               Sesión activa
             </p>
           </div>
@@ -61,19 +77,19 @@
       <!-- Quick Actions -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Profile -->
-        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 hover:shadow-lg dark:hover:shadow-gray-600 transition-shadow">
           <div class="flex items-center space-x-3 mb-4">
             <div class="h-10 w-10 bg-blue-500 rounded-lg flex items-center justify-center">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900">Mi Perfil</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Mi Perfil</h3>
           </div>
-          <p class="text-gray-600 mb-4">Gestiona tu información personal</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Gestiona tu información personal</p>
           <NuxtLink
             to="/profile"
-            class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+            class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Ver perfil
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,19 +99,19 @@
         </div>
 
         <!-- Posts -->
-        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 hover:shadow-lg dark:hover:shadow-gray-600 transition-shadow">
           <div class="flex items-center space-x-3 mb-4">
             <div class="h-10 w-10 bg-green-500 rounded-lg flex items-center justify-center">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900">Posts</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Posts</h3>
           </div>
-          <p class="text-gray-600 mb-4">Explora contenido del blog</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Explora contenido del blog</p>
           <NuxtLink
             to="/posts"
-            class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+            class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Ver posts
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,17 +121,17 @@
         </div>
 
         <!-- Admin Panel Loading -->
-        <div v-if="isLoadingAuth" class="bg-white rounded-lg shadow p-6">
+        <div v-if="isLoadingAuth" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6">
           <div class="flex items-center space-x-3 mb-4">
-            <div class="h-10 w-10 bg-gray-200 rounded-lg animate-pulse"/>
-            <div class="h-5 bg-gray-200 rounded animate-pulse w-24"/>
+            <div class="h-10 w-10 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse"/>
+            <div class="h-5 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-24"/>
           </div>
-          <div class="h-4 bg-gray-200 rounded animate-pulse w-32 mb-4"/>
-          <div class="h-4 bg-gray-200 rounded animate-pulse w-20"/>
+          <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-32 mb-4"/>
+          <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-20"/>
         </div>
 
         <!-- Admin Panel Fallback (when no user data but authenticated) -->
-        <div v-else-if="authStore.isAuthenticated && !user" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+        <div v-else-if="authStore.isAuthenticated && !user" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 hover:shadow-lg dark:hover:shadow-gray-600 transition-shadow">
           <div class="flex items-center space-x-3 mb-4">
             <div class="h-10 w-10 bg-purple-500 rounded-lg flex items-center justify-center">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,12 +139,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900">Administración</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Administración</h3>
           </div>
-          <p class="text-gray-600 mb-4">Panel de administrador</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Panel de administrador</p>
           <NuxtLink
             to="/admin"
-            class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+            class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Ir al admin
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,7 +154,7 @@
         </div>
 
         <!-- Admin Panel (only for admins) -->
-        <div v-else-if="canAccessAdmin" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+        <div v-else-if="canAccessAdmin" class="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-700 p-6 hover:shadow-lg dark:hover:shadow-gray-600 transition-shadow">
           <div class="flex items-center space-x-3 mb-4">
             <div class="h-10 w-10 bg-purple-500 rounded-lg flex items-center justify-center">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,12 +162,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900">Administración</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Administración</h3>
           </div>
-          <p class="text-gray-600 mb-4">Panel de administrador</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Panel de administrador</p>
           <NuxtLink
             to="/admin"
-            class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+            class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Ir al admin
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -200,6 +216,7 @@ useHead({
 // Composables
 const router = useRouter();
 const authStore = useAuthStore();
+const colorMode = useColorMode();
 
 // State
 const isLoggingOut = ref(false);
@@ -211,6 +228,8 @@ const canAccessAdmin = computed(() => {
   return user.value && (user.value.hasRole(ROLE.ADMIN) || user.value.hasRole(ROLE.SUPER_ADMIN));
 });
 
+const isDarkMode = computed(() => colorMode.value === 'dark');
+
 // Methods
 const getRoleDisplayName = (role: string): string => {
   const roleMap: Record<string, string> = {
@@ -220,6 +239,10 @@ const getRoleDisplayName = (role: string): string => {
     [ROLE.GUEST]: 'Usuario'
   };
   return roleMap[role] || 'Usuario';
+};
+
+const toggleDarkMode = () => {
+  colorMode.preference = isDarkMode.value ? 'light' : 'dark';
 };
 
 const handleLogout = async () => {

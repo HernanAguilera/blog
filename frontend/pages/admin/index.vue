@@ -228,7 +228,8 @@ import { ROLE } from '../../domain/types/permissions.types';
 
 // Meta data
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  layout: 'admin'
 });
 
 // Head configuration

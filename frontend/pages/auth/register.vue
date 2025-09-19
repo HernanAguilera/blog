@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <!-- Header -->
       <div>
@@ -9,17 +9,17 @@
             <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold text-xl">B</span>
             </div>
-            <span class="text-2xl font-bold text-gray-900">BlogV2</span>
+            <span class="text-2xl font-bold text-gray-900 dark:text-white">BlogV2</span>
           </NuxtLink>
         </div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
           Crea tu cuenta
         </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
+        <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           O
           <NuxtLink
             to="/auth/login"
-            class="font-medium text-blue-600 hover:text-blue-500"
+            class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
           >
             inicia sesión si ya tienes una cuenta
           </NuxtLink>
@@ -27,7 +27,7 @@
       </div>
 
       <!-- Registration Form -->
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow dark:shadow-gray-700 sm:rounded-lg sm:px-10">
         <RegisterForm
           :redirect-to="redirectTo"
           @success="handleRegisterSuccess"
@@ -38,16 +38,16 @@
       <!-- Success Message -->
       <div
         v-if="successMessage"
-        class="rounded-md bg-green-50 p-4"
+        class="rounded-md bg-green-50 dark:bg-green-900/50 p-4">
       >
         <div class="flex">
           <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="h-5 w-5 text-green-400 dark:text-green-300" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-green-800">
+            <p class="text-sm font-medium text-green-800 dark:text-green-200">
               {{ successMessage }}
             </p>
           </div>
@@ -57,16 +57,16 @@
       <!-- Error Message -->
       <div
         v-if="errorMessage"
-        class="rounded-md bg-red-50 p-4"
+        class="rounded-md bg-red-50 dark:bg-red-900/50 p-4">
       >
         <div class="flex">
           <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
             </svg>
           </div>
           <div class="ml-3">
-            <h3 class="text-sm font-medium text-red-800">
+            <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
               {{ errorMessage }}
             </h3>
           </div>
@@ -74,18 +74,18 @@
       </div>
 
       <!-- Information Box -->
-      <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+      <div class="bg-blue-50 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-700 rounded-md p-4">
         <div class="flex">
           <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="h-5 w-5 text-blue-400 dark:text-blue-300" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
             </svg>
           </div>
           <div class="ml-3">
-            <h3 class="text-sm font-medium text-blue-800">
+            <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
               Beneficios de crear una cuenta
             </h3>
-            <div class="mt-2 text-sm text-blue-700">
+            <div class="mt-2 text-sm text-blue-700 dark:text-blue-300">
               <ul class="list-disc list-inside space-y-1">
                 <li>Acceso completo a todas las funcionalidades del blog</li>
                 <li>Posibilidad de comentar y interactuar con el contenido</li>
@@ -99,14 +99,14 @@
 
       <!-- Footer Links -->
       <div class="text-center space-y-2">
-        <div class="text-xs text-gray-500 space-y-1">
+        <div class="text-xs text-gray-500 dark:text-gray-400 space-y-1">
           <p>
             Al crear una cuenta, aceptas nuestros
-            <NuxtLink to="/terms" class="text-blue-600 hover:text-blue-500">
+            <NuxtLink to="/terms" class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
               términos y condiciones
             </NuxtLink>
             y
-            <NuxtLink to="/privacy" class="text-blue-600 hover:text-blue-500">
+            <NuxtLink to="/privacy" class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
               política de privacidad
             </NuxtLink>
           </p>
@@ -114,7 +114,7 @@
         <div>
           <NuxtLink
             to="/"
-            class="text-sm text-gray-600 hover:text-gray-500"
+            class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
           >
             ← Volver al inicio
           </NuxtLink>
