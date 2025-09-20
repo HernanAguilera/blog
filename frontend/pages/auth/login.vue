@@ -137,7 +137,10 @@ const errorMessage = ref<string | null>(null);
 // Computed
 const redirectTo = computed(() => {
   const redirect = route.query.redirect as string;
-  return redirect || '/dashboard';
+  if (redirect) return redirect;
+
+  // Determine default redirect based on user role after login
+  return '/profile'; // Default to profile, will be adjusted after login based on role
 });
 
 // Methods
@@ -148,8 +151,24 @@ const handleLoginSuccess = async (payload: LoginPayload) => {
   // Wait a moment to show success message
   await new Promise(resolve => setTimeout(resolve, 1000));
 
+  // Determine redirect based on user role
+  let finalRedirectTo = redirectTo.value;
+
+  // If no specific redirect was requested, use role-based default
+  if (!route.query.redirect) {
+    const user = authStore.currentUser;
+    if (user) {
+      const role = user.getRole().value();
+      if (['SuperAdmin', 'Admin'].includes(role)) {
+        finalRedirectTo = '/admin';
+      } else {
+        finalRedirectTo = '/profile';
+      }
+    }
+  }
+
   // Redirect to intended destination
-  await router.push(redirectTo.value);
+  await router.push(finalRedirectTo);
 };
 
 const handleLoginError = (error: string) => {

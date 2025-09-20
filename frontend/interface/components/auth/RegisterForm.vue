@@ -253,7 +253,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  redirectTo: '/dashboard'
+  redirectTo: '/profile'
 });
 
 // Emits

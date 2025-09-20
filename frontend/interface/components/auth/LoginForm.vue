@@ -208,7 +208,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  redirectTo: '/dashboard'
+  redirectTo: '/profile'
 });
 
 // Emits

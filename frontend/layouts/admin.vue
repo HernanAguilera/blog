@@ -76,18 +76,25 @@
               >
                 <div class="py-1">
                   <NuxtLink
+                    to="/profile"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    @click="showUserMenu = false"
+                  >
+                    Mi Perfil
+                  </NuxtLink>
+                  <NuxtLink
+                    to="/admin/posts"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    @click="showUserMenu = false"
+                  >
+                    Mis Posts
+                  </NuxtLink>
+                  <NuxtLink
                     to="/"
                     class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     @click="showUserMenu = false"
                   >
                     Ver sitio público
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/dashboard"
-                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    @click="showUserMenu = false"
-                  >
-                    Mi dashboard
                   </NuxtLink>
                   <button
                     class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"

@@ -1,3 +1,6 @@
+/* Import Quill editor styles */
+@import './quill-theme.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

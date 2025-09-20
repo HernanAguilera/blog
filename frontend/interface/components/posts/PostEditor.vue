@@ -1,5 +1,5 @@
 <template>
-  <div class="post-editor bg-white shadow-sm border border-gray-200 rounded-lg">
+  <div class="post-editor bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-600 rounded-lg">
     <!-- Toolbar -->
     <PostToolbar
       :current-status="currentPost?.getStatus().value() || 'draft'"
@@ -17,14 +17,14 @@
     />
 
     <!-- Editor container -->
-    <div class="editor-container">
+    <div class="editor-container bg-white dark:bg-gray-800">
       <!-- Title input -->
       <div class="px-6 pt-6 pb-2">
         <input
           v-model="title"
           type="text"
           placeholder="Título del post..."
-          class="block w-full text-3xl font-bold border-0 border-b border-transparent pb-2 placeholder-gray-400 focus:border-gray-300 focus:ring-0 focus:outline-none"
+          class="block w-full text-3xl font-bold border-0 border-b border-transparent pb-2 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 bg-transparent focus:border-gray-300 dark:focus:border-gray-600 focus:ring-0 focus:outline-none"
           @input="handleTitleChange"
         >
       </div>
@@ -53,7 +53,7 @@
           @click="closePreview"
         />
 
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <PostPreview
             :title="title"
             :content="content"
@@ -359,42 +359,12 @@ defineExpose({
   @apply max-w-none;
 }
 
-.editor-container {
-  @apply bg-white;
-}
-
-/* Customize Quill editor styles */
-:deep(.ql-editor) {
-  @apply text-base leading-relaxed;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  min-height: 400px;
-  padding: 0;
-}
-
-:deep(.ql-editor.ql-blank::before) {
-  @apply text-gray-400 italic;
-  left: 0;
-}
-
-:deep(.ql-toolbar) {
-  @apply border-0 border-b border-gray-200 bg-gray-50;
-}
-
-:deep(.ql-container) {
-  @apply border-0;
-}
-
-/* Custom focus styles */
-:deep(.ql-editor:focus) {
-  @apply outline-none;
-}
-
 /* Title input custom styles */
 input[type="text"] {
   background: transparent;
 }
 
 input[type="text"]:focus {
-  @apply border-gray-300;
+  @apply border-gray-300 dark:border-gray-600;
 }
 </style>

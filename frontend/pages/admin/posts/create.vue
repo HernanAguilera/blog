@@ -1,76 +1,28 @@
 <template>
-  <div class="create-post-page">
-    <!-- Page header -->
-    <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
-          <div class="flex-1 min-w-0">
-            <!-- Breadcrumb -->
-            <nav class="flex mb-4" aria-label="Breadcrumb">
-              <ol class="flex items-center space-x-4">
-                <li>
-                  <div>
-                    <NuxtLink to="/admin" class="text-gray-400 hover:text-gray-500">
-                      <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                      </svg>
-                      <span class="sr-only">Inicio</span>
-                    </NuxtLink>
-                  </div>
-                </li>
-                <li>
-                  <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    <NuxtLink to="/admin/posts" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">
-                      Posts
-                    </NuxtLink>
-                  </div>
-                </li>
-                <li>
-                  <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml-4 text-sm font-medium text-gray-500">Crear</span>
-                  </div>
-                </li>
-              </ol>
-            </nav>
+  <NuxtLayout name="admin-sidebar">
+    <!-- Breadcrumb -->
+    <AdminBreadcrumb :items="breadcrumbItems" />
 
-            <!-- Page title -->
-            <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-              Crear Nuevo Post
-            </h1>
-            <p class="mt-1 text-sm text-gray-500">
-              Escribe y publica un nuevo post para tu blog
-            </p>
-          </div>
-
-          <!-- Actions -->
-          <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-            <NuxtLink
-              to="/admin/posts"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Volver a Posts
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Header with title and action -->
+    <AdminHeader title="Crear Nuevo Post" description="Escribe y publica un nuevo post para tu blog">
+      <template #actions>
+        <NuxtLink
+          to="/admin/posts"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 border-gray-300 dark:border-gray-600"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Volver a Posts
+        </NuxtLink>
+      </template>
+    </AdminHeader>
 
     <!-- Main content -->
-    <div class="py-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Toast notifications will be handled by a global toast system -->
 
-        <!-- Editor -->
-        <div class="bg-white shadow rounded-lg">
+    <!-- Editor -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
           <ClientOnly>
             <PostEditor
               :auto-save="true"
@@ -81,7 +33,7 @@
               <div class="flex items-center justify-center h-96">
                 <div class="text-center">
                   <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"/>
-                  <p class="mt-2 text-sm text-gray-500">Cargando editor...</p>
+                  <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Cargando editor...</p>
                 </div>
               </div>
             </template>
@@ -119,9 +71,7 @@
             {{ isSaving ? 'Guardando...' : 'Guardar borrador' }}
           </button>
         </div>
-      </div>
-    </div>
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -129,11 +79,12 @@ import { ref, computed, getCurrentInstance } from 'vue';
 import { useRouter, onBeforeRouteLeave  } from 'vue-router';
 import { usePostsStore } from '~/interface/stores/posts.store';
 import PostEditor from '~/interface/components/posts/PostEditor.vue';
+import AdminBreadcrumb from '~/interface/components/admin/AdminBreadcrumb.vue';
+import AdminHeader from '~/interface/components/admin/AdminHeader.vue';
 
 // Meta
 definePageMeta({
   middleware: ['auth', 'admin'],
-  layout: 'admin',
   ssr: false
 });
 
@@ -142,6 +93,13 @@ const router = useRouter();
 const instance = getCurrentInstance();
 const toast = instance?.appContext.config.globalProperties.$toast;
 const postsStore = import.meta.client ? usePostsStore() : null;
+
+// Breadcrumb items
+const breadcrumbItems = [
+  { label: 'Panel Admin', to: '/admin' },
+  { label: 'Posts', to: '/admin/posts' },
+  { label: 'Crear' }
+];
 
 // Reactive state
 const hasChanges = ref(false);

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+  <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
     <!-- Left side: Status and actions -->
     <div class="flex items-center space-x-4">
       <PostStatusBadge :status="currentStatus" />
@@ -40,12 +40,12 @@
         <button
           :disabled="isGeneratingPreview"
           type="button"
-          class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           @click="$emit('preview')"
         >
           <svg
             v-if="isGeneratingPreview"
-            class="animate-spin -ml-1 mr-2 h-3 w-3 text-gray-500"
+            class="animate-spin -ml-1 mr-2 h-3 w-3 text-gray-500 dark:text-gray-400"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -66,7 +66,7 @@
           </svg>
           <svg
             v-else
-            class="-ml-1 mr-2 h-3 w-3 text-gray-500"
+            class="-ml-1 mr-2 h-3 w-3 text-gray-500 dark:text-gray-400"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -91,7 +91,7 @@
     </div>
 
     <!-- Center: Auto-save status -->
-    <div class="flex items-center space-x-2 text-xs text-gray-500">
+    <div class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
       <div v-if="autoSaveEnabled" class="flex items-center space-x-1">
         <div
           :class="[
@@ -117,7 +117,7 @@
       <div v-if="availableTransitions.length > 0" class="relative">
         <button
           type="button"
-          class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           @click="showStatusMenu = !showStatusMenu"
         >
           Cambiar estado
@@ -138,14 +138,14 @@
         <!-- Dropdown menu -->
         <div
           v-if="showStatusMenu"
-          class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+          class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 dark:ring-gray-600 z-10"
           @click.away="showStatusMenu = false"
         >
           <div class="py-1">
             <button
               v-for="transition in availableTransitions"
               :key="transition"
-              class="block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-100"
+              class="block w-full text-left px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               @click="handleStatusChange(transition)"
             >
               {{ getStatusLabel(transition) }}
@@ -157,7 +157,7 @@
       <!-- Settings button -->
       <button
         type="button"
-        class="inline-flex items-center p-1.5 border border-gray-300 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        class="inline-flex items-center p-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         @click="$emit('settings')"
       >
         <svg
