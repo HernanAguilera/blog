@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin-sidebar">
+  <NuxtLayout name="admin">
     <!-- Breadcrumb -->
     <AdminBreadcrumb :items="breadcrumbItems" />
 
@@ -18,7 +18,7 @@
       </template>
     </AdminHeader>
     <!-- Quick stats -->
-    <div v-if="!postsStore.isLoading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <div v-if="postsStore && !postsStore.isLoading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
       <!-- Total posts -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div class="flex items-center">
@@ -81,7 +81,7 @@
     </div>
 
     <!-- Loading state -->
-    <div v-if="postsStore.isLoading" class="py-12">
+    <div v-if="postsStore && postsStore.isLoading" class="py-12">
       <div class="text-center">
         <svg
           class="animate-spin -ml-1 mr-3 h-8 w-8 text-blue-600 mx-auto"

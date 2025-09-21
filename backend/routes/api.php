@@ -44,6 +44,7 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
         Route::put('{id}', [PostController::class, 'update'])->where('id', '[0-9]+')->middleware('throttle:posts');
         Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
         Route::patch('{id}/transition', [PostController::class, 'changeStatus'])->where('id', '[0-9]+')->middleware('throttle:posts');
+        Route::get('{id}/transitions', [PostController::class, 'getTransitions'])->where('id', '[0-9]+');
 
         // Editor endpoints
         Route::post('autosave', [EditorController::class, 'autoSave'])->middleware('throttle:autosave');

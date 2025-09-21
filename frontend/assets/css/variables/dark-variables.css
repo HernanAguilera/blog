@@ -1,0 +1,69 @@
+/* Dark Theme Variables */
+
+.dark {
+  /* Editor Variables - Dark Theme */
+  --editor-bg: var(--color-gray-800);
+  --editor-border: var(--color-gray-500);
+  --editor-border-focus: var(--color-gray-400);
+
+  /* Toolbar Variables - Dark Theme */
+  --toolbar-bg: var(--color-gray-700);
+  --toolbar-border: var(--color-gray-500);
+  --toolbar-button-color: var(--color-gray-200);
+  --toolbar-button-hover-bg: var(--color-gray-600);
+  --toolbar-button-hover-color: var(--color-white);
+  --toolbar-button-active-color: var(--color-blue-400);
+  --toolbar-button-active-bg: rgba(30, 58, 138, 0.3);
+
+  /* Text Variables - Dark Theme */
+  --text-primary: var(--color-gray-100);
+  --text-secondary: var(--color-gray-200);
+  --text-tertiary: var(--color-gray-500);
+  --text-placeholder: var(--color-gray-500);
+
+  /* SVG Icons - Dark Theme */
+  --icon-stroke: var(--color-gray-200);
+  --icon-fill: var(--color-gray-200);
+  --icon-stroke-hover: var(--color-white);
+  --icon-fill-hover: var(--color-white);
+  --icon-stroke-active: var(--color-blue-400);
+  --icon-fill-active: var(--color-blue-400);
+
+  /* Picker Variables - Dark Theme */
+  --picker-bg: var(--color-gray-800);
+  --picker-border: var(--color-gray-500);
+  --picker-text: var(--color-gray-200);
+  --picker-text-hover: var(--color-white);
+  --picker-bg-hover: var(--color-gray-600);
+  --picker-text-selected: var(--color-blue-400);
+  --picker-bg-selected: rgba(30, 58, 138, 0.3);
+  --picker-label-border-hover: var(--color-gray-500);
+  --picker-label-border-expanded: var(--color-gray-500);
+
+  /* Content Variables - Dark Theme */
+  --content-heading-color: var(--color-gray-100);
+  --content-text-color: var(--color-gray-100);
+  --content-blockquote-border: var(--color-gray-600);
+  --content-blockquote-text: var(--color-gray-300);
+  --content-code-bg: var(--color-gray-800);
+  --content-code-text: var(--color-gray-200);
+  --content-link-color: var(--color-blue-400);
+  --content-link-hover-color: var(--color-blue-300);
+
+  /* Tooltip Variables - Dark Theme */
+  --tooltip-bg: var(--color-gray-800);
+  --tooltip-border: var(--color-gray-600);
+  --tooltip-input-bg: var(--color-gray-700);
+  --tooltip-input-text: var(--color-gray-100);
+  --tooltip-input-border: var(--color-gray-600);
+  --tooltip-action-color: var(--color-blue-400);
+  --tooltip-action-hover-color: var(--color-blue-300);
+
+  /* Scrollbar Variables - Dark Theme */
+  --scrollbar-track-bg: var(--color-gray-800);
+  --scrollbar-thumb-bg: var(--color-gray-600);
+  --scrollbar-thumb-hover-bg: var(--color-gray-500);
+
+  /* Theme Mode */
+  --theme-mode: 'dark';
+}

@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin-sidebar">
+  <NuxtLayout name="admin">
     <!-- Breadcrumb -->
     <nav class="mb-6">
       <ol class="flex items-center space-x-2 text-sm text-gray-500">

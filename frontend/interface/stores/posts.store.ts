@@ -328,14 +328,16 @@ export const usePostsStore = defineStore('posts', () => {
         }
     };
 
-    // Auto-save functionality
+    // Auto-save functionality - now global
     const enableAutoSave = (config: AutoSaveConfig = { enabled: true }) => {
+        if (autoSaveEnabled.value) return; // Already enabled, prevent multiple timers
+
         autoSaveEnabled.value = config.enabled;
         if (config.interval) {
             autoSaveInterval.value = config.interval;
         }
 
-        if (autoSaveEnabled.value && currentPost.value) {
+        if (autoSaveEnabled.value) {
             startAutoSaveTimer();
         }
     };
@@ -443,6 +445,11 @@ export const usePostsStore = defineStore('posts', () => {
     const cleanup = () => {
         stopAutoSaveTimer();
     };
+
+    // Initialize auto-save only on client
+    if (import.meta.client) {
+        enableAutoSave({ enabled: true, interval: 30000 }); // 30 seconds
+    }
 
     return {
         // State

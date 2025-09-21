@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin-sidebar">
+  <NuxtLayout name="admin">
     <!-- Breadcrumb -->
     <AdminBreadcrumb :items="breadcrumbItems" />
 

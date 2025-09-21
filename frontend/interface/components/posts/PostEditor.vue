@@ -29,6 +29,27 @@
         >
       </div>
 
+      <!-- Meta Description input -->
+      <div class="px-6 pb-4">
+        <textarea
+          v-model="metaDescription"
+          placeholder="Meta descripción para SEO (opcional, mínimo 50 caracteres)..."
+          class="block w-full text-sm border-0 border-b border-transparent pb-2 placeholder-gray-400 dark:placeholder-gray-500 text-gray-600 dark:text-gray-300 bg-transparent focus:border-gray-300 dark:focus:border-gray-600 focus:ring-0 focus:outline-none resize-none"
+          rows="2"
+          maxlength="160"
+          @input="handleMetaChange"
+        ></textarea>
+        <div class="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <span>{{ metaDescription.length }}/160 caracteres</span>
+          <span v-if="metaDescription.length > 0 && metaDescription.length < 50" class="text-amber-500">
+            Mínimo 50 caracteres para SEO óptimo
+          </span>
+          <span v-else-if="metaDescription.length >= 50 && metaDescription.length <= 160" class="text-green-500">
+            Longitud óptima para SEO
+          </span>
+        </div>
+      </div>
+
       <!-- Quill editor -->
       <div class="px-6 pb-6">
         <div
@@ -73,39 +94,44 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from 'vue';
 import { usePostsStore } from '../../stores/posts.store';
-import { useAuthStore } from '../../stores/auth.store';
 import PostToolbar from './PostToolbar.vue';
 import PostPreview from './PostPreview.vue';
-import type { Post } from '../../../domain/entities/post.entity';
+import type Quill from 'quill';
 
 interface Props {
   postId?: string;
   initialTitle?: string;
   initialContent?: string;
+  initialMetaDescription?: string;
   autoSave?: boolean;
 }
 
 interface Emits {
-  (e: 'save', data: { title: string; content: string }): void;
-  (e: 'change', data: { title: string; content: string }): void;
+  (e: 'save', data: { title: string; content: string; metaDescription: string }): void;
+  (e: 'change', data: { title: string; content: string; metaDescription: string }): void;
   (e: 'status-change', status: string): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  autoSave: true
+  postId: '',
+  initialTitle: '',
+  initialContent: '',
+  initialMetaDescription: '',
+  autoSave: true,
 });
 
 const emit = defineEmits<Emits>();
 
 // Stores
 const postsStore = usePostsStore();
-const authStore = useAuthStore();
 
 // Reactive state
 const editorContainer = ref<HTMLElement>();
-const quillInstance = ref<any>();
-const title = ref(props.initialTitle || '');
-const content = ref(props.initialContent || '');
+let quillInstance: Quill | null = null;
+let isInitialized = false;
+const title = ref(props.initialTitle);
+const content = ref(props.initialContent);
+const metaDescription = ref(props.initialMetaDescription);
 const showPreview = ref(false);
 const isGeneratingPreview = ref(false);
 const availableTransitions = ref<string[]>([]);
@@ -160,18 +186,18 @@ const initializeEditor = async () => {
   const { default: Quill } = await import('quill');
   await import('quill/dist/quill.snow.css');
 
-  quillInstance.value = new Quill(editorContainer.value, quillConfig);
-
+  quillInstance = new Quill(editorContainer.value, quillConfig);
+  
   // Set initial content
   if (content.value) {
-    quillInstance.value.root.innerHTML = content.value;
+    quillInstance.root.innerHTML = content.value;
   }
 
   // Listen for content changes
-  quillInstance.value.on('text-change', handleContentChange);
+  quillInstance.on('text-change', handleContentChange);
 
   // Focus editor
-  quillInstance.value.focus();
+  quillInstance.focus();
 };
 
 // Event handlers
@@ -179,23 +205,30 @@ const handleTitleChange = () => {
   if (autoSaveEnabled.value) {
     postsStore.markAsChanged();
   }
-  emit('change', { title: title.value, content: content.value });
+  emit('change', { title: title.value, content: content.value, metaDescription: metaDescription.value });
+};
+
+const handleMetaChange = () => {
+  if (autoSaveEnabled.value) {
+    postsStore.markAsChanged();
+  }
+  emit('change', { title: title.value, content: content.value, metaDescription: metaDescription.value });
 };
 
 const handleContentChange = () => {
-  if (!quillInstance.value) return;
+  if (!quillInstance) return;
 
-  content.value = quillInstance.value.root.innerHTML;
+  content.value = quillInstance.root.innerHTML;
 
   if (autoSaveEnabled.value) {
     postsStore.markAsChanged();
   }
 
-  emit('change', { title: title.value, content: content.value });
+  emit('change', { title: title.value, content: content.value, metaDescription: metaDescription.value });
 };
 
 const handleSave = async () => {
-  const data = { title: title.value, content: content.value };
+  const data = { title: title.value, content: content.value, metaDescription: metaDescription.value };
 
   try {
     if (props.postId) {
@@ -275,7 +308,9 @@ const handleSettings = () => {
 
 // Load post transitions
 const loadTransitions = async () => {
-  if (!props.postId) return;
+  if (!props.postId) {
+    return;
+  }
 
   try {
     const transitions = await postsStore.getPostTransitions(props.postId);
@@ -287,39 +322,24 @@ const loadTransitions = async () => {
   }
 };
 
-// Auto-save functionality
+// Auto-save functionality - moved to store
 const setupAutoSave = () => {
-  if (autoSaveEnabled.value) {
-    postsStore.enableAutoSave({ enabled: true, interval: 30000 }); // 30 seconds
-  }
+  // Auto-save is now handled by the store globally
 };
 
 // Load existing post if postId is provided
-const loadPost = async () => {
-  if (!props.postId) return;
-
-  try {
-    const post = await postsStore.fetchPost(props.postId);
-    if (post) {
-      title.value = post.getTitle().value();
-      content.value = post.getContent().value();
-
-      // Update Quill content
-      if (quillInstance.value) {
-        quillInstance.value.root.innerHTML = content.value;
-      }
-    }
-  } catch (error) {
-    console.error('Error loading post:', error);
-  }
-};
+// PostEditor no longer loads posts - parent handles all data loading
 
 // Lifecycle hooks
 onMounted(async () => {
+  if (isInitialized) {
+    return;
+  }
+  isInitialized = true;
+
   await initializeEditor();
 
   if (props.postId) {
-    await loadPost();
     await loadTransitions();
   }
 
@@ -327,14 +347,12 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  postsStore.disableAutoSave();
   postsStore.cleanup();
 });
 
 // Watchers
 watch(() => props.postId, async (newPostId) => {
   if (newPostId) {
-    await loadPost();
     await loadTransitions();
   }
 });
@@ -342,13 +360,14 @@ watch(() => props.postId, async (newPostId) => {
 // Expose methods for parent components
 defineExpose({
   save: handleSave,
-  getContent: () => ({ title: title.value, content: content.value }),
-  setContent: (newTitle: string, newContent: string) => {
+  getContent: () => ({ title: title.value, content: content.value, metaDescription: metaDescription.value }),
+  setContent: (newTitle: string, newContent: string, newMetaDescription?: string) => {
     title.value = newTitle;
     content.value = newContent;
+    metaDescription.value = newMetaDescription || '';
 
-    if (quillInstance.value) {
-      quillInstance.value.root.innerHTML = newContent;
+    if (quillInstance) {
+      quillInstance.root.innerHTML = newContent;
     }
   }
 });

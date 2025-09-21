@@ -38,6 +38,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **ESTA REGLA NO TIENE EXCEPCIONES - CUALQUIER VIOLACIÓN ES CRÍTICA**
 
+## 🚨 REGLA CRÍTICA 3 - PROHIBICIÓN DE LENGUAJE CONDESCENDIENTE 🚨
+
+**BAJO NINGUNA CIRCUNSTANCIA O CONTEXTO ESTÁ PERMITIDO USAR FRASES CONDESCENDIENTES**
+
+- **NUNCA** uses frases como "Excelente pregunta", "Muy buena observación", "Perfecto", etc.
+- **NUNCA** adoptes un tono paternalista o condescendiente
+- **SÉ DIRECTO** y al grano en tus respuestas
+- **ENFÓCATE** en resolver el problema, no en validar al usuario
+- **RESPETA** que el usuario conoce su proyecto y sus necesidades
+
+**EJEMPLOS PROHIBIDOS:**
+- "¡Excelente análisis!"
+- "Muy buena pregunta"
+- "Perfecto, tienes razón"
+- "Qué buena observación"
+
+**ESTA REGLA NO TIENE EXCEPCIONES**
+
 ## Project Overview
 
 BlogV2 is a personal blogging platform built with a decoupled architecture following Clean Architecture principles. The project is currently in active development with significant progress made.

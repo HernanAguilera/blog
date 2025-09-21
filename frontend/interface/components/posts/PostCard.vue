@@ -6,7 +6,7 @@
       <div class="flex items-start justify-between mb-2">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1 mr-3">
           <NuxtLink
-            :to="editUrl"
+            :to="viewUrl"
             class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
           >
             {{ post.getTitle().value() || 'Sin título' }}
@@ -179,6 +179,7 @@ const postsStore = usePostsStore();
 const showQuickActions = ref(false);
 
 // Computed properties
+const viewUrl = computed(() => `/admin/posts/${props.post.getId().value()}`);
 const editUrl = computed(() => `/admin/posts/${props.post.getId().value()}/edit`);
 
 const publicUrl = computed(() => {

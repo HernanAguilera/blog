@@ -1,16 +1,16 @@
 <template>
   <div class="view-post-page">
     <!-- Page header -->
-    <div class="bg-white shadow">
+    <div class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700">
       <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:lg:border-gray-600">
           <div class="flex-1 min-w-0">
             <!-- Breadcrumb -->
             <nav class="flex mb-4" aria-label="Breadcrumb">
               <ol class="flex items-center space-x-4">
                 <li>
                   <div>
-                    <NuxtLink to="/admin" class="text-gray-400 hover:text-gray-500">
+                    <NuxtLink to="/admin" class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400">
                       <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                       </svg>
@@ -20,20 +20,20 @@
                 </li>
                 <li>
                   <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <NuxtLink to="/admin/posts" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <NuxtLink to="/admin/posts" class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
                       Posts
                     </NuxtLink>
                   </div>
                 </li>
                 <li>
                   <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <span class="ml-4 text-sm font-medium text-gray-500">
+                    <span class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                       {{ currentPost ? currentPost.getTitle().value() : 'Ver' }}
                     </span>
                   </div>
@@ -43,7 +43,7 @@
 
             <!-- Page title -->
             <div class="flex items-center">
-              <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate mr-4">
+              <h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:truncate mr-4">
                 Vista del Post
               </h1>
               <PostStatusBadge
@@ -72,7 +72,7 @@
               v-if="currentPost?.isPublished() && publicUrl"
               :to="publicUrl"
               target="_blank"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -82,7 +82,7 @@
 
             <NuxtLink
               to="/admin/posts"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -118,7 +118,7 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-          <p class="text-gray-500 mt-2">Cargando post...</p>
+          <p class="text-gray-500 dark:text-gray-400 mt-2">Cargando post...</p>
         </div>
       </div>
     </div>
@@ -130,8 +130,8 @@
           <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900">Error al cargar el post</h3>
-          <p class="mt-1 text-sm text-gray-500">{{ errorMessage }}</p>
+          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Error al cargar el post</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ errorMessage }}</p>
           <div class="mt-6">
             <button
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -148,75 +148,75 @@
     <div v-else-if="currentPost" class="py-8">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Post metadata -->
-        <div class="bg-white shadow rounded-lg mb-8">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Información del Post</h3>
+        <div class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700 rounded-lg mb-8">
+          <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Información del Post</h3>
           </div>
           <div class="px-6 py-4">
             <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div>
-                <dt class="text-sm font-medium text-gray-500">Estado</dt>
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Estado</dt>
                 <dd class="mt-1">
                   <PostStatusBadge :status="currentPost.getStatus().value()" />
                 </dd>
               </div>
 
               <div>
-                <dt class="text-sm font-medium text-gray-500">Slug</dt>
-                <dd class="mt-1 text-sm text-gray-900 font-mono">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Slug</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 font-mono">
                   {{ currentPost.getSlug().value() }}
                 </dd>
               </div>
 
               <div>
-                <dt class="text-sm font-medium text-gray-500">Palabras</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Palabras</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ currentPost.getWordCount() }} palabras
                 </dd>
               </div>
 
               <div>
-                <dt class="text-sm font-medium text-gray-500">Tiempo de lectura</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tiempo de lectura</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ readingTime }} minutos
                 </dd>
               </div>
 
               <div>
-                <dt class="text-sm font-medium text-gray-500">Creado</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Creado</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ formatDate(currentPost.getCreatedAt()) }}
                 </dd>
               </div>
 
               <div>
-                <dt class="text-sm font-medium text-gray-500">Última modificación</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Última modificación</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ formatDate(currentPost.getUpdatedAt()) }}
                 </dd>
               </div>
 
               <div v-if="currentPost.getScheduledAt()">
-                <dt class="text-sm font-medium text-gray-500">Programado para</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Programado para</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ formatDate(currentPost.getScheduledAt()) }}
                 </dd>
               </div>
 
               <div v-if="currentPost.getPublishedAt()">
-                <dt class="text-sm font-medium text-gray-500">Publicado</dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Publicado</dt>
+                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                   {{ formatDate(currentPost.getPublishedAt()) }}
                 </dd>
               </div>
 
               <div v-if="publicUrl" class="sm:col-span-2">
-                <dt class="text-sm font-medium text-gray-500">URL pública</dt>
+                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">URL pública</dt>
                 <dd class="mt-1">
                   <NuxtLink
                     :to="publicUrl"
                     target="_blank"
-                    class="text-sm text-blue-600 hover:text-blue-500 font-mono"
+                    class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-mono"
                   >
                     {{ fullPublicUrl }}
                   </NuxtLink>
@@ -227,17 +227,17 @@
         </div>
 
         <!-- Post preview -->
-        <div class="bg-white shadow rounded-lg">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Vista Previa del Contenido</h3>
-            <p class="mt-1 text-sm text-gray-500">
+        <div class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700 rounded-lg">
+          <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Vista Previa del Contenido</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Así es como se verá el post para los lectores
             </p>
           </div>
           <div class="px-6 py-8">
             <article class="prose prose-lg max-w-none">
               <!-- Title -->
-              <h1 class="text-3xl font-bold text-gray-900 mb-6">
+              <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 {{ currentPost.getTitle().value() }}
               </h1>
 
@@ -339,11 +339,11 @@ useHead({
 <style scoped>
 .view-post-page {
   min-height: 100vh;
-  background-color: #f9fafb;
+  @apply bg-gray-50 dark:bg-gray-900;
 }
 
 .prose-content {
-  @apply text-gray-900 leading-relaxed;
+  @apply text-gray-900 dark:text-gray-100 leading-relaxed;
 }
 
 .prose-content h1,
@@ -352,7 +352,7 @@ useHead({
 .prose-content h4,
 .prose-content h5,
 .prose-content h6 {
-  @apply font-bold text-gray-900 mt-8 mb-4;
+  @apply font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4;
 }
 
 .prose-content h1 { @apply text-2xl; }
@@ -373,19 +373,19 @@ useHead({
 }
 
 .prose-content blockquote {
-  @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4;
+  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic text-gray-600 dark:text-gray-300 mb-4;
 }
 
 .prose-content code {
-  @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono;
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-2 py-1 rounded text-sm font-mono;
 }
 
 .prose-content pre {
-  @apply bg-gray-100 p-4 rounded overflow-x-auto mb-4;
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 rounded overflow-x-auto mb-4;
 }
 
 .prose-content a {
-  @apply text-blue-600 hover:text-blue-800 underline;
+  @apply text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline;
 }
 
 .prose-content img {

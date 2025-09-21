@@ -44,7 +44,10 @@ final readonly class CreatePostUseCase
         $authorId = new UserId($dto->authorId);
         // Handle meta description - treat empty strings as null
         $metaDescription = null;
-        if (!empty(trim($dto->metaDescription ?? ''))) {
+        $trimmedMeta = trim($dto->metaDescription ?? '');
+
+        // Only create MetaDescription if we have substantial content
+        if (!empty($trimmedMeta) && mb_strlen($trimmedMeta) >= 50) {
             $metaDescription = new MetaDescription($dto->metaDescription);
         }
 

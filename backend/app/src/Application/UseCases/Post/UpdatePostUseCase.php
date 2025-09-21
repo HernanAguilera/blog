@@ -76,10 +76,14 @@ final readonly class UpdatePostUseCase
 
         // Update meta description if provided - treat empty strings as null
         if ($dto->metaDescription !== null) {
+            $trimmedMeta = trim($dto->metaDescription);
             $metaDescription = null;
-            if (!empty(trim($dto->metaDescription))) {
+
+            // Only create MetaDescription if we have substantial content
+            if (!empty($trimmedMeta) && mb_strlen($trimmedMeta) >= 50) {
                 $metaDescription = new MetaDescription($dto->metaDescription);
             }
+
             $post->updateMetaDescription($metaDescription);
         }
 

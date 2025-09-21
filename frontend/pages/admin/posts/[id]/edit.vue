@@ -1,16 +1,16 @@
 <template>
   <div class="edit-post-page">
     <!-- Page header -->
-    <div class="bg-white shadow">
+    <div class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-700">
       <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:lg:border-gray-600">
           <div class="flex-1 min-w-0">
             <!-- Breadcrumb -->
             <nav class="flex mb-4" aria-label="Breadcrumb">
               <ol class="flex items-center space-x-4">
                 <li>
                   <div>
-                    <NuxtLink to="/admin" class="text-gray-400 hover:text-gray-500">
+                    <NuxtLink to="/admin" class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400">
                       <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                       </svg>
@@ -20,20 +20,20 @@
                 </li>
                 <li>
                   <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <NuxtLink to="/admin/posts" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <NuxtLink to="/admin/posts" class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
                       Posts
                     </NuxtLink>
                   </div>
                 </li>
                 <li>
                   <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <span class="ml-4 text-sm font-medium text-gray-500">
+                    <span class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                       {{ currentPost ? currentPost.getTitle().value() : 'Editar' }}
                     </span>
                   </div>
@@ -43,7 +43,7 @@
 
             <!-- Page title -->
             <div class="flex items-center">
-              <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate mr-4">
+              <h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:truncate mr-4">
                 Editar Post
               </h1>
               <PostStatusBadge
@@ -52,7 +52,7 @@
                 size="md"
               />
             </div>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {{ currentPost ? `Última modificación: ${formatDate(currentPost.getUpdatedAt())}` : 'Cargando post...' }}
             </p>
           </div>
@@ -64,7 +64,7 @@
               v-if="currentPost?.isPublished() && publicUrl"
               :to="publicUrl"
               target="_blank"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -74,7 +74,7 @@
 
             <NuxtLink
               to="/admin/posts"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -167,16 +167,27 @@
         </div>
 
         <!-- Editor -->
-        <div class="bg-white shadow rounded-lg">
-          <PostEditor
-            :post-id="route.params.id as string"
-            :initial-title="currentPost.getTitle().value()"
-            :initial-content="currentPost.getContent().value()"
-            :auto-save="true"
-            @save="handleSave"
-            @change="handleChange"
-            @status-change="handleStatusChange"
-          />
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+          <ClientOnly>
+            <PostEditor
+              :post-id="route.params.id as string"
+              :initial-title="currentPost?.getTitle().value() || ''"
+              :initial-content="currentPost?.getContent().value() || ''"
+              :initial-meta-description="''"
+              :auto-save="true"
+              @save="handleSave"
+              @change="handleChange"
+              @status-change="handleStatusChange"
+            />
+            <template #fallback>
+              <div class="flex items-center justify-center h-96">
+                <div class="text-center">
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"/>
+                  <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Cargando editor...</p>
+                </div>
+              </div>
+            </template>
+          </ClientOnly>
         </div>
       </div>
     </div>
@@ -383,6 +394,6 @@ onBeforeRouteLeave((to, from, next) => {
 <style scoped>
 .edit-post-page {
   min-height: 100vh;
-  background-color: #f9fafb;
+  @apply bg-gray-50 dark:bg-gray-900;
 }
 </style>

@@ -15,6 +15,7 @@ use App\src\Application\UseCases\Post\GetPostUseCase;
 use App\src\Application\UseCases\Post\GetPublishedPostsUseCase;
 use App\src\Application\UseCases\Post\GetAllPostsUseCase;
 use App\src\Application\UseCases\Post\ChangePostStatusUseCase;
+use App\src\Application\UseCases\Post\GetPostTransitionsUseCase;
 use App\src\Interface\Http\Requests\CreatePostRequest;
 use App\src\Interface\Http\Requests\UpdatePostRequest;
 use App\Http\Requests\ChangePostStatusRequest;
@@ -36,7 +37,8 @@ class PostController
         private GetPostUseCase $getPostUseCase,
         private GetPublishedPostsUseCase $getPublishedPostsUseCase,
         private GetAllPostsUseCase $getAllPostsUseCase,
-        private ChangePostStatusUseCase $changePostStatusUseCase
+        private ChangePostStatusUseCase $changePostStatusUseCase,
+        private GetPostTransitionsUseCase $getPostTransitionsUseCase
     ) {}
 
     /**
@@ -309,6 +311,37 @@ class PostController
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error changing post status',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get available transitions for a post
+     */
+    public function getTransitions(int $id, Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->user()->id;
+            $transitions = $this->getPostTransitionsUseCase->execute($id, $userId);
+
+            return response()->json([
+                'data' => $transitions
+            ]);
+
+        } catch (PostNotFoundException $e) {
+            return response()->json([
+                'message' => 'Post not found'
+            ], Response::HTTP_NOT_FOUND);
+
+        } catch (PostAccessDeniedException $e) {
+            return response()->json([
+                'message' => 'Access denied'
+            ], Response::HTTP_FORBIDDEN);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error retrieving transitions',
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

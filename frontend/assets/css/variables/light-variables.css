@@ -1,0 +1,16 @@
+/* Light Theme Variables - Default Theme */
+
+/* Light theme uses the base variables as default, so this file mainly serves
+   for explicit overrides or future customizations specific to light theme */
+
+:root {
+  /* Explicit light theme values - same as base but declared for clarity */
+  --editor-bg: var(--color-white);
+  --editor-border: var(--color-gray-200);
+  --toolbar-bg: var(--color-gray-50);
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-600);
+
+  /* Light-specific adjustments if needed in the future */
+  --theme-mode: 'light';
+}

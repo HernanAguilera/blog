@@ -1,0 +1,51 @@
+/* Corporate Theme Variables - Mi Empresa */
+
+.corporate-mi-empresa {
+  /* Brand Colors */
+  --brand-primary: #ff6b35;
+  --brand-secondary: #4ecdc4;
+  --brand-accent: #ffc107;
+  --brand-neutral: #6c757d;
+
+  /* Corporate Editor Overrides - Light Theme */
+  --toolbar-bg: #fef8f6; /* Subtle brand background */
+  --toolbar-border: #fed7d2;
+  --editor-border: #fed7d2;
+  --toolbar-button-active-color: var(--brand-primary);
+  --toolbar-button-active-bg: #fff5f0;
+
+  /* Corporate Text Colors */
+  --text-accent: var(--brand-primary);
+  --content-link-color: var(--brand-primary);
+  --content-link-hover-color: #e55a2b;
+
+  /* Corporate Picker Colors */
+  --picker-text-selected: var(--brand-primary);
+  --picker-bg-selected: #fff5f0;
+
+  /* Corporate Theme Mode */
+  --corporate-theme: 'mi-empresa';
+}
+
+/* Corporate Dark Theme Combination */
+.corporate-mi-empresa.dark {
+  /* Brand colors adjusted for dark theme */
+  --brand-primary: #ff7675; /* Lighter version for dark backgrounds */
+  --brand-secondary: #74b9ff;
+
+  /* Corporate Editor Overrides - Dark Theme */
+  --toolbar-bg: var(--color-gray-800);
+  --toolbar-border: var(--color-gray-600);
+  --editor-border: var(--color-gray-600);
+  --toolbar-button-active-color: var(--brand-primary);
+  --toolbar-button-active-bg: rgba(255, 118, 117, 0.15);
+
+  /* Corporate Text Colors - Dark */
+  --text-accent: var(--brand-primary);
+  --content-link-color: var(--brand-primary);
+  --content-link-hover-color: #ff8a8a;
+
+  /* Corporate Picker Colors - Dark */
+  --picker-text-selected: var(--brand-primary);
+  --picker-bg-selected: rgba(255, 118, 117, 0.15);
+}

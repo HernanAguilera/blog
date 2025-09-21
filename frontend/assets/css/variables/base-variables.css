@@ -1,0 +1,102 @@
+/* Base CSS Variables for Theme System */
+
+:root {
+  /* Base Color Palette */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Gray Scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Blue Scale */
+  --color-blue-50: #eff6ff;
+  --color-blue-400: #60a5fa;
+  --color-blue-600: #2563eb;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+
+  /* Red Scale */
+  --color-red-400: #f87171;
+  --color-red-600: #dc2626;
+  --color-red-900: #7f1d1d;
+
+  /* Semantic Variables - Editor */
+  --editor-bg: var(--color-white);
+  --editor-border: var(--color-gray-200);
+  --editor-border-focus: var(--color-gray-300);
+  --editor-min-height: 400px;
+  --editor-padding: 0;
+
+  /* Semantic Variables - Toolbar */
+  --toolbar-bg: var(--color-gray-50);
+  --toolbar-border: var(--color-gray-200);
+  --toolbar-button-color: var(--color-gray-500);
+  --toolbar-button-hover-bg: var(--color-gray-200);
+  --toolbar-button-hover-color: var(--color-gray-900);
+  --toolbar-button-active-color: var(--color-blue-600);
+  --toolbar-button-active-bg: var(--color-blue-50);
+
+  /* Semantic Variables - Text */
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-600);
+  --text-tertiary: var(--color-gray-400);
+  --text-placeholder: var(--color-gray-400);
+
+  /* Semantic Variables - SVG Icons */
+  --icon-stroke: var(--color-gray-500);
+  --icon-fill: var(--color-gray-500);
+  --icon-stroke-hover: var(--color-gray-900);
+  --icon-fill-hover: var(--color-gray-900);
+  --icon-stroke-active: var(--color-blue-600);
+  --icon-fill-active: var(--color-blue-600);
+
+  /* Semantic Variables - Picker */
+  --picker-bg: var(--color-white);
+  --picker-border: var(--color-gray-300);
+  --picker-text: var(--color-gray-700);
+  --picker-text-hover: var(--color-gray-900);
+  --picker-bg-hover: var(--color-gray-100);
+  --picker-text-selected: var(--color-blue-600);
+  --picker-bg-selected: var(--color-blue-50);
+  --picker-label-border: transparent;
+  --picker-label-border-hover: var(--color-gray-300);
+  --picker-label-border-expanded: var(--color-gray-300);
+
+  /* Semantic Variables - Content */
+  --content-heading-color: var(--color-gray-900);
+  --content-text-color: var(--color-gray-900);
+  --content-blockquote-border: var(--color-gray-300);
+  --content-blockquote-text: var(--color-gray-700);
+  --content-code-bg: var(--color-gray-100);
+  --content-code-text: var(--color-gray-800);
+  --content-link-color: var(--color-blue-600);
+  --content-link-hover-color: var(--color-blue-800);
+
+  /* Semantic Variables - Tooltip */
+  --tooltip-bg: var(--color-white);
+  --tooltip-border: var(--color-gray-200);
+  --tooltip-input-bg: var(--color-white);
+  --tooltip-input-text: var(--color-gray-900);
+  --tooltip-input-border: var(--color-gray-300);
+  --tooltip-action-color: var(--color-blue-600);
+  --tooltip-action-hover-color: var(--color-blue-800);
+
+  /* Semantic Variables - Scrollbar */
+  --scrollbar-width: 8px;
+  --scrollbar-track-bg: var(--color-gray-100);
+  --scrollbar-thumb-bg: var(--color-gray-300);
+  --scrollbar-thumb-hover-bg: var(--color-gray-400);
+
+  /* Semantic Variables - Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+}

@@ -1,5 +1,11 @@
-/* Import Quill editor styles */
-@import './quill-theme.css';
+/* CSS Variables - Theme System */
+@import './variables/base-variables.css';
+@import './variables/light-variables.css';
+@import './variables/dark-variables.css';
+@import './variables/corporate/mi-empresa-variables.css';
+
+/* Component Styles */
+@import './components/quill-theme.css';
 
 @tailwind base;
 @tailwind components;
