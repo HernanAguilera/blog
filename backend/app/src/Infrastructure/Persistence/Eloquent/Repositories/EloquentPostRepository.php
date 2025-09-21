@@ -10,6 +10,7 @@ use App\src\Domain\Post\ValueObjects\PostId;
 use App\src\Domain\Post\ValueObjects\PostSlug;
 use App\src\Domain\Post\ValueObjects\PostStatus;
 use App\src\Domain\User\ValueObjects\UserId;
+use App\src\Application\DTOs\Post\PostFilterDTO;
 use App\src\Infrastructure\Persistence\Eloquent\Models\PostModel;
 use App\src\Infrastructure\Persistence\Eloquent\Mappers\PostMapper;
 use DateTimeInterface;
@@ -59,6 +60,47 @@ final class EloquentPostRepository implements PostRepositoryInterface
     public function existsBySlug(PostSlug $slug): bool
     {
         return PostModel::where('slug', $slug->value())->exists();
+    }
+
+    public function findWithFilters(PostFilterDTO $filter): array
+    {
+        $query = PostModel::query();
+
+        // Apply search filter
+        if ($filter->search) {
+            $query->where(function($q) use ($filter) {
+                $q->where('title', 'LIKE', '%' . $filter->search . '%')
+                  ->orWhere('content', 'LIKE', '%' . $filter->search . '%')
+                  ->orWhere('excerpt', 'LIKE', '%' . $filter->search . '%');
+            });
+        }
+
+        // Apply status filter
+        if ($filter->status) {
+            $query->where('status', $filter->status);
+        }
+
+        // Apply author filter
+        if ($filter->authorId) {
+            $query->where('author_id', $filter->authorId);
+        }
+
+        // Get total count before pagination
+        $total = $query->count();
+
+        // Apply sorting
+        $query->orderBy($filter->sortBy, $filter->sortDirection);
+
+        // Apply pagination
+        $offset = ($filter->page - 1) * $filter->perPage;
+        $models = $query->offset($offset)->limit($filter->perPage)->get();
+
+        return [
+            'posts' => PostMapper::toDomainCollection($models),
+            'total' => $total,
+            'page' => $filter->page,
+            'perPage' => $filter->perPage
+        ];
     }
 
     public function findAll(int $page = 1, int $perPage = 15): array

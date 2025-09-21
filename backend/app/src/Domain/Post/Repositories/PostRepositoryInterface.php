@@ -9,6 +9,7 @@ use App\src\Domain\Post\ValueObjects\PostId;
 use App\src\Domain\Post\ValueObjects\PostSlug;
 use App\src\Domain\Post\ValueObjects\PostStatus;
 use App\src\Domain\User\ValueObjects\UserId;
+use App\src\Application\DTOs\Post\PostFilterDTO;
 
 interface PostRepositoryInterface
 {
@@ -36,6 +37,13 @@ interface PostRepositoryInterface
      * Check if a post exists by slug.
      */
     public function existsBySlug(PostSlug $slug): bool;
+
+    /**
+     * Find posts with filters (replaces multiple findBy* methods).
+     *
+     * @return array{posts: Post[], total: int, page: int, perPage: int}
+     */
+    public function findWithFilters(PostFilterDTO $filter): array;
 
     /**
      * Find all posts with pagination.

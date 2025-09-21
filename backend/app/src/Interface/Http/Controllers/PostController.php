@@ -106,17 +106,17 @@ class PostController
      */
     public function adminIndex(Request $request): JsonResponse
     {
-        try {
-            $filter = new PostFilterDTO(
-                page: (int) $request->get('page', 1),
-                perPage: (int) $request->get('per_page', 15),
-                search: $request->get('search'),
-                status: $request->get('status'),
-                authorId: $request->get('author_id') ? (int) $request->get('author_id') : null,
-                sortBy: $request->get('sort_by', 'created_at'),
-                sortDirection: $request->get('sort_direction', 'desc')
-            );
+        $filter = new PostFilterDTO(
+            page: (int) $request->get('page', 1),
+            perPage: (int) $request->get('per_page', 15),
+            search: $request->get('search'),
+            status: $request->get('status'),
+            authorId: $request->get('author_id') ? (int) $request->get('author_id') : null,
+            sortBy: $request->get('sort_by', 'created_at'),
+            sortDirection: $request->get('sort_direction', 'desc')
+        );
 
+        try {
             $result = $this->getAllPostsUseCase->execute($filter);
 
             return response()->json(

@@ -6,8 +6,6 @@ namespace App\src\Application\UseCases\Post;
 
 use App\src\Application\DTOs\Post\PostFilterDTO;
 use App\src\Domain\Post\Repositories\PostRepositoryInterface;
-use App\src\Domain\Post\ValueObjects\PostStatus;
-use App\src\Domain\User\ValueObjects\UserId;
 
 final readonly class GetAllPostsUseCase
 {
@@ -17,31 +15,6 @@ final readonly class GetAllPostsUseCase
 
     public function execute(PostFilterDTO $filter): array
     {
-        if ($filter->search) {
-            return [
-                'posts' => $this->postRepository->search($filter->search, $filter->page, $filter->perPage),
-                'total' => $this->postRepository->count(),
-                'page' => $filter->page,
-                'perPage' => $filter->perPage
-            ];
-        }
-
-        if ($filter->status && $filter->authorId) {
-            $status = new PostStatus($filter->status);
-            $authorId = new UserId($filter->authorId);
-            return $this->postRepository->findByAuthorAndStatus($authorId, $status, $filter->page, $filter->perPage);
-        }
-
-        if ($filter->status) {
-            $status = new PostStatus($filter->status);
-            return $this->postRepository->findByStatus($status, $filter->page, $filter->perPage);
-        }
-
-        if ($filter->authorId) {
-            $authorId = new UserId($filter->authorId);
-            return $this->postRepository->findByAuthor($authorId, $filter->page, $filter->perPage);
-        }
-
-        return $this->postRepository->findAll($filter->page, $filter->perPage);
+        return $this->postRepository->findWithFilters($filter);
     }
 }
