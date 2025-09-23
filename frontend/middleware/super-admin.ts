@@ -5,27 +5,24 @@
 import { useAuthStore } from '~/interface/stores/auth.store';
 import { ROLE } from '~/domain/types/permissions.types';
 
-export default defineNuxtRouteMiddleware(() => {
-  // Skip on server-side rendering to avoid hydration issues
-  if (import.meta.server) return;
-
+export default defineNuxtRouteMiddleware(async () => {
   const authStore = useAuthStore();
 
-  // Try to restore session first
-  authStore.restoreSession();
+  // Try to restore session first (await to ensure completion)
+  await authStore.restoreSession();
 
   // First check if user is authenticated
-  if (!authStore.isAuthenticated) {
+  if (!authStore.isLoggedIn) {
     return navigateTo('/auth/login');
   }
 
   // Check if user has super admin role
   const currentUser = authStore.currentUser;
   if (!currentUser || !currentUser.hasRole(ROLE.SUPER_ADMIN)) {
-    // Redirect to dashboard with error message
-    return navigateTo({
-      path: '/dashboard',
-      query: { error: 'No tienes permisos para acceder a esta sección' }
+    // Show 404 instead of revealing route exists
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Página no encontrada'
     });
   }
 });

@@ -159,7 +159,7 @@ const handleLoginSuccess = async (payload: LoginPayload) => {
     const user = authStore.currentUser;
     if (user) {
       const role = user.getRole().value();
-      if (['SuperAdmin', 'Admin'].includes(role)) {
+      if (['super_admin', 'admin'].includes(role)) {
         finalRedirectTo = '/admin';
       } else {
         finalRedirectTo = '/profile';

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Blog\Infrastructure\Persistence\Eloquent;
+namespace Blog\Infrastructure\Persistence\Eloquent\Repositories;
 
 use Blog\Domain\User\Repositories\UserRepositoryInterface;
 use Blog\Domain\User\Entities\User as DomainUser;

@@ -164,7 +164,7 @@ const errorMessage = ref<string | null>(null);
 // Computed
 const redirectTo = computed(() => {
   const redirect = route.query.redirect as string;
-  return redirect || '/dashboard';
+  return redirect || '/profile';
 });
 
 // Methods

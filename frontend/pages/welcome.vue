@@ -90,10 +90,10 @@ class="h-5 w-5" :class="user.getIsActive() ? 'text-green-500' : 'text-red-500'"
           </div>
           <p class="text-gray-600 mb-4">Accede a tu panel de control personal</p>
           <NuxtLink
-            to="/dashboard"
+            to="/profile"
             class="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
           >
-            Ir al dashboard
+            Ir al perfil
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -180,10 +180,10 @@ class="h-5 w-5" :class="user.getIsActive() ? 'text-green-500' : 'text-red-500'"
       <!-- Continue Button -->
       <div class="text-center">
         <NuxtLink
-          to="/dashboard"
+          to="/profile"
           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          Continuar al Dashboard
+          Continuar al Perfil
           <svg class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
