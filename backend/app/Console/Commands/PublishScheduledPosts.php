@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\src\Infrastructure\Jobs\ScheduledPostPublisher;
+use Blog\Infrastructure\Jobs\ScheduledPostPublisher;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -86,8 +86,8 @@ class PublishScheduledPosts extends Command
 
             // Execute the job handle method directly
             $job->handle(
-                app(\App\src\Domain\Post\Repositories\PostRepositoryInterface::class),
-                app(\App\src\Application\UseCases\Post\PublishPostUseCase::class)
+                app(\Blog\Domain\Post\Repositories\PostRepositoryInterface::class),
+                app(\Blog\Application\UseCases\Post\PublishPostUseCase::class)
             );
 
             $this->info('Scheduled post publishing completed successfully.');

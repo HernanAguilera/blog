@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Post\Services;
 
-use App\src\Domain\Post\Entities\Post;
-use App\src\Domain\Post\Services\PostStateValidator;
-use App\src\Domain\Post\ValueObjects\PostTitle;
-use App\src\Domain\Post\ValueObjects\PostContent;
-use App\src\Domain\Post\ValueObjects\PostStatus;
-use App\src\Domain\Post\Exceptions\InvalidPostStatusException;
-use App\src\Domain\User\ValueObjects\UserId;
+use Blog\Domain\Post\Entities\Post;
+use Blog\Domain\Post\Services\PostStateValidator;
+use Blog\Domain\Post\ValueObjects\PostTitle;
+use Blog\Domain\Post\ValueObjects\PostContent;
+use Blog\Domain\Post\ValueObjects\PostStatus;
+use Blog\Domain\Post\Exceptions\InvalidPostStatusException;
+use Blog\Domain\User\ValueObjects\UserId;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

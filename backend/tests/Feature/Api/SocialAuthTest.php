@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\Api;
 
 use App\Models\User as LaravelUser;
-use App\src\Application\Services\Auth\SocialAuthServiceInterface;
-use App\src\Domain\User\ValueObjects\SocialProvider;
-use App\src\Domain\User\ValueObjects\SocialUserData;
+use Blog\Application\Services\Auth\SocialAuthServiceInterface;
+use Blog\Domain\User\ValueObjects\SocialProvider;
+use Blog\Domain\User\ValueObjects\SocialUserData;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

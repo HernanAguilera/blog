@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Auth;
 
-use App\src\Domain\User\ValueObjects\SocialProvider;
+use Blog\Domain\User\ValueObjects\SocialProvider;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

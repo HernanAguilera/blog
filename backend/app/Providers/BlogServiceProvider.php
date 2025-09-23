@@ -2,24 +2,24 @@
 
 namespace App\Providers;
 
-use App\src\Domain\Post\Repositories\PostRepositoryInterface;
-use App\src\Infrastructure\Persistence\Eloquent\Repositories\EloquentPostRepository;
-use App\src\Application\UseCases\Post\CreatePostUseCase;
-use App\src\Application\UseCases\Post\UpdatePostUseCase;
-use App\src\Application\UseCases\Post\DeletePostUseCase;
-use App\src\Application\UseCases\Post\GetPostUseCase;
-use App\src\Application\UseCases\Post\GetPublishedPostsUseCase;
-use App\src\Application\UseCases\Post\GetAllPostsUseCase;
-use App\src\Application\UseCases\Post\GetDraftPostsUseCase;
-use App\src\Application\UseCases\Post\GetArchivedPostsUseCase;
-use App\src\Application\UseCases\Post\AutoSavePostUseCase;
-use App\src\Application\UseCases\Post\PreviewPostUseCase;
-use App\src\Application\UseCases\Post\ChangePostStatusUseCase;
-use App\src\Domain\Post\Services\HtmlSanitizerInterface;
-use App\src\Infrastructure\Services\HtmlSanitizerService;
-use App\src\Interface\Console\Commands\CleanupDraftsCommand;
-use App\src\Interface\Console\Commands\CleanupPreviewsCommand;
-use App\src\Domain\Shared\Events\EventDispatcherInterface;
+use Blog\Domain\Post\Repositories\PostRepositoryInterface;
+use Blog\Infrastructure\Persistence\Eloquent\Repositories\EloquentPostRepository;
+use Blog\Application\UseCases\Post\CreatePostUseCase;
+use Blog\Application\UseCases\Post\UpdatePostUseCase;
+use Blog\Application\UseCases\Post\DeletePostUseCase;
+use Blog\Application\UseCases\Post\GetPostUseCase;
+use Blog\Application\UseCases\Post\GetPublishedPostsUseCase;
+use Blog\Application\UseCases\Post\GetAllPostsUseCase;
+use Blog\Application\UseCases\Post\GetDraftPostsUseCase;
+use Blog\Application\UseCases\Post\GetArchivedPostsUseCase;
+use Blog\Application\UseCases\Post\AutoSavePostUseCase;
+use Blog\Application\UseCases\Post\PreviewPostUseCase;
+use Blog\Application\UseCases\Post\ChangePostStatusUseCase;
+use Blog\Domain\Post\Services\HtmlSanitizerInterface;
+use Blog\Infrastructure\Services\HtmlSanitizerService;
+use Blog\Interface\Console\Commands\CleanupDraftsCommand;
+use Blog\Interface\Console\Commands\CleanupPreviewsCommand;
+use Blog\Domain\Shared\Events\EventDispatcherInterface;
 use Illuminate\Support\ServiceProvider;
 
 class BlogServiceProvider extends ServiceProvider

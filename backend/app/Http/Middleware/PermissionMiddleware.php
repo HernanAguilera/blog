@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\src\Domain\User\Entities\User;
-use App\src\Domain\User\ValueObjects\Permission;
+use Blog\Domain\User\Entities\User;
+use Blog\Domain\User\ValueObjects\Permission;
 use Closure;
 use Illuminate\Http\Request;
 use InvalidArgumentException;

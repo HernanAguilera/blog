@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\src\Application\Services\Auth\SocialAuthServiceInterface;
-use App\src\Application\Services\Security\TurnstileServiceInterface;
-use App\src\Application\Services\Security\SecurityLoggerInterface;
-use App\src\Application\Services\Security\IPBlockServiceInterface;
-use App\src\Infrastructure\Services\SocialAuthService;
-use App\src\Infrastructure\Services\TurnstileService;
-use App\src\Infrastructure\Services\SecurityLogger;
-use App\src\Infrastructure\Services\IPBlockService;
+use Blog\Application\Services\Auth\SocialAuthServiceInterface;
+use Blog\Application\Services\Security\TurnstileServiceInterface;
+use Blog\Application\Services\Security\SecurityLoggerInterface;
+use Blog\Application\Services\Security\IPBlockServiceInterface;
+use Blog\Infrastructure\Services\SocialAuthService;
+use Blog\Infrastructure\Services\TurnstileService;
+use Blog\Infrastructure\Services\SecurityLogger;
+use Blog\Infrastructure\Services\IPBlockService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\src\Application\DTOs\Auth\SocialLoginDTO;
-use App\src\Application\UseCases\Auth\SocialLoginUseCase;
-use App\src\Domain\User\Exceptions\AuthenticationException;
-use App\src\Domain\User\ValueObjects\SocialProvider;
+use Blog\Application\DTOs\Auth\SocialLoginDTO;
+use Blog\Application\UseCases\Auth\SocialLoginUseCase;
+use Blog\Domain\User\Exceptions\AuthenticationException;
+use Blog\Domain\User\ValueObjects\SocialProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;

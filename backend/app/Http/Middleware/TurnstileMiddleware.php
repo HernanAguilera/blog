@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\src\Application\Services\Security\TurnstileServiceInterface;
-use App\src\Application\Services\Security\SecurityLoggerInterface;
-use App\src\Application\Services\Security\IPBlockServiceInterface;
+use Blog\Application\Services\Security\TurnstileServiceInterface;
+use Blog\Application\Services\Security\SecurityLoggerInterface;
+use Blog\Application\Services\Security\IPBlockServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

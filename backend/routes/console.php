@@ -1,7 +1,7 @@
 <?php
 
-use App\src\Infrastructure\Jobs\CleanupExpiredDraftsJob;
-use App\src\Infrastructure\Jobs\CleanupExpiredPreviewsJob;
+use Blog\Infrastructure\Jobs\CleanupExpiredDraftsJob;
+use Blog\Infrastructure\Jobs\CleanupExpiredPreviewsJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;

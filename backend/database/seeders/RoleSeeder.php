@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\src\Domain\User\ValueObjects\UserRole;
+use Blog\Domain\User\ValueObjects\UserRole;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder

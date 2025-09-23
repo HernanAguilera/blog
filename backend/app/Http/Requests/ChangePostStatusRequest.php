@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\src\Domain\Post\ValueObjects\PostStatus;
+use Blog\Domain\Post\ValueObjects\PostStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 

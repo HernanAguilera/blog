@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\src\Application\Services\Auth\JwtServiceInterface;
-use App\src\Domain\User\Repositories\UserRepositoryInterface;
-use App\src\Domain\User\ValueObjects\UserId;
+use Blog\Application\Services\Auth\JwtServiceInterface;
+use Blog\Domain\User\Repositories\UserRepositoryInterface;
+use Blog\Domain\User\ValueObjects\UserId;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

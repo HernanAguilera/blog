@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\src\Interface\Http\Controllers\EditorController;
+use Blog\Interface\Http\Controllers\EditorController;
 
 Route::get('/', function () {
     return view('welcome');

@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SocialAuthController;
-use App\src\Interface\Http\Controllers\PostController;
-use App\src\Interface\Http\Controllers\EditorController;
+use Blog\Interface\Http\Controllers\PostController;
+use Blog\Interface\Http\Controllers\EditorController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {

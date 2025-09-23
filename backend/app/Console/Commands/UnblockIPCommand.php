@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\src\Application\Services\Security\IPBlockServiceInterface;
+use Blog\Application\Services\Security\IPBlockServiceInterface;
 use Illuminate\Console\Command;
 
 class UnblockIPCommand extends Command

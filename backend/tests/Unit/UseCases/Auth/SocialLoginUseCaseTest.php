@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Unit\UseCases\Auth;
 
-use App\src\Application\DTOs\Auth\AuthenticationResultDTO;
-use App\src\Application\DTOs\Auth\SocialLoginDTO;
-use App\src\Application\Services\Auth\JwtServiceInterface;
-use App\src\Application\Services\Auth\SocialAuthServiceInterface;
-use App\src\Application\UseCases\Auth\SocialLoginUseCase;
-use App\src\Domain\User\Entities\User;
-use App\src\Domain\User\Exceptions\AuthenticationException;
-use App\src\Domain\User\Repositories\UserRepositoryInterface;
-use App\src\Domain\User\ValueObjects\Email;
-use App\src\Domain\User\ValueObjects\SocialProvider;
-use App\src\Domain\User\ValueObjects\SocialUserData;
-use App\src\Domain\User\ValueObjects\UserRole;
+use Blog\Application\DTOs\Auth\AuthenticationResultDTO;
+use Blog\Application\DTOs\Auth\SocialLoginDTO;
+use Blog\Application\Services\Auth\JwtServiceInterface;
+use Blog\Application\Services\Auth\SocialAuthServiceInterface;
+use Blog\Application\UseCases\Auth\SocialLoginUseCase;
+use Blog\Domain\User\Entities\User;
+use Blog\Domain\User\Exceptions\AuthenticationException;
+use Blog\Domain\User\Repositories\UserRepositoryInterface;
+use Blog\Domain\User\ValueObjects\Email;
+use Blog\Domain\User\ValueObjects\SocialProvider;
+use Blog\Domain\User\ValueObjects\SocialUserData;
+use Blog\Domain\User\ValueObjects\UserRole;
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -101,7 +101,7 @@ class SocialLoginUseCaseTest extends TestCase
         $existingUser = User::create(
             name: 'Existing User',
             email: new Email('existing@example.com'),
-            password: \App\src\Domain\User\ValueObjects\Password::fromPlainText('password'),
+            password: \Blog\Domain\User\ValueObjects\Password::fromPlainText('password'),
             role: UserRole::COLLABORATOR
         );
 
@@ -152,7 +152,7 @@ class SocialLoginUseCaseTest extends TestCase
         $inactiveUser = User::create(
             name: 'Inactive User',
             email: new Email('inactive@example.com'),
-            password: \App\src\Domain\User\ValueObjects\Password::fromPlainText('password')
+            password: \Blog\Domain\User\ValueObjects\Password::fromPlainText('password')
         );
         $inactiveUser->deactivate();
 
