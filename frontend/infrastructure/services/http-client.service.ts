@@ -2,6 +2,26 @@ import type { TokenStorageInterface } from '../storage/token-storage.interface';
 import type { HttpClientInterface } from './http-client.interface';
 import type { HttpClientConfig, HttpError } from '../types/http.types';
 
+// Import loading store - will be available globally in browser context
+let loadingStore: any = null;
+
+// Lazy load the store to avoid SSR issues
+const getLoadingStore = () => {
+    if (typeof window === 'undefined') return null;
+
+    if (!loadingStore) {
+        try {
+            // Dynamic import to avoid SSR issues
+            const { useLoadingStore } = require('~/interface/stores/loading.store');
+            loadingStore = useLoadingStore();
+        } catch (error) {
+            // Store not available, continue without loading integration
+            return null;
+        }
+    }
+    return loadingStore;
+};
+
 export class HttpClientService implements HttpClientInterface {
     private readonly config: Required<HttpClientConfig>;
 
@@ -46,30 +66,45 @@ export class HttpClientService implements HttpClientInterface {
         const fullUrl = this.buildUrl(url);
         const headers = this.buildHeaders(options.headers);
 
+        // Auto-loading integration
+        const loadingStore = getLoadingStore();
+        const shouldShowLoading = options.loading !== false; // Allow opt-out with loading: false
+
+        if (loadingStore && shouldShowLoading) {
+            loadingStore.show();
+        }
+
         let lastError: any;
         let attempt = 0;
 
-        while (attempt <= this.config.retries) {
-            try {
-                const response = await this.performRequest<T>(method, fullUrl, data, {
-                    ...options,
-                    headers
-                });
+        try {
+            while (attempt <= this.config.retries) {
+                try {
+                    const response = await this.performRequest<T>(method, fullUrl, data, {
+                        ...options,
+                        headers
+                    });
 
-                return response;
-            } catch (error) {
-                lastError = error;
-                attempt++;
+                    return response;
+                } catch (error) {
+                    lastError = error;
+                    attempt++;
 
-                // Don't retry on authentication errors or client errors
-                if (this.shouldNotRetry(error)) {
-                    break;
+                    // Don't retry on authentication errors or client errors
+                    if (this.shouldNotRetry(error)) {
+                        break;
+                    }
+
+                    // Don't retry on last attempt
+                    if (attempt <= this.config.retries) {
+                        await this.delay(this.config.retryDelay * attempt);
+                    }
                 }
-
-                // Don't retry on last attempt
-                if (attempt <= this.config.retries) {
-                    await this.delay(this.config.retryDelay * attempt);
-                }
+            }
+        } finally {
+            // Always clean up loading state
+            if (loadingStore && shouldShowLoading) {
+                loadingStore.hide();
             }
         }
 

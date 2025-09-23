@@ -126,7 +126,7 @@ import AdminHeader from '~/interface/components/admin/AdminHeader.vue';
 
 // Meta
 definePageMeta({
-  middleware: ['auth', 'admin'],
+  middleware: ['admin'],
   ssr: false // Disable SSR for admin pages to avoid hydration issues
 });
 

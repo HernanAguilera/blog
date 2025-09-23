@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '../../interface/stores/auth.store';
 
 // Composables
@@ -128,9 +128,20 @@ const resetForm = () => {
   }
 };
 
-// Initialize form with user data
-onMounted(() => {
-  resetForm();
+// Watch for user changes and update form reactively
+watch(user, (newUser) => {
+  if (newUser) {
+    form.name = newUser.getName();
+    form.email = newUser.getEmail().value();
+  }
+}, { immediate: true });
+
+// Also ensure we have user data on mount (restore session if needed)
+onMounted(async () => {
+  // Restore session if not already loaded
+  if (!authStore.currentUser) {
+    await authStore.restoreSession();
+  }
 });
 
 // SEO

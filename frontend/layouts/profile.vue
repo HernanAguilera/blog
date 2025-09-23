@@ -130,6 +130,7 @@
 import { ref, computed } from 'vue';
 import { useAuthStore } from '../interface/stores/auth.store';
 import { useRouter } from 'vue-router';
+import { ROLE } from '../domain/types/permissions.types';
 
 // Composables
 const authStore = useAuthStore();
@@ -142,8 +143,9 @@ const showUserMenu = ref(false);
 const user = computed(() => authStore.currentUser);
 const canAccessAdmin = computed(() => {
   if (!user.value) return false;
-  const role = user.value.getRole().value();
-  return ['SuperAdmin', 'Admin'].includes(role);
+  return user.value.hasRole(ROLE.SUPER_ADMIN) ||
+         user.value.hasRole(ROLE.ADMIN) ||
+         user.value.hasRole(ROLE.COLLABORATOR);
 });
 
 // Methods

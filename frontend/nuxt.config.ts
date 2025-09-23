@@ -40,6 +40,13 @@ export default defineNuxtConfig({
   },
 
 
+  // Force client-side rendering for admin routes
+  nitro: {
+    routeRules: {
+      '/admin/**': { ssr: false }
+    }
+  },
+
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:8000/api',

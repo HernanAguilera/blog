@@ -13,9 +13,17 @@
         <slot />
       </main>
     </div>
+
+    <!-- Admin-specific Loading Overlay -->
+    <LoadingOverlay />
   </div>
 </template>
 
 <script setup lang="ts">
-// No need for any logic here - components handle their own state
+import LoadingOverlay from '~/interface/components/ui/LoadingOverlay.vue';
+
+// Force client-side rendering for admin layout
+definePageMeta({
+  ssr: false
+});
 </script>

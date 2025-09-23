@@ -84,7 +84,7 @@ import AdminHeader from '~/interface/components/admin/AdminHeader.vue';
 
 // Meta
 definePageMeta({
-  middleware: ['auth', 'admin'],
+  middleware: ['admin'],
   ssr: false
 });
 

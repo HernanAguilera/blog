@@ -262,7 +262,7 @@ import PostStatusBadge from '~/interface/components/posts/PostStatusBadge.vue';
 
 // Meta
 definePageMeta({
-  middleware: ['auth', 'admin'],
+  middleware: ['admin'],
   layout: 'admin',
   ssr: false
 });

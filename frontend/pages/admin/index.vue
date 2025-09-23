@@ -180,7 +180,8 @@ import { ROLE } from '../../domain/types/permissions.types';
 
 // Meta data
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  ssr: false // Client-side rendering only for admin routes
 });
 
 // Head configuration
