@@ -10,6 +10,7 @@ use Blog\Application\UseCases\Auth\SocialLoginUseCase;
 use Blog\Domain\User\Exceptions\AuthenticationException;
 use Blog\Domain\User\ValueObjects\SocialProvider;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -22,127 +23,79 @@ class SocialAuthController extends Controller
     /**
      * Redirect to social provider authentication page
      */
-    public function redirect(string $provider): JsonResponse
+    public function redirect(string $provider, Request $request): RedirectResponse
     {
         try {
+            // Store return URL in session for later use
+            $returnUrl = $request->query('return_url', config('app.frontend_url', 'http://localhost:3000'));
+            session(['oauth_return_url' => $returnUrl]);
+
             // Validate provider
             $socialProvider = SocialProvider::fromString($provider);
 
             if (!$socialProvider->isEnabled()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Social provider '{$provider}' is not enabled",
-                    'errors' => ['provider' => ["Provider '{$provider}' is not configured"]]
-                ], 400);
+                return redirect($returnUrl . '?error=provider_not_enabled&message=' . urlencode("Provider '{$provider}' is not configured"));
             }
 
             $dto = SocialLoginDTO::fromProvider($provider);
             $redirectUrl = $this->socialLoginUseCase->getRedirectUrl($dto);
 
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'redirect_url' => $redirectUrl,
-                    'provider' => $provider
-                ]
-            ]);
+            return redirect($redirectUrl);
 
         } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid social provider',
-                'errors' => ['provider' => [$e->getMessage()]]
-            ], 400);
+            $returnUrl = session('oauth_return_url', config('app.frontend_url', 'http://localhost:3000'));
+            return redirect($returnUrl . '?error=invalid_provider&message=' . urlencode($e->getMessage()));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unable to redirect to social provider',
-                'errors' => ['redirect' => ['Failed to generate redirect URL']]
-            ], 500);
+            $returnUrl = session('oauth_return_url', config('app.frontend_url', 'http://localhost:3000'));
+            return redirect($returnUrl . '?error=redirect_failed&message=' . urlencode('Unable to redirect to social provider'));
         }
     }
 
     /**
      * Handle callback from social provider
      */
-    public function callback(string $provider, Request $request): JsonResponse
+    public function callback(string $provider, Request $request): RedirectResponse
     {
+        $returnUrl = session('oauth_return_url', config('app.frontend_url', 'http://localhost:3000'));
+
         try {
             // Validate provider
             $socialProvider = SocialProvider::fromString($provider);
 
             if (!$socialProvider->isEnabled()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Social provider '{$provider}' is not enabled",
-                    'errors' => ['provider' => ["Provider '{$provider}' is not configured"]]
-                ], 400);
+                return redirect($returnUrl . '?error=provider_not_enabled&message=' . urlencode("Provider '{$provider}' is not configured"));
             }
 
             // Check for OAuth errors in callback
             if ($request->has('error')) {
-                $error = $request->get('error');
                 $errorDescription = $request->get('error_description', 'Authentication was cancelled or failed');
-
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Social authentication failed',
-                    'errors' => ['oauth' => [$errorDescription]]
-                ], 400);
+                return redirect($returnUrl . '?error=oauth_error&message=' . urlencode($errorDescription));
             }
 
             $dto = SocialLoginDTO::fromProvider($provider);
             $result = $this->socialLoginUseCase->execute($dto);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Authentication successful',
-                'data' => [
-                    'token' => $result->token,
-                    'expires_at' => $result->expiresAt->format('Y-m-d H:i:s'),
-                    'user' => [
-                        'id' => $result->user->getId()?->value(),
-                        'name' => $result->user->getName(),
-                        'email' => $result->user->getEmail()->value(),
-                        'role' => $result->user->getRole()->value,
-                        'is_active' => $result->user->isActive(),
-                        'social_provider' => $result->user->getSocialProvider()?->value,
-                        'email_verified_at' => $result->user->getEmailVerifiedAt()?->format('Y-m-d H:i:s')
-                    ]
-                ]
-            ]);
+            // Clear the return URL from session
+            session()->forget('oauth_return_url');
+
+            // Redirect to frontend with token and success flag
+            return redirect($returnUrl . '?token=' . $result->token . '&auth=success');
 
         } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid social provider',
-                'errors' => ['provider' => [$e->getMessage()]]
-            ], 400);
+            return redirect($returnUrl . '?error=invalid_provider&message=' . urlencode($e->getMessage()));
         } catch (AuthenticationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Authentication failed',
-                'errors' => ['auth' => [$e->getMessage()]]
-            ], 401);
+            return redirect($returnUrl . '?error=auth_failed&message=' . urlencode($e->getMessage()));
         } catch (\RuntimeException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Social authentication error',
-                'errors' => ['social' => [$e->getMessage()]]
-            ], 400);
+            return redirect($returnUrl . '?error=social_error&message=' . urlencode($e->getMessage()));
         } catch (\Exception $e) {
             // Log unexpected errors for debugging
-            \Log::error('Social authentication error', [
+            \Illuminate\Support\Facades\Log::error('Social authentication error', [
                 'provider' => $provider,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Internal server error during authentication',
-                'errors' => ['server' => ['An unexpected error occurred']]
-            ], 500);
+            return redirect($returnUrl . '?error=server_error&message=' . urlencode('An unexpected error occurred'));
         }
     }
 

@@ -67,7 +67,7 @@ Para el estado actual del proyecto, consulta el archivo [sprints.md](./docs/spri
 ## Architecture & Technology Stack
 
 - **Backend:** Laravel API (PHP 8.2+) with Clean Architecture
-- **Frontend:** Nuxt 3 (Vue.js 3 + TypeScript) with SSG/SSR
+- **Frontend:** Nuxt 4 (Vue.js 3 + TypeScript) with SSG/SSR
 - **Database:** MySQL/PostgreSQL
 - **Storage:** AWS S3 for media uploads
 - **Cache:** File cache (MVP), Redis in future phases
@@ -79,7 +79,7 @@ Para el estado actual del proyecto, consulta el archivo [sprints.md](./docs/spri
 ```
 blog-platform/
 ├── backend/          # Laravel API (✅ implemented with Clean Architecture)
-├── frontend/         # Nuxt 3 application (✅ implemented)
+├── frontend/         # Nuxt 4 application (✅ implemented)
 ├── docker-compose.yml
 └── docs/             # Planning documents and core context
 ```
@@ -101,15 +101,14 @@ To work with the implemented codebase:
 
 ### Backend (Laravel)
 ```bash
-cd backend
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-php artisan serve
+docker compose up -d
+docker compose exec backend composer install
+docker compose exec backend cp .env.example .env
+docker compose exec backend php artisan key:generate
+docker compose exec backend php artisan migrate --seed
 ```
 
-### Frontend (Nuxt 3)
+### Frontend (Nuxt 4)
 ```bash
 cd frontend
 pnpm install
@@ -120,7 +119,7 @@ pnpm run generate
 
 ### Development Environment
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Core Architecture Principles

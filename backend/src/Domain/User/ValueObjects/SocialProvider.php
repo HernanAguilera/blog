@@ -21,7 +21,10 @@ enum SocialProvider: string
 
     public function getDriverName(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::TWITTER => 'twitter-oauth-2',
+            default => $this->value,
+        };
     }
 
     public static function fromString(string $provider): self
@@ -34,7 +37,7 @@ enum SocialProvider: string
         return match ($this) {
             self::GOOGLE => !empty(config('services.google.client_id')),
             self::FACEBOOK => !empty(config('services.facebook.client_id')),
-            self::TWITTER => !empty(config('services.twitter.client_id')),
+            self::TWITTER => !empty(config('services.twitter-oauth-2.client_id')),
         };
     }
 

@@ -17,10 +17,10 @@ Route::prefix('auth')->group(function () {
         Route::get('providers', [SocialAuthController::class, 'providers']);
         Route::get('{provider}', [SocialAuthController::class, 'redirect'])
             ->where('provider', 'google|facebook|twitter')
-            ->middleware('throttle:social-auth');
+            ->middleware(['web', 'throttle:social-auth']);
         Route::get('{provider}/callback', [SocialAuthController::class, 'callback'])
             ->where('provider', 'google|facebook|twitter')
-            ->middleware('throttle:social-auth');
+            ->middleware(['web', 'throttle:social-auth']);
     });
 });
 
