@@ -114,7 +114,19 @@
     - [x] **Rate Limiting**: 3/min (producción), 15/min (desarrollo)
     - [x] **Service Providers**: Bindings en BlogServiceProvider, rate limiter en AppServiceProvider
     - [x] **Total**: 46 archivos implementados desde Domain hasta Presentation layer
-  - [ ] [Tarea 3.3: Sistema de Moderación](./task/tarea-3-3-sistema-de-moderacion.md)
+  - [x] [Tarea 3.3: Sistema de Moderación](./task/tarea-3-3-sistema-de-moderacion.md)
+    - [x] Plan de acción: [plan-tarea-3-3-sistema-de-moderacion.md](./action-plans/plan-tarea-3-3-sistema-de-moderacion.md)
+    - [x] **ModerationService**: Servicio de aplicación con reglas configurables
+    - [x] **Notificaciones Email**: NewCommentPendingNotification + SendNewCommentNotification listener
+    - [x] **Use Cases Bulk** (3 implementados):
+      - BulkApproveCommentsUseCase
+      - BulkRejectCommentsUseCase
+      - BulkDeleteCommentsUseCase
+    - [x] **Endpoints Bulk**: POST /api/admin/comments/bulk-approve, bulk-reject, bulk-delete
+    - [x] **Configuración**: config/moderation.php con reglas personalizables
+    - [x] **Event Listener**: Registrado en AppServiceProvider
+    - [x] **Service Bindings**: ModerationService en BlogServiceProvider
+    - [x] **Total**: 11 archivos (7 nuevos + 4 modificados)
   - [ ] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
   - [ ] [Tarea 3.5: Seguridad y Anti-spam](./task/tarea-3-5-seguridad-y-anti-spam.md)
   - [ ] [Tarea 3.6: Frontend - Sistema de Comentarios](./task/tarea-3-6-frontend-sistema-de-comentarios.md)

@@ -10,8 +10,11 @@ use Blog\Infrastructure\Services\SocialAuthService;
 use Blog\Infrastructure\Services\TurnstileService;
 use Blog\Infrastructure\Services\SecurityLogger;
 use Blog\Infrastructure\Services\IPBlockService;
+use App\Listeners\SendNewCommentNotification;
+use Blog\Domain\Comment\Events\CommentCreated;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,6 +42,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
+        $this->configureEventListeners();
+    }
+
+    /**
+     * Configure event listeners for the application.
+     */
+    protected function configureEventListeners(): void
+    {
+        // Comment notifications
+        Event::listen(
+            CommentCreated::class,
+            SendNewCommentNotification::class
+        );
     }
 
     /**

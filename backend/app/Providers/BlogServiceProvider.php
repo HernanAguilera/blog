@@ -22,6 +22,8 @@ use Blog\Infrastructure\Services\HtmlSanitizerService;
 use Blog\Interface\Console\Commands\CleanupDraftsCommand;
 use Blog\Interface\Console\Commands\CleanupPreviewsCommand;
 use Blog\Domain\Shared\Events\EventDispatcherInterface;
+use Blog\Application\Services\Moderation\ModerationService;
+use Blog\Domain\Comment\Services\CommentDomainService;
 use Illuminate\Support\ServiceProvider;
 
 class BlogServiceProvider extends ServiceProvider
@@ -49,6 +51,14 @@ class BlogServiceProvider extends ServiceProvider
             HtmlSanitizerInterface::class,
             HtmlSanitizerService::class
         );
+
+        // Comment services
+        $this->app->singleton(ModerationService::class, function ($app) {
+            return new ModerationService(
+                $app->make(CommentDomainService::class),
+                config('moderation.comments', [])
+            );
+        });
 
         // Use Cases bindings
         $this->app->bind(CreatePostUseCase::class, function ($app) {

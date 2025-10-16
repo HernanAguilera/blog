@@ -79,6 +79,8 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
     // Admin comment moderation routes
     Route::prefix('comments')->group(function () {
         Route::get('pending', [AdminCommentController::class, 'pending']);
+
+        // Single comment actions
         Route::patch('{id}/approve', [AdminCommentController::class, 'approve'])
             ->where('id', '[a-f0-9\-]{36}');
         Route::patch('{id}/reject', [AdminCommentController::class, 'reject'])
@@ -87,5 +89,10 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
             ->where('id', '[a-f0-9\-]{36}');
         Route::delete('{id}', [AdminCommentController::class, 'destroy'])
             ->where('id', '[a-f0-9\-]{36}');
+
+        // Bulk actions
+        Route::post('bulk-approve', [AdminCommentController::class, 'bulkApprove']);
+        Route::post('bulk-reject', [AdminCommentController::class, 'bulkReject']);
+        Route::post('bulk-delete', [AdminCommentController::class, 'bulkDelete']);
     });
 });

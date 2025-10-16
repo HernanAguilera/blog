@@ -11,6 +11,9 @@ use Blog\Application\UseCases\Comment\RejectCommentUseCase;
 use Blog\Application\UseCases\Comment\MarkCommentAsSpamUseCase;
 use Blog\Application\UseCases\Comment\GetPendingCommentsUseCase;
 use Blog\Application\UseCases\Comment\DeleteCommentUseCase;
+use Blog\Application\UseCases\Comment\BulkApproveCommentsUseCase;
+use Blog\Application\UseCases\Comment\BulkRejectCommentsUseCase;
+use Blog\Application\UseCases\Comment\BulkDeleteCommentsUseCase;
 use Blog\Domain\Comment\Exceptions\CommentNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,7 +25,10 @@ class AdminCommentController extends Controller
         private readonly ApproveCommentUseCase $approveCommentUseCase,
         private readonly RejectCommentUseCase $rejectCommentUseCase,
         private readonly MarkCommentAsSpamUseCase $markCommentAsSpamUseCase,
-        private readonly DeleteCommentUseCase $deleteCommentUseCase
+        private readonly DeleteCommentUseCase $deleteCommentUseCase,
+        private readonly BulkApproveCommentsUseCase $bulkApproveCommentsUseCase,
+        private readonly BulkRejectCommentsUseCase $bulkRejectCommentsUseCase,
+        private readonly BulkDeleteCommentsUseCase $bulkDeleteCommentsUseCase
     ) {}
 
     /**
@@ -185,6 +191,116 @@ class AdminCommentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting comment',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk approve comments
+     * POST /api/admin/comments/bulk-approve
+     */
+    public function bulkApprove(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'comment_ids' => 'required|array|min:1|max:100',
+            'comment_ids.*' => 'required|uuid|exists:comments,id'
+        ]);
+
+        try {
+            $result = $this->bulkApproveCommentsUseCase->execute(
+                $validated['comment_ids'],
+                auth()->id()
+            );
+
+            $message = "Approved {$result['approved']} comment(s)";
+            if (!empty($result['failed'])) {
+                $message .= ", " . count($result['failed']) . " failed";
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => $result
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error in bulk approval',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk reject comments
+     * POST /api/admin/comments/bulk-reject
+     */
+    public function bulkReject(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'comment_ids' => 'required|array|min:1|max:100',
+            'comment_ids.*' => 'required|uuid|exists:comments,id'
+        ]);
+
+        try {
+            $result = $this->bulkRejectCommentsUseCase->execute(
+                $validated['comment_ids'],
+                auth()->id()
+            );
+
+            $message = "Rejected {$result['rejected']} comment(s)";
+            if (!empty($result['failed'])) {
+                $message .= ", " . count($result['failed']) . " failed";
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => $result
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error in bulk rejection',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk delete comments
+     * POST /api/admin/comments/bulk-delete
+     */
+    public function bulkDelete(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'comment_ids' => 'required|array|min:1|max:100',
+            'comment_ids.*' => 'required|uuid|exists:comments,id'
+        ]);
+
+        try {
+            $result = $this->bulkDeleteCommentsUseCase->execute(
+                $validated['comment_ids']
+            );
+
+            $message = "Deleted {$result['deleted']} comment(s)";
+            if (!empty($result['failed'])) {
+                $message .= ", " . count($result['failed']) . " failed";
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => $result
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error in bulk deletion',
                 'error' => $e->getMessage()
             ], 500);
         }
