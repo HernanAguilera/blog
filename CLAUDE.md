@@ -197,6 +197,12 @@ All project documentation is organized within the `/docs/` directory:
 - Stories numbered and organized by development phases
 - Covers MVP through advanced features
 
+### `/docs/design-decisions/` - Architecture & Design Decisions
+- Important technical decisions with context and rationale
+- Trade-offs and alternatives considered
+- Helps avoid reopening resolved debates
+- Example: [comment-system-anonymous-users.md](./docs/design-decisions/comment-system-anonymous-users.md)
+
 ### `/docs/task/` - Development Tasks
 - Detailed task breakdown derived from user stories
 - Each task in a separate file with specific implementation requirements

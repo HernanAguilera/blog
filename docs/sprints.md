@@ -93,7 +93,27 @@
     - [x] Excepciones: CommentNotFoundException, InvalidCommentStatusException, InvalidCommentContentException, InvalidAuthorException, SpamCommentException
     - [x] Soporte completo para usuarios registrados y anónimos
     - [x] Anidación ilimitada a nivel lógico (control visual en frontend)
-  - [ ] [Tarea 3.2: CRUD de Comentarios](./task/tarea-3-2-crud-de-comentarios.md)
+  - [x] [Tarea 3.2: CRUD de Comentarios](./task/tarea-3-2-crud-de-comentarios.md)
+    - [x] **Migración**: Tabla comments con UUID, foreign keys a posts/users, self-referencing parent_id, índices optimizados
+    - [x] **Modelos Eloquent**: CommentModel con HasUuids, relaciones (post, user, moderator, parent, replies), PostModel actualizado
+    - [x] **Mapper**: CommentMapper para conversión bidireccional Domain ↔ Eloquent
+    - [x] **Repositorio**: EloquentCommentRepository con implementación de Recursive CTE en getCommentTree()
+    - [x] **DTOs**: CreateCommentDTO, CreateAnonymousCommentDTO (con turnstileToken)
+    - [x] **Use Cases** (8 implementados):
+      - CreateCommentFromUserUseCase (auto-aprobado)
+      - CreateAnonymousCommentUseCase (pending approval)
+      - ApproveCommentUseCase
+      - RejectCommentUseCase
+      - MarkCommentAsSpamUseCase
+      - GetCommentTreeUseCase
+      - GetPendingCommentsUseCase
+      - DeleteCommentUseCase
+    - [x] **Requests**: CreateCommentRequest, CreateAnonymousCommentRequest (con Turnstile), ModerateCommentRequest
+    - [x] **Controllers**: CommentController (público), AdminCommentController (admin)
+    - [x] **Rutas API**: GET/POST /api/posts/{slug}/comments, POST /api/posts/{slug}/comments/anonymous, endpoints admin
+    - [x] **Rate Limiting**: 3/min (producción), 15/min (desarrollo)
+    - [x] **Service Providers**: Bindings en BlogServiceProvider, rate limiter en AppServiceProvider
+    - [x] **Total**: 46 archivos implementados desde Domain hasta Presentation layer
   - [ ] [Tarea 3.3: Sistema de Moderación](./task/tarea-3-3-sistema-de-moderacion.md)
   - [ ] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
   - [ ] [Tarea 3.5: Seguridad y Anti-spam](./task/tarea-3-5-seguridad-y-anti-spam.md)

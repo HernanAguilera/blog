@@ -12,6 +12,8 @@
 
 **Descripción detallada:** Sistema de comentarios que permite participación tanto de usuarios registrados como anónimos, con sistema de moderación manual y medidas anti-spam.
 
+**📋 Decisión de Diseño:** Ver [comment-system-anonymous-users.md](../design-decisions/comment-system-anonymous-users.md) para entender por qué NO se verifica email de anónimos y las limitaciones aceptadas para MVP.
+
 **Criterios de aceptación:**
 
 - 3.1 Comentarios de usuarios registrados (auto-aprobados)

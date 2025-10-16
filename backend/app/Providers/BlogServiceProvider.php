@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Blog\Domain\Post\Repositories\PostRepositoryInterface;
+use Blog\Domain\Comment\Repositories\CommentRepositoryInterface;
 use Blog\Infrastructure\Persistence\Eloquent\Repositories\EloquentPostRepository;
+use Blog\Infrastructure\Persistence\Eloquent\Repositories\EloquentCommentRepository;
 use Blog\Application\UseCases\Post\CreatePostUseCase;
 use Blog\Application\UseCases\Post\UpdatePostUseCase;
 use Blog\Application\UseCases\Post\DeletePostUseCase;
@@ -35,6 +37,11 @@ class BlogServiceProvider extends ServiceProvider
         $this->app->bind(
             PostRepositoryInterface::class,
             EloquentPostRepository::class
+        );
+
+        $this->app->bind(
+            CommentRepositoryInterface::class,
+            EloquentCommentRepository::class
         );
 
         // Service bindings

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SocialAuthController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\Admin\AdminCommentController;
 use Blog\Interface\Http\Controllers\PostController;
 use Blog\Interface\Http\Controllers\EditorController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,16 @@ Route::prefix('auth')->group(function () {
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostController::class, 'index']);
     Route::get('{slug}', [PostController::class, 'show']);
+
+    // Public comment routes
+    Route::prefix('{slug}/comments')->group(function () {
+        Route::get('/', [CommentController::class, 'index']);
+        Route::get('count', [CommentController::class, 'count']);
+        Route::post('/', [CommentController::class, 'store'])
+            ->middleware(['auth.jwt', 'throttle:comments']);
+        Route::post('anonymous', [CommentController::class, 'storeAnonymous'])
+            ->middleware(['throttle:comments', 'turnstile']);
+    });
 });
 
 // Public preview route (no auth required)
@@ -62,5 +74,18 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
         // Draft management
         Route::get('drafts', [EditorController::class, 'getDrafts']);
         Route::get('drafts/{id}', [EditorController::class, 'restoreDraft'])->where('id', '[0-9]+');
+    });
+
+    // Admin comment moderation routes
+    Route::prefix('comments')->group(function () {
+        Route::get('pending', [AdminCommentController::class, 'pending']);
+        Route::patch('{id}/approve', [AdminCommentController::class, 'approve'])
+            ->where('id', '[a-f0-9\-]{36}');
+        Route::patch('{id}/reject', [AdminCommentController::class, 'reject'])
+            ->where('id', '[a-f0-9\-]{36}');
+        Route::patch('{id}/spam', [AdminCommentController::class, 'markAsSpam'])
+            ->where('id', '[a-f0-9\-]{36}');
+        Route::delete('{id}', [AdminCommentController::class, 'destroy'])
+            ->where('id', '[a-f0-9\-]{36}');
     });
 });

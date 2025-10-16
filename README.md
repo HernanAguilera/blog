@@ -246,6 +246,7 @@ Essential information for understanding the project:
 - **User Stories** (`HU/`): Complete feature specifications
 - **Development Tasks** (`task/`): Granular implementation tasks
 - **Sprint Planning** (`sprints.md`): Organized development timeline
+- **Design Decisions** (`design-decisions/`): Architecture and design choices with rationale
 
 ## MVP Acceptance Criteria
 

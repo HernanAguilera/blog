@@ -132,6 +132,21 @@ class AppServiceProvider extends ServiceProvider
                 });
         });
 
+        // Comments rate limiting: 3 per minute
+        RateLimiter::for('comments', function (Request $request) {
+            $maxAttempts = app()->environment('production') ? 3 : 15;
+
+            return Limit::perMinute($maxAttempts)
+                ->by($request->user()?->id ?: $request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Too many comments. Please wait before posting again.',
+                        'errors' => ['rate_limit' => ['Maximum 3 comments per minute allowed']]
+                    ], 429, $headers);
+                });
+        });
+
         // General API rate limiting
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
