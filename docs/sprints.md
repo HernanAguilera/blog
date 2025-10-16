@@ -83,7 +83,16 @@
 ## Sprint 7: Comentarios y Moderación
 
 - [ ] **Historia de Usuario:** [Historia 3: Sistema de Comentarios con Moderación](./HU/historia-3-sistema-de-comentarios-con-moderacion.md)
-  - [ ] [Tarea 3.1: Dominio de Comentarios (Backend)](./task/tarea-3-1-dominio-de-comentarios-backend.md)
+  - [x] [Tarea 3.1: Dominio de Comentarios (Backend)](./task/tarea-3-1-dominio-de-comentarios-backend.md)
+    - [x] Plan de acción: [plan-tarea-3-1-dominio-comentarios-backend.md](./action-plans/plan-tarea-3-1-dominio-comentarios-backend.md)
+    - [x] Value Objects implementados: CommentId, CommentContent, CommentStatus, AnonymousAuthor, CommentAuthorType
+    - [x] Entidad Comment con métodos approve(), reject(), markAsSpam()
+    - [x] CommentRepositoryInterface con getCommentTree() para árbol anidado con Recursive CTE
+    - [x] CommentDomainService con sanitización, detección de spam, auto-aprobación
+    - [x] Domain Events: CommentCreated, CommentApproved, CommentRejected, CommentMarkedAsSpam, CommentReplyCreated
+    - [x] Excepciones: CommentNotFoundException, InvalidCommentStatusException, InvalidCommentContentException, InvalidAuthorException, SpamCommentException
+    - [x] Soporte completo para usuarios registrados y anónimos
+    - [x] Anidación ilimitada a nivel lógico (control visual en frontend)
   - [ ] [Tarea 3.2: CRUD de Comentarios](./task/tarea-3-2-crud-de-comentarios.md)
   - [ ] [Tarea 3.3: Sistema de Moderación](./task/tarea-3-3-sistema-de-moderacion.md)
   - [ ] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
