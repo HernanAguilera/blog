@@ -23,6 +23,7 @@ use Blog\Interface\Console\Commands\CleanupDraftsCommand;
 use Blog\Interface\Console\Commands\CleanupPreviewsCommand;
 use Blog\Domain\Shared\Events\EventDispatcherInterface;
 use Blog\Application\Services\Moderation\ModerationService;
+use Blog\Application\Services\Security\CommentSecurityLogger;
 use Blog\Domain\Comment\Services\CommentDomainService;
 use Illuminate\Support\ServiceProvider;
 
@@ -57,6 +58,12 @@ class BlogServiceProvider extends ServiceProvider
             return new ModerationService(
                 $app->make(CommentDomainService::class),
                 config('moderation.comments', [])
+            );
+        });
+
+        $this->app->singleton(CommentSecurityLogger::class, function ($app) {
+            return new CommentSecurityLogger(
+                $app->make(\Blog\Application\Services\Security\SecurityLoggerInterface::class)
             );
         });
 

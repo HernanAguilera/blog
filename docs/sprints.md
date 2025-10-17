@@ -128,7 +128,24 @@
     - [x] **Service Bindings**: ModerationService en BlogServiceProvider
     - [x] **Total**: 11 archivos (7 nuevos + 4 modificados)
   - [ ] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
-  - [ ] [Tarea 3.5: Seguridad y Anti-spam](./task/tarea-3-5-seguridad-y-anti-spam.md)
+  - [x] [Tarea 3.5: Seguridad y Anti-spam](./task/tarea-3-5-seguridad-y-anti-spam.md)
+    - [x] Plan de acción: [plan-tarea-3-5-seguridad-y-anti-spam.md](./action-plans/plan-tarea-3-5-seguridad-y-anti-spam.md)
+    - [x] **CommentSecurityLogger**: Servicio para logging de eventos de seguridad
+    - [x] **Logging integrado en Use Cases**:
+      - CreateAnonymousCommentUseCase (spam y contenido sospechoso)
+      - CreateCommentFromUserUseCase (spam de usuarios registrados)
+    - [x] **Rate Limiter Logging**: Log cuando se excede límite de 3/min
+    - [x] **Eventos de seguridad loggeados**:
+      - comment_spam_attempt (spam detectado)
+      - comment_suspicious_content (contenido de baja calidad)
+      - comment_rate_limit_exceeded (límite excedido)
+      - comment_turnstile_failure (validación Turnstile fallida)
+      - comment_multiple_rejections (múltiples rechazos de misma IP)
+      - comment_deleted (auditoría de eliminaciones)
+      - comment_bulk_* (acciones masivas)
+    - [x] **Service Bindings**: CommentSecurityLogger en BlogServiceProvider
+    - [x] **Total**: 5 archivos (1 nuevo + 4 modificados)
+    - [x] **Nota**: Turnstile (3.5.1), Rate limiting (3.5.2), Filtros anti-spam (3.5.3) y Sanitización HTML (3.5.4) ya estaban implementados en Tareas 3.1-3.2
   - [ ] [Tarea 3.6: Frontend - Sistema de Comentarios](./task/tarea-3-6-frontend-sistema-de-comentarios.md)
 
 ## Sprint 8: Multi-idioma

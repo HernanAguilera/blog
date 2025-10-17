@@ -11,6 +11,7 @@ use Blog\Infrastructure\Services\TurnstileService;
 use Blog\Infrastructure\Services\SecurityLogger;
 use Blog\Infrastructure\Services\IPBlockService;
 use App\Listeners\SendNewCommentNotification;
+use Blog\Application\Services\Security\CommentSecurityLogger;
 use Blog\Domain\Comment\Events\CommentCreated;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -155,6 +156,16 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute($maxAttempts)
                 ->by($request->user()?->id ?: $request->ip())
                 ->response(function (Request $request, array $headers) {
+                    // Log rate limit exceeded
+                    try {
+                        app(CommentSecurityLogger::class)->logRateLimitExceeded(
+                            ipAddress: $request->ip(),
+                            userId: $request->user()?->id
+                        );
+                    } catch (\Exception $e) {
+                        // Silently fail logging to not break rate limiting
+                    }
+
                     return response()->json([
                         'success' => false,
                         'message' => 'Too many comments. Please wait before posting again.',

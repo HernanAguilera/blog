@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Blog\Application\UseCases\Comment;
 
 use Blog\Application\DTOs\Comment\CreateCommentDTO;
+use Blog\Application\Services\Security\CommentSecurityLogger;
 use Blog\Domain\Comment\Entities\Comment;
 use Blog\Domain\Comment\Repositories\CommentRepositoryInterface;
 use Blog\Domain\Comment\Services\CommentDomainService;
@@ -21,7 +22,8 @@ final readonly class CreateCommentFromUserUseCase
     public function __construct(
         private CommentRepositoryInterface $commentRepository,
         private CommentDomainService $domainService,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
+        private CommentSecurityLogger $securityLogger
     ) {}
 
     public function execute(CreateCommentDTO $dto): Comment
@@ -33,11 +35,26 @@ final readonly class CreateCommentFromUserUseCase
         // Validate content quality
         $qualityErrors = $this->domainService->validateContentQuality($content);
         if (!empty($qualityErrors)) {
+            // Log suspicious content from registered user
+            $this->securityLogger->logSuspiciousContent(
+                ipAddress: $dto->ipAddress,
+                reason: implode(', ', $qualityErrors),
+                content: $sanitizedContent,
+                userId: $dto->userId,
+                email: null
+            );
             throw new \DomainException(implode(', ', $qualityErrors));
         }
 
-        // Check for spam
+        // Check for spam (unusual for registered users, high severity)
         if ($this->domainService->isSpamContent($sanitizedContent)) {
+            // Log spam attempt from registered user (more suspicious)
+            $this->securityLogger->logSpamAttempt(
+                ipAddress: $dto->ipAddress,
+                content: $sanitizedContent,
+                userId: $dto->userId,
+                email: null
+            );
             throw new \DomainException('Comment detected as spam');
         }
 

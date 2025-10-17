@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Blog\Application\UseCases\Comment;
 
 use Blog\Application\DTOs\Comment\CreateAnonymousCommentDTO;
+use Blog\Application\Services\Security\CommentSecurityLogger;
 use Blog\Domain\Comment\Entities\Comment;
 use Blog\Domain\Comment\Repositories\CommentRepositoryInterface;
 use Blog\Domain\Comment\Services\CommentDomainService;
@@ -21,7 +22,8 @@ final readonly class CreateAnonymousCommentUseCase
     public function __construct(
         private CommentRepositoryInterface $commentRepository,
         private CommentDomainService $domainService,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
+        private CommentSecurityLogger $securityLogger
     ) {}
 
     public function execute(CreateAnonymousCommentDTO $dto): Comment
@@ -36,11 +38,26 @@ final readonly class CreateAnonymousCommentUseCase
         // Validate content quality
         $qualityErrors = $this->domainService->validateContentQuality($content);
         if (!empty($qualityErrors)) {
+            // Log suspicious content
+            $this->securityLogger->logSuspiciousContent(
+                ipAddress: $dto->ipAddress,
+                reason: implode(', ', $qualityErrors),
+                content: $sanitizedContent,
+                userId: null,
+                email: $dto->authorEmail
+            );
             throw new \DomainException(implode(', ', $qualityErrors));
         }
 
         // Check for spam
         if ($this->domainService->isSpamContent($sanitizedContent)) {
+            // Log spam attempt
+            $this->securityLogger->logSpamAttempt(
+                ipAddress: $dto->ipAddress,
+                content: $sanitizedContent,
+                userId: null,
+                email: $dto->authorEmail
+            );
             throw new \DomainException('Comment detected as spam');
         }
 
