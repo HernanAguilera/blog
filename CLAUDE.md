@@ -235,6 +235,7 @@ Lee [Readme](./README.md) y luego lee:
 14. [MVP features essential](./docs/core-context/14-mvp-features-essential.md)
 15. [Container service setup](./docs/core-context/15-container-services-setup.md)
 16. [Typscript conventions](./docs/core-context/16-typescript-conventions.md)
+17. [Validation and error handling](./docs/core-context/17-validation-and-error-handling.md) ⭐ **CRÍTICO**
 
 ## Si te preguntan por estado del proyecto
 
