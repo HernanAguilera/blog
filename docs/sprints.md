@@ -80,9 +80,9 @@
 
 **✅ LOGROS:** Visitantes pueden ahora leer posts publicados, navegar el sitio, y disfrutar de una experiencia optimizada con SEO completo.
 
-## Sprint 7: Comentarios y Moderación
+## ✅ Sprint 7: Comentarios y Moderación (COMPLETADO)
 
-- [ ] **Historia de Usuario:** [Historia 3: Sistema de Comentarios con Moderación](./HU/historia-3-sistema-de-comentarios-con-moderacion.md)
+- [x] **Historia de Usuario:** [Historia 3: Sistema de Comentarios con Moderación](./HU/historia-3-sistema-de-comentarios-con-moderacion.md)
   - [x] [Tarea 3.1: Dominio de Comentarios (Backend)](./task/tarea-3-1-dominio-de-comentarios-backend.md)
     - [x] Plan de acción: [plan-tarea-3-1-dominio-comentarios-backend.md](./action-plans/plan-tarea-3-1-dominio-comentarios-backend.md)
     - [x] Value Objects implementados: CommentId, CommentContent, CommentStatus, AnonymousAuthor, CommentAuthorType
@@ -146,7 +146,31 @@
     - [x] **Service Bindings**: CommentSecurityLogger en BlogServiceProvider
     - [x] **Total**: 5 archivos (1 nuevo + 4 modificados)
     - [x] **Nota**: Turnstile (3.5.1), Rate limiting (3.5.2), Filtros anti-spam (3.5.3) y Sanitización HTML (3.5.4) ya estaban implementados en Tareas 3.1-3.2
-  - [ ] [Tarea 3.6: Frontend - Sistema de Comentarios](./task/tarea-3-6-frontend-sistema-de-comentarios.md)
+  - [x] [Tarea 3.6: Frontend - Sistema de Comentarios](./task/tarea-3-6-frontend-sistema-de-comentarios.md)
+    - [x] **Domain Layer**: Comment entity, Value Objects (CommentId, CommentContent, CommentStatus, CommentAuthorType, AnonymousAuthor), Repository interface, Types
+    - [x] **Application Layer**: 12 Use Cases (create, approve, reject, spam, delete, bulk operations)
+    - [x] **Infrastructure Layer**: CommentAPI client, HttpCommentRepository
+    - [x] **Interface - Components**: 8 componentes (CommentForm, CommentItem, CommentTree, CommentsList, CommentReplyForm, CommentModerationPanel, CommentModerationItem, CommentBulkActions)
+    - [x] **Interface - Composables**: useComments, useCommentModeration (completamente conectados al service container)
+    - [x] **Interface - Store**: comment.store.ts (Pinia)
+    - [x] **Service Container**: Bindings configurados en bindings.ts con todos los Use Cases
+    - [x] **Integration**: CommentsList integrado en página pública de post
+    - [x] **Admin Page**: /admin/comments/index.vue creada y funcional
+    - [x] **Turnstile**: Configuración verificada en nuxt.config.ts
+    - [x] **TypeScript**: Todos los errores de tipo resueltos, typecheck pasa exitosamente
+    - [x] **Dependencies**: dompurify instalado para sanitización HTML
+    - [x] **Total**: ~35 archivos implementados
+    - [x] **Estado**: ✅ Sistema completamente implementado y listo para testing funcional con backend.
+
+**🎯 RESULTADO:** Sistema de comentarios completo con moderación, soporte para usuarios registrados y anónimos, protección anti-spam, y panel de administración.
+
+**✅ LOGROS:**
+- Comentarios anidados con árbol recursivo
+- Moderación masiva (bulk approve/reject/delete)
+- Rate limiting y Turnstile para prevenir spam
+- Sanitización HTML con DOMPurify
+- Arquitectura limpia end-to-end (Domain → Application → Infrastructure → Presentation)
+- TypeScript type-safe en todo el frontend
 
 ## Sprint 8: Multi-idioma
 

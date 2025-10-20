@@ -5,12 +5,15 @@ import { LocalTokenStorage } from '../../infrastructure/storage/local-token.stor
 import { HttpClientService } from '../../infrastructure/services/http-client.service';
 import { HttpUserRepository } from '../../infrastructure/repositories/http-user.repository';
 import { HttpPostRepository } from '../../infrastructure/repositories/http-post.repository';
+import { HttpCommentRepository } from '../../infrastructure/repositories/http-comment-repository';
+import { CommentAPI } from '../../infrastructure/api/comment-api';
 
 // Infrastructure types
 import type { TokenStorageInterface } from '../../infrastructure/storage/token-storage.interface';
 import type { HttpClientInterface } from '../../infrastructure/services/http-client.interface';
 import type { UserRepositoryInterface } from '../../domain/repositories/user-repository.interface';
 import type { PostRepositoryInterface } from '../../domain/repositories/post-repository.interface';
+import type { CommentRepositoryInterface } from '../../domain/repositories/comment-repository.interface';
 
 // Application imports
 import { AuthorizationService } from '../../application/services/authorization.service';
@@ -30,6 +33,20 @@ import { ChangePostStatusUseCase } from '../../application/use-cases/change-post
 import { GetPostTransitionsUseCase } from '../../application/use-cases/get-post-transitions.use-case';
 import { SavePostAsDraftUseCase } from '../../application/use-cases/save-post-as-draft.use-case';
 import { GeneratePostPreviewUseCase } from '../../application/use-cases/generate-post-preview.use-case';
+
+// Comment use cases
+import { CreateCommentUseCase } from '../../application/use-cases/comment/create-comment.use-case';
+import { CreateAnonymousCommentUseCase } from '../../application/use-cases/comment/create-anonymous-comment.use-case';
+import { GetCommentsTreeUseCase } from '../../application/use-cases/comment/get-comments-tree.use-case';
+import { GetCommentCountUseCase } from '../../application/use-cases/comment/get-comment-count.use-case';
+import { ApproveCommentUseCase } from '../../application/use-cases/comment/approve-comment.use-case';
+import { RejectCommentUseCase } from '../../application/use-cases/comment/reject-comment.use-case';
+import { MarkCommentAsSpamUseCase } from '../../application/use-cases/comment/mark-comment-as-spam.use-case';
+import { DeleteCommentUseCase } from '../../application/use-cases/comment/delete-comment.use-case';
+import { GetPendingCommentsUseCase } from '../../application/use-cases/comment/get-pending-comments.use-case';
+import { BulkApproveCommentsUseCase } from '../../application/use-cases/comment/bulk-approve-comments.use-case';
+import { BulkRejectCommentsUseCase } from '../../application/use-cases/comment/bulk-reject-comments.use-case';
+import { BulkDeleteCommentsUseCase } from '../../application/use-cases/comment/bulk-delete-comments.use-case';
 
 export const configureContainer = (container: ContainerInterface) => {
     // ========== STORAGE SERVICES ==========
@@ -132,5 +149,79 @@ export const configureContainer = (container: ContainerInterface) => {
     container.bind('GeneratePostPreviewUseCase', () => {
         const postRepository = container.get('PostRepository') as PostRepositoryInterface;
         return new GeneratePostPreviewUseCase(postRepository);
+    });
+
+    // ========== API CLIENTS - COMMENTS ==========
+    container.singleton('CommentAPI', () => {
+        const httpClient = container.get('HttpClient') as HttpClientInterface;
+        return new CommentAPI(httpClient);
+    });
+
+    // ========== REPOSITORIES - COMMENTS ==========
+    container.singleton('CommentRepository', () => {
+        const commentAPI = container.get('CommentAPI') as CommentAPI;
+        return new HttpCommentRepository(commentAPI);
+    });
+
+    // ========== USE CASES - COMMENTS (PUBLIC) ==========
+    container.bind('GetCommentsTreeUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new GetCommentsTreeUseCase(commentRepository);
+    });
+
+    container.bind('GetCommentCountUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new GetCommentCountUseCase(commentRepository);
+    });
+
+    container.bind('CreateCommentUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new CreateCommentUseCase(commentRepository);
+    });
+
+    container.bind('CreateAnonymousCommentUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new CreateAnonymousCommentUseCase(commentRepository);
+    });
+
+    // ========== USE CASES - COMMENTS (ADMIN) ==========
+    container.bind('GetPendingCommentsUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new GetPendingCommentsUseCase(commentRepository);
+    });
+
+    container.bind('ApproveCommentUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new ApproveCommentUseCase(commentRepository);
+    });
+
+    container.bind('RejectCommentUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new RejectCommentUseCase(commentRepository);
+    });
+
+    container.bind('MarkCommentAsSpamUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new MarkCommentAsSpamUseCase(commentRepository);
+    });
+
+    container.bind('DeleteCommentUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new DeleteCommentUseCase(commentRepository);
+    });
+
+    container.bind('BulkApproveCommentsUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new BulkApproveCommentsUseCase(commentRepository);
+    });
+
+    container.bind('BulkRejectCommentsUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new BulkRejectCommentsUseCase(commentRepository);
+    });
+
+    container.bind('BulkDeleteCommentsUseCase', () => {
+        const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
+        return new BulkDeleteCommentsUseCase(commentRepository);
     });
 };

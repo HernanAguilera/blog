@@ -96,6 +96,11 @@
           :excerpt="post.excerpt"
         />
 
+        <!-- Comments Section -->
+        <div class="mt-12">
+          <CommentsList :post-slug="post.slug" />
+        </div>
+
         <!-- Navigation to other posts -->
         <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div class="flex justify-between items-center">
