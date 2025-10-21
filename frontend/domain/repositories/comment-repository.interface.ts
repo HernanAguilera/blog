@@ -39,16 +39,18 @@ export interface CommentRepositoryInterface {
   /**
    * Crea un nuevo comentario como usuario registrado
    * @param data - Datos del comentario
-   * @returns Comentario creado
+   * @returns Promise que se resuelve cuando el comentario se crea exitosamente
+   * Nota: El backend devuelve datos parciales, se debe refrescar la lista para ver el comentario
    */
-  createComment(data: CreateCommentData): Promise<Comment>;
+  createComment(data: CreateCommentData): Promise<void>;
 
   /**
    * Crea un nuevo comentario anónimo
    * @param data - Datos del comentario anónimo (incluye Turnstile token)
-   * @returns Comentario creado
+   * @returns Promise que se resuelve cuando el comentario se crea exitosamente
+   * Nota: El backend devuelve datos parciales, se debe refrescar la lista para ver el comentario
    */
-  createAnonymousComment(data: CreateAnonymousCommentData): Promise<Comment>;
+  createAnonymousComment(data: CreateAnonymousCommentData): Promise<void>;
 
   /**
    * Obtiene todos los comentarios pendientes de moderación

@@ -43,11 +43,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { CommentData } from '../../../domain/types/comment.types';
+import type { CommentTreeNode } from '../../../domain/types/comment.types';
 import DOMPurify from 'dompurify';
 
 interface Props {
-  comment: CommentData;
+  comment: CommentTreeNode;
   depth: number;
   maxDepth?: number;
 }
@@ -63,13 +63,13 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 
 // Computed
-const isUserComment = computed(() => props.comment.authorType === 'user');
+const isUserComment = computed(() => props.comment.author.type === 'registered');
 
 const authorName = computed(() => {
   if (isUserComment.value) {
-    return props.comment.userName || 'Usuario';
+    return 'Usuario'; // TODO: obtener nombre real del usuario del backend
   }
-  return props.comment.anonymousName || 'Anónimo';
+  return props.comment.author.name || 'Anónimo';
 });
 
 const authorInitial = computed(() => {
@@ -77,7 +77,7 @@ const authorInitial = computed(() => {
 });
 
 const formattedDate = computed(() => {
-  const date = new Date(props.comment.createdAt);
+  const date = new Date(props.comment.created_at);
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
@@ -115,7 +115,8 @@ const sanitizedContent = computed(() => {
 });
 
 const canReply = computed(() => {
-  return props.depth < props.maxDepth && props.comment.status === 'approved';
+  // Los comentarios del árbol siempre están aprobados (el backend filtra por status='approved')
+  return props.depth < props.maxDepth;
 });
 
 // Methods

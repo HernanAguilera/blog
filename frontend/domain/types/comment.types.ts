@@ -55,13 +55,29 @@ export type CommentData = {
 };
 
 /**
+ * Comment Author Data
+ * Representa los datos del autor de un comentario
+ */
+export type CommentAuthorData = {
+  type: 'registered' | 'anonymous';
+  user_id?: number;
+  name?: string;
+  email?: string;
+  website?: string | null;
+};
+
+/**
  * Comment Tree Node Type
- * Representa un nodo en el árbol de comentarios con sus respuestas
+ * Representa un nodo en el árbol de comentarios con sus respuestas.
+ * Esta estructura coincide exactamente con la respuesta del backend.
  */
 export type CommentTreeNode = {
-  comment: CommentData;
-  replies: CommentTreeNode[];
+  id: string;
+  content: string;
+  author: CommentAuthorData;
   depth: number;
+  created_at: string;
+  replies: CommentTreeNode[];
 };
 
 /**

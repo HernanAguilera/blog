@@ -3,6 +3,17 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Turnstile Enabled
+    |--------------------------------------------------------------------------
+    |
+    | This value determines if Turnstile validation is enabled.
+    | Set to false in development to skip CAPTCHA validation.
+    |
+    */
+    'enabled' => env('TURNSTILE_ENABLED', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Turnstile Keys
     |--------------------------------------------------------------------------
     |

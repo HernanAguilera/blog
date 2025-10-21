@@ -1,8 +1,8 @@
 <template>
   <div class="comment-tree">
-    <div v-for="node in comments" :key="node.comment.id" class="comment-tree__node">
+    <div v-for="node in comments" :key="node.id" class="comment-tree__node">
       <CommentItem
-        :comment="node.comment"
+        :comment="node"
         :depth="depth"
         :max-depth="maxDepth"
         @reply-clicked="handleReplyClicked"
@@ -10,10 +10,10 @@
 
       <!-- Formulario de respuesta -->
       <CommentReplyForm
-        v-if="activeReplyId === node.comment.id"
+        v-if="activeReplyId === node.id"
         :post-slug="postSlug"
-        :parent-id="node.comment.id"
-        :parent-author-name="getAuthorName(node.comment)"
+        :parent-id="node.id"
+        :parent-author-name="getAuthorName(node)"
         @reply-created="handleReplyCreated"
         @cancel="handleReplyCancel"
       />
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { CommentTreeNode, CommentData } from '../../../domain/types/comment.types';
+import type { CommentTreeNode } from '../../../domain/types/comment.types';
 import CommentItem from './CommentItem.vue';
 import CommentReplyForm from './CommentReplyForm.vue';
 
@@ -96,11 +96,11 @@ const handleReplyCancel = () => {
   activeReplyId.value = null;
 };
 
-const getAuthorName = (comment: CommentData): string => {
-  if (comment.authorType === 'user') {
-    return comment.userName || 'Usuario';
+const getAuthorName = (node: CommentTreeNode): string => {
+  if (node.author.type === 'registered') {
+    return 'Usuario'; // TODO: obtener nombre real del usuario
   }
-  return comment.anonymousName || 'Anónimo';
+  return node.author.name || 'Anónimo';
 };
 </script>
 

@@ -216,4 +216,35 @@ final class Comment
     {
         return $this->approvedBy;
     }
+
+    /**
+     * Convert entity to primitives array for serialization
+     */
+    public function toPrimitives(): array
+    {
+        $data = [
+            'id' => $this->id?->value(),
+            'post_id' => $this->postId->value(),
+            'author_type' => $this->authorType->value(),
+            'content' => $this->content->value(),
+            'status' => $this->status->value(),
+            'user_id' => $this->userId?->value(),
+            'parent_id' => $this->parentId?->value(),
+            'ip_address' => $this->ipAddress,
+            'user_agent' => $this->userAgent,
+            'created_at' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
+            'approved_at' => $this->approvedAt?->format('Y-m-d H:i:s'),
+            'approved_by' => $this->approvedBy?->value(),
+        ];
+
+        // Add anonymous author data if applicable
+        if ($this->authorType->isAnonymous() && $this->anonymousAuthor) {
+            $data['author_name'] = $this->anonymousAuthor->name();
+            $data['author_email'] = $this->anonymousAuthor->email();
+            $data['author_website'] = $this->anonymousAuthor->website();
+        }
+
+        return $data;
+    }
 }

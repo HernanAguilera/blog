@@ -37,6 +37,13 @@ final class TurnstileService implements TurnstileServiceInterface
 
     public function isEnabled(): bool
     {
+        // Check if explicitly disabled via env variable
+        $enabled = config('turnstile.enabled', true);
+
+        if ($enabled === false || $enabled === 'false') {
+            return false;
+        }
+
         $siteKey = config('turnstile.turnstile_site_key');
         $secretKey = config('turnstile.turnstile_secret_key');
 

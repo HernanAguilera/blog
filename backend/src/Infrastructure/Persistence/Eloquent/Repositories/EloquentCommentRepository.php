@@ -17,14 +17,16 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
 {
     public function save(Comment $comment): void
     {
-        if ($comment->id() === null) {
+        // Check if comment exists in database
+        $existingModel = $comment->id() ? CommentModel::find($comment->id()->value()) : null;
+
+        if ($existingModel === null) {
             // Create new comment
             $model = CommentMapper::toEloquent($comment);
             $model->save();
         } else {
             // Update existing comment
-            $model = CommentModel::findOrFail($comment->id()->value());
-            $model = CommentMapper::updateEloquentFromDomain($model, $comment);
+            $model = CommentMapper::updateEloquentFromDomain($existingModel, $comment);
             $model->save();
         }
     }
@@ -61,7 +63,7 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
 
     public function findPendingModeration(int $limit = 50, int $offset = 0): array
     {
-        $models = CommentModel::where('status', 'pending_approval')
+        $models = CommentModel::where('status', 'pending')
             ->orderBy('created_at', 'asc')
             ->limit($limit)
             ->offset($offset)
@@ -72,7 +74,7 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
 
     public function countPendingModeration(): int
     {
-        return CommentModel::where('status', 'pending_approval')->count();
+        return CommentModel::where('status', 'pending')->count();
     }
 
     public function findReplies(CommentId $parentId): array
@@ -92,6 +94,7 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
     public function getCommentTree(PostId $postId): array
     {
         // Recursive CTE query for PostgreSQL
+        // Ordenamiento: Comentarios más recientes primero (tanto raíz como respuestas)
         $sql = <<<SQL
             WITH RECURSIVE comment_tree AS (
                 -- Base case: root comments (no parent)
@@ -100,7 +103,8 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
                     content, status, ip_address, user_agent, approved_at, approved_by,
                     created_at, updated_at,
                     0 as depth,
-                    ARRAY[id] as path
+                    ARRAY[created_at::timestamp]::timestamp[] as path_dates,
+                    ARRAY[id::text]::text[] as path_ids
                 FROM comments
                 WHERE post_id = ? AND parent_id IS NULL AND status = 'approved'
 
@@ -112,12 +116,13 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
                     c.content, c.status, c.ip_address, c.user_agent, c.approved_at, c.approved_by,
                     c.created_at, c.updated_at,
                     ct.depth + 1,
-                    ct.path || c.id
+                    ct.path_dates || c.created_at::timestamp,
+                    ct.path_ids || c.id::text
                 FROM comments c
                 INNER JOIN comment_tree ct ON c.parent_id = ct.id
                 WHERE c.status = 'approved'
             )
-            SELECT * FROM comment_tree ORDER BY path
+            SELECT * FROM comment_tree ORDER BY path_dates DESC, path_ids
         SQL;
 
         // Execute the query
@@ -184,7 +189,7 @@ final class EloquentCommentRepository implements CommentRepositoryInterface
                 'content' => $comment->content,
                 'author' => $author,
                 'depth' => $comment->depth,
-                'created_at' => $comment->created_at,
+                'created_at' => \Carbon\Carbon::parse($comment->created_at)->toIso8601String(),
                 'replies' => $this->buildNode($grouped, $comment->id),
             ];
 

@@ -15,6 +15,7 @@ use Blog\Application\UseCases\Comment\BulkApproveCommentsUseCase;
 use Blog\Application\UseCases\Comment\BulkRejectCommentsUseCase;
 use Blog\Application\UseCases\Comment\BulkDeleteCommentsUseCase;
 use Blog\Domain\Comment\Exceptions\CommentNotFoundException;
+use Blog\Interface\Http\Resources\CommentResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -46,18 +47,23 @@ class AdminCommentController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'comments' => $result['comments'],
+                    'comments' => CommentResource::collection($result['comments'])->resolve(),
                     'total' => $result['total'],
                     'limit' => $limit,
                     'offset' => $offset
                 ]
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error retrieving pending comments', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error retrieving pending comments',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -88,11 +94,17 @@ class AdminCommentController extends Controller
                 'message' => $e->getMessage()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error approving comment', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_id' => $id
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error approving comment',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -123,11 +135,17 @@ class AdminCommentController extends Controller
                 'message' => $e->getMessage()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error rejecting comment', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_id' => $id
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error rejecting comment',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -158,11 +176,17 @@ class AdminCommentController extends Controller
                 'message' => $e->getMessage()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error marking comment as spam', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_id' => $id
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error marking comment as spam',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -187,11 +211,17 @@ class AdminCommentController extends Controller
                 'message' => $e->getMessage()
             ], 404);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error deleting comment', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_id' => $id
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting comment',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -224,11 +254,17 @@ class AdminCommentController extends Controller
                 'data' => $result
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error in bulk approval', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_ids' => $validated['comment_ids'] ?? []
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error in bulk approval',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -261,11 +297,17 @@ class AdminCommentController extends Controller
                 'data' => $result
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error in bulk rejection', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_ids' => $validated['comment_ids'] ?? []
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error in bulk rejection',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -297,11 +339,17 @@ class AdminCommentController extends Controller
                 'data' => $result
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error in bulk deletion', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'comment_ids' => $validated['comment_ids'] ?? []
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error in bulk deletion',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }

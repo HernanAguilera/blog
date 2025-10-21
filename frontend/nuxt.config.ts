@@ -39,6 +39,14 @@ export default defineNuxtConfig({
     host: '0.0.0.0'
   },
 
+  vite: {
+    server: {
+      fs: {
+        // Permitir acceso a directorios de pnpm (necesario cuando pnpm está instalado por Volta)
+        strict: false
+      }
+    }
+  },
 
   // Force client-side rendering for admin routes
   nitro: {

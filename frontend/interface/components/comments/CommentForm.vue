@@ -2,6 +2,17 @@
   <div class="comment-form">
     <h3 class="comment-form__title">{{ title }}</h3>
 
+    <!-- Información de usuario autenticado -->
+    <div v-if="isAuthenticated" class="comment-form__user-info">
+      <div class="comment-form__user-avatar">
+        {{ userInitial }}
+      </div>
+      <div class="comment-form__user-details">
+        <span class="comment-form__user-name">{{ userName }}</span>
+        <span class="comment-form__user-email">{{ userEmail }}</span>
+      </div>
+    </div>
+
     <form @submit.prevent="handleSubmit" class="comment-form__form">
       <!-- Campos para usuarios anónimos -->
       <div v-if="!isAuthenticated" class="comment-form__anonymous-fields">
@@ -97,6 +108,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
+import { useComments } from '../../composables/useComments';
 
 interface Props {
   postSlug: string;
@@ -118,6 +130,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 
 const authStore = useAuthStore();
+const { createComment, createAnonymousComment } = useComments(props.postSlug);
 
 // State
 const content = ref('');
@@ -133,6 +146,15 @@ let rateLimitInterval: NodeJS.Timeout | null = null;
 
 // Computed
 const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+const userName = computed(() => authStore.userName || 'Usuario');
+
+const userEmail = computed(() => authStore.userEmail || '');
+
+const userInitial = computed(() => {
+  const name = authStore.userName || 'U';
+  return name.charAt(0).toUpperCase();
+});
 
 // Methods
 const validateForm = (): boolean => {
@@ -199,8 +221,28 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
 
   try {
-    // Aquí se llamará al use case correspondiente
-    // Por ahora solo emitimos el evento
+    if (isAuthenticated.value) {
+      // Usuario autenticado
+      await createComment({
+        postSlug: props.postSlug,
+        content: content.value,
+        parentId: props.parentId,
+      });
+      alert('Comentario publicado exitosamente');
+    } else {
+      // Usuario anónimo
+      await createAnonymousComment({
+        postSlug: props.postSlug,
+        content: content.value,
+        anonymousName: anonymousName.value,
+        anonymousEmail: anonymousEmail.value,
+        parentId: props.parentId,
+        turnstileToken: turnstileToken.value!,
+      });
+      alert('Comentario enviado. Será visible una vez aprobado por un moderador.');
+    }
+
+    // Emitir evento de éxito
     emit('comment-created');
 
     // Resetear formulario
@@ -215,7 +257,9 @@ const handleSubmit = async () => {
     // Iniciar rate limiting (20 segundos)
     startRateLimitCountdown(20);
   } catch (error: any) {
+    console.error('Error submitting comment:', error);
     errors.value.content = error.message || 'Error al enviar el comentario';
+    alert('Error: ' + (error.message || 'Error al enviar el comentario'));
   } finally {
     isSubmitting.value = false;
   }
@@ -271,30 +315,56 @@ const checkRateLimitFromStorage = () => {
   }
 };
 
-// Turnstile functions (placeholder - requires actual Turnstile integration)
+// Turnstile functions
 const initTurnstile = () => {
   if (isAuthenticated.value || !turnstileContainer.value) {
     return;
   }
 
-  // TODO: Implementar integración real con Cloudflare Turnstile
-  // Ejemplo:
-  // if (window.turnstile) {
-  //   turnstileWidget.value = window.turnstile.render(turnstileContainer.value, {
-  //     sitekey: 'YOUR_SITE_KEY',
-  //     callback: (token: string) => {
-  //       turnstileToken.value = token;
-  //     },
-  //   });
-  // }
+  // TODO: Integrar Cloudflare Turnstile en producción
+  // Por ahora, generamos un token dummy para testing
+  if (process.dev) {
+    // En desarrollo, generar token dummy automáticamente
+    turnstileToken.value = 'development-token-' + Date.now();
+
+    // Mostrar mensaje informativo
+    if (turnstileContainer.value) {
+      turnstileContainer.value.innerHTML =
+        '<div style="padding: 0.5rem; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 4px; font-size: 0.875rem;">' +
+        '⚠️ Modo desarrollo: Turnstile deshabilitado' +
+        '</div>';
+    }
+  } else {
+    // En producción, usar Turnstile real
+    // if (window.turnstile) {
+    //   turnstileWidget.value = window.turnstile.render(turnstileContainer.value, {
+    //     sitekey: 'YOUR_SITE_KEY',
+    //     callback: (token: string) => {
+    //       turnstileToken.value = token;
+    //     },
+    //   });
+    // }
+
+    // Por ahora, en producción también usamos token dummy
+    turnstileToken.value = 'testing-token-' + Date.now();
+    if (turnstileContainer.value) {
+      turnstileContainer.value.innerHTML =
+        '<div style="padding: 0.5rem; background: #dbeafe; border: 1px solid #3b82f6; border-radius: 4px; font-size: 0.875rem;">' +
+        'ℹ️ Verificación de seguridad pendiente de configurar' +
+        '</div>';
+    }
+  }
 };
 
 const resetTurnstile = () => {
-  // TODO: Implementar reset de Turnstile
+  // TODO: Implementar reset de Turnstile real
   // if (window.turnstile && turnstileWidget.value) {
   //   window.turnstile.reset(turnstileWidget.value);
   // }
+
+  // Por ahora, regenerar token dummy
   turnstileToken.value = null;
+  initTurnstile();
 };
 
 // Lifecycle
@@ -326,6 +396,48 @@ onUnmounted(() => {
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #111827;
+}
+
+.comment-form__user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.comment-form__user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.comment-form__user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.comment-form__user-name {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.comment-form__user-email {
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
 .comment-form__form {

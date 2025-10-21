@@ -70,4 +70,36 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Check if user is SuperAdmin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
+    /**
+     * Check if user is Admin or SuperAdmin
+     */
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'superadmin'], true);
+    }
+
+    /**
+     * Check if user is Collaborator
+     */
+    public function isCollaborator(): bool
+    {
+        return $this->role === 'collaborator';
+    }
+
+    /**
+     * Check if user can moderate comments (Admin or SuperAdmin)
+     */
+    public function canModerateComments(): bool
+    {
+        return $this->isAdmin();
+    }
 }

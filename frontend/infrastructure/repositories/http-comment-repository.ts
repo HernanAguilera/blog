@@ -26,23 +26,18 @@ export class HttpCommentRepository implements CommentRepositoryInterface {
   async getCommentTree(postSlug: string): Promise<CommentTreeNode[]> {
     const tree = await this.commentAPI.getCommentTree(postSlug);
 
-    // Mapear recursivamente los comentarios del árbol a entidades
-    return this.mapTreeNodes(tree);
-  }
+    // Si el árbol está vacío, retornar array vacío
+    if (!Array.isArray(tree) || tree.length === 0) {
+      return [];
+    }
 
-  /**
-   * Mapea recursivamente los nodos del árbol a entidades Comment
-   */
-  private mapTreeNodes(nodes: CommentTreeNode[]): CommentTreeNode[] {
-    return nodes.map((node) => ({
-      comment: this.mapToCommentData(node.comment),
-      replies: this.mapTreeNodes(node.replies),
-      depth: node.depth,
-    }));
+    // El backend ya retorna la estructura correcta, solo retornamos tal cual
+    return tree;
   }
 
   /**
    * Asegura que CommentData tenga el formato correcto
+   * Se usa solo para comentarios individuales (no árbol)
    */
   private mapToCommentData(data: any): CommentData {
     return {
@@ -90,19 +85,23 @@ export class HttpCommentRepository implements CommentRepositoryInterface {
   /**
    * Crea un comentario como usuario registrado
    * Nota: Las validaciones de dominio deben hacerse en la UI antes de llamar al Use Case
+   * El backend solo devuelve {comment_id, status, pending_approval}, no el objeto completo
    */
-  async createComment(data: CreateCommentData): Promise<Comment> {
-    const commentData = await this.commentAPI.createComment(data);
-    return CommentEntity.fromData(this.mapToCommentData(commentData));
+  async createComment(data: CreateCommentData): Promise<void> {
+    await this.commentAPI.createComment(data);
+    // No intentamos mapear a entidad porque el backend solo devuelve datos parciales
+    // El caller debe refrescar la lista de comentarios si necesita ver el nuevo comentario
   }
 
   /**
    * Crea un comentario anónimo
    * Nota: Las validaciones de dominio deben hacerse en la UI antes de llamar al Use Case
+   * El backend solo devuelve {comment_id, status, pending_approval}, no el objeto completo
    */
-  async createAnonymousComment(data: CreateAnonymousCommentData): Promise<Comment> {
-    const commentData = await this.commentAPI.createAnonymousComment(data);
-    return CommentEntity.fromData(this.mapToCommentData(commentData));
+  async createAnonymousComment(data: CreateAnonymousCommentData): Promise<void> {
+    await this.commentAPI.createAnonymousComment(data);
+    // No intentamos mapear a entidad porque el backend solo devuelve datos parciales
+    // El caller debe refrescar la lista de comentarios si necesita ver el nuevo comentario
   }
 
   /**

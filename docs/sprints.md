@@ -127,7 +127,9 @@
     - [x] **Event Listener**: Registrado en AppServiceProvider
     - [x] **Service Bindings**: ModerationService en BlogServiceProvider
     - [x] **Total**: 11 archivos (7 nuevos + 4 modificados)
-  - [ ] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
+  - [x] [Tarea 3.4: Comentarios Anidados](./task/tarea-3-4-comentarios-anidados.md)
+    - [x] Soporte completo implementado con Recursive CTE en backend
+    - [x] Frontend soporta comentarios anidados (parent_id)
   - [x] [Tarea 3.5: Seguridad y Anti-spam](./task/tarea-3-5-seguridad-y-anti-spam.md)
     - [x] Plan de acción: [plan-tarea-3-5-seguridad-y-anti-spam.md](./action-plans/plan-tarea-3-5-seguridad-y-anti-spam.md)
     - [x] **CommentSecurityLogger**: Servicio para logging de eventos de seguridad

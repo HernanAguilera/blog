@@ -55,11 +55,17 @@ class CommentController extends Controller
                 ]
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error retrieving comments', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'slug' => $slug
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error retrieving comments',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -108,11 +114,19 @@ class CommentController extends Controller
                 'message' => $e->getMessage()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error creating comment from user', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'slug' => $slug
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error creating comment',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -164,11 +178,19 @@ class CommentController extends Controller
                 'message' => $e->getMessage()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error creating anonymous comment', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'slug' => $slug
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error creating comment',
-                'error' => $e->getMessage()
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
             ], 500);
         }
     }
@@ -197,7 +219,13 @@ class CommentController extends Controller
                 ]
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Log::error('Error counting comments', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'slug' => $slug
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error counting comments'

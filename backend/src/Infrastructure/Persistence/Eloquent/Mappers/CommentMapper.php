@@ -42,7 +42,7 @@ final class CommentMapper
             parentId: $model->parent_id ? CommentId::fromString($model->parent_id) : null,
             ipAddress: $model->ip_address,
             userAgent: $model->user_agent,
-            createdAt: $model->created_at
+            createdAt: $model->created_at ? \DateTimeImmutable::createFromMutable($model->created_at->toDateTime()) : null
         );
     }
 
@@ -52,7 +52,9 @@ final class CommentMapper
 
         if ($comment->id() !== null) {
             $model->id = $comment->id()->value();
-            $model->exists = true;
+            // DO NOT set $model->exists = true here
+            // That flag should only be true when loading from database
+            // Setting it true causes Eloquent to UPDATE instead of INSERT
         }
 
         $model->post_id = $comment->postId()->value();

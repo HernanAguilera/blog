@@ -18,25 +18,38 @@ import type {
  * Response types del API
  */
 type CommentTreeResponse = {
-  data: CommentTreeNode[];
+  success: boolean;
+  data: {
+    comments: CommentTreeNode[];
+    total: number;
+  };
 };
 
 type CommentResponse = {
+  success: boolean;
   data: CommentData;
   message?: string;
 };
 
 type CommentCountResponse = {
+  success: boolean;
   data: {
     count: number;
   };
 };
 
 type CommentsListResponse = {
-  data: CommentData[];
+  success: boolean;
+  data: {
+    comments: CommentData[];
+    total: number;
+    limit?: number;
+    offset?: number;
+  };
 };
 
 type MessageResponse = {
+  success: boolean;
   message: string;
 };
 
@@ -53,9 +66,9 @@ export class CommentAPI {
    */
   async getCommentTree(postSlug: string): Promise<CommentTreeNode[]> {
     const response = await this.httpClient.get<CommentTreeResponse>(
-      `/api/posts/${postSlug}/comments`
+      `/posts/${postSlug}/comments`
     );
-    return response.data;
+    return response.data.comments;
   }
 
   /**
@@ -64,7 +77,7 @@ export class CommentAPI {
    */
   async getCommentCount(postSlug: string): Promise<number> {
     const response = await this.httpClient.get<CommentCountResponse>(
-      `/api/posts/${postSlug}/comments/count`
+      `/posts/${postSlug}/comments/count`
     );
     return response.data.count;
   }
@@ -74,15 +87,21 @@ export class CommentAPI {
    * POST /api/posts/{slug}/comments/anonymous
    */
   async createAnonymousComment(data: CreateAnonymousCommentData): Promise<CommentData> {
+    const payload: Record<string, any> = {
+      content: data.content,
+      author_name: data.anonymousName,
+      author_email: data.anonymousEmail,
+      'cf-turnstile-response': data.turnstileToken,
+    };
+
+    // Solo incluir parent_id si existe
+    if (data.parentId) {
+      payload.parent_id = data.parentId;
+    }
+
     const response = await this.httpClient.post<CommentResponse>(
-      `/api/posts/${data.postSlug}/comments/anonymous`,
-      {
-        content: data.content,
-        anonymous_name: data.anonymousName,
-        anonymous_email: data.anonymousEmail,
-        turnstile_token: data.turnstileToken,
-        parent_id: data.parentId,
-      }
+      `/posts/${data.postSlug}/comments/anonymous`,
+      payload
     );
     return response.data;
   }
@@ -97,12 +116,18 @@ export class CommentAPI {
    * Requiere: Authorization header con JWT token
    */
   async createComment(data: CreateCommentData): Promise<CommentData> {
+    const payload: Record<string, any> = {
+      content: data.content,
+    };
+
+    // Solo incluir parent_id si existe
+    if (data.parentId) {
+      payload.parent_id = data.parentId;
+    }
+
     const response = await this.httpClient.post<CommentResponse>(
-      `/api/posts/${data.postSlug}/comments`,
-      {
-        content: data.content,
-        parent_id: data.parentId,
-      }
+      `/posts/${data.postSlug}/comments`,
+      payload
     );
     return response.data;
   }
@@ -118,9 +143,9 @@ export class CommentAPI {
    */
   async getPendingComments(): Promise<CommentData[]> {
     const response = await this.httpClient.get<CommentsListResponse>(
-      '/api/admin/comments/pending'
+      '/admin/comments/pending'
     );
-    return response.data;
+    return response.data.comments;
   }
 
   /**
@@ -130,7 +155,7 @@ export class CommentAPI {
    */
   async approveComment(commentId: string): Promise<void> {
     await this.httpClient.patch<MessageResponse>(
-      `/api/admin/comments/${commentId}/approve`,
+      `/admin/comments/${commentId}/approve`,
       {}
     );
   }
@@ -142,7 +167,7 @@ export class CommentAPI {
    */
   async rejectComment(commentId: string): Promise<void> {
     await this.httpClient.patch<MessageResponse>(
-      `/api/admin/comments/${commentId}/reject`,
+      `/admin/comments/${commentId}/reject`,
       {}
     );
   }
@@ -154,7 +179,7 @@ export class CommentAPI {
    */
   async markCommentAsSpam(commentId: string): Promise<void> {
     await this.httpClient.patch<MessageResponse>(
-      `/api/admin/comments/${commentId}/spam`,
+      `/admin/comments/${commentId}/spam`,
       {}
     );
   }
@@ -165,7 +190,7 @@ export class CommentAPI {
    * Requiere: Authorization header con JWT token + rol admin
    */
   async deleteComment(commentId: string): Promise<void> {
-    await this.httpClient.delete<MessageResponse>(`/api/admin/comments/${commentId}`);
+    await this.httpClient.delete<MessageResponse>(`/admin/comments/${commentId}`);
   }
 
   /**
@@ -174,7 +199,7 @@ export class CommentAPI {
    * Requiere: Authorization header con JWT token + rol admin
    */
   async bulkApproveComments(commentIds: string[]): Promise<void> {
-    await this.httpClient.post<MessageResponse>('/api/admin/comments/bulk-approve', {
+    await this.httpClient.post<MessageResponse>('/admin/comments/bulk-approve', {
       ids: commentIds,
     });
   }
@@ -185,7 +210,7 @@ export class CommentAPI {
    * Requiere: Authorization header con JWT token + rol admin
    */
   async bulkRejectComments(commentIds: string[]): Promise<void> {
-    await this.httpClient.post<MessageResponse>('/api/admin/comments/bulk-reject', {
+    await this.httpClient.post<MessageResponse>('/admin/comments/bulk-reject', {
       ids: commentIds,
     });
   }
@@ -196,7 +221,7 @@ export class CommentAPI {
    * Requiere: Authorization header con JWT token + rol admin
    */
   async bulkDeleteComments(commentIds: string[]): Promise<void> {
-    await this.httpClient.post<MessageResponse>('/api/admin/comments/bulk-delete', {
+    await this.httpClient.post<MessageResponse>('/admin/comments/bulk-delete', {
       ids: commentIds,
     });
   }

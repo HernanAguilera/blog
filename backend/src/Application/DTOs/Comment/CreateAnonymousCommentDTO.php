@@ -15,6 +15,6 @@ final readonly class CreateAnonymousCommentDTO
         public ?string $parentId = null,
         public string $ipAddress,
         public string $userAgent,
-        public string $turnstileToken
+        public ?string $turnstileToken
     ) {}
 }

@@ -1,9 +1,7 @@
 <template>
-  <NuxtLayout name="admin">
-    <div class="admin-comments-page">
-      <CommentModerationPanel />
-    </div>
-  </NuxtLayout>
+  <div class="admin-comments-page">
+    <CommentModerationPanel />
+  </div>
 </template>
 
 <script setup lang="ts">

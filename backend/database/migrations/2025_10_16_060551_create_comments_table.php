@@ -24,7 +24,7 @@ return new class extends Migration
 
             // Comment content and status
             $table->text('content');
-            $table->enum('status', ['pending_approval', 'approved', 'rejected', 'spam'])->default('pending_approval');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'spam'])->default('pending');
 
             // Thread support
             $table->uuid('parent_id')->nullable();

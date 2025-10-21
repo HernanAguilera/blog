@@ -56,6 +56,59 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **ESTA REGLA NO TIENE EXCEPCIONES**
 
+## 🚨 REGLA CRÍTICA 4 - PROHIBIDO ACTUAR SIN AUTORIZACIÓN EXPLÍCITA 🚨
+
+**NUNCA EJECUTES CÓDIGO, COMANDOS O EDICIONES SIN AUTORIZACIÓN EXPLÍCITA DEL USUARIO**
+
+- **PRIMERO**: Responde la pregunta del usuario con texto explicativo
+- **SEGUNDO**: Explica qué cambios consideras necesarios y POR QUÉ
+- **TERCERO**: Pregunta EXPLÍCITAMENTE si el usuario quiere que procedas
+- **CUARTO**: ESPERA confirmación del usuario antes de ejecutar CUALQUIER acción
+
+### Comportamientos PROHIBIDOS:
+- ❌ Ejecutar múltiples comandos bash en secuencia sin preguntar
+- ❌ Hacer ediciones de archivos "porque veo un problema"
+- ❌ Asumir que una pregunta es una solicitud de acción
+- ❌ Realizar "pruebas" o "verificaciones" sin autorización
+- ❌ Gastar tokens en comandos curl/grep/find sin confirmación previa
+
+### Protocolo obligatorio antes de CUALQUIER acción:
+1. **DETENTE** - No ejecutes nada automáticamente
+2. **RESPONDE** la pregunta del usuario con explicación clara
+3. **IDENTIFICA** qué cambios/comandos consideras necesarios
+4. **EXPLICA** tu razonamiento de forma concisa
+5. **PREGUNTA** explícitamente: "¿Quieres que proceda con estos cambios?"
+6. **ESPERA** respuesta del usuario
+7. **EJECUTA** solo después de autorización explícita
+
+### Ejemplo de comportamiento CORRECTO:
+```
+Usuario: "¿Por qué no se guarda el comentario?"
+
+Claude: "El problema está en dos type hints de PHP:
+1. getTurnstileToken() devuelve null pero declara string
+2. CreateAnonymousCommentDTO espera string no-nullable
+
+Por eso Laravel devuelve HTML de error en lugar de JSON.
+
+¿Quieres que cambie estos dos type hints a ?string (nullable)?"
+
+[ESPERA RESPUESTA DEL USUARIO]
+```
+
+### Ejemplo de comportamiento INCORRECTO:
+```
+Usuario: "¿Por qué no se guarda el comentario?"
+
+Claude: [Inmediatamente ejecuta 15 comandos curl/grep/find]
+Claude: [Lee 10 archivos]
+Claude: [Hace 3 ediciones]
+Claude: [Ejecuta más comandos de verificación]
+Claude: "Ya lo arreglé"
+```
+
+**ESTA REGLA NO TIENE EXCEPCIONES - ES CRÍTICA PARA CONTROL DE COSTOS**
+
 ## Project Overview
 
 BlogV2 is a personal blogging platform built with a decoupled architecture following Clean Architecture principles. The project is currently in active development with significant progress made.

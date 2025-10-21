@@ -1,11 +1,9 @@
-import { SimpleContainer } from '~/shared/container/simple-container';
+import container from '~/shared/container/simple-container';
 import { configureContainer } from '~/shared/container/bindings';
 import { useAuthStore } from '~/interface/stores/auth.store';
 
-export default defineNuxtPlugin(() => {
-  const container = new SimpleContainer();
-
-  // Configurar bindings
+export default defineNuxtPlugin(async () => {
+  // Configurar bindings en el contenedor por defecto
   configureContainer(container);
 
   // Inicializar dependencias del auth store directamente
@@ -18,6 +16,9 @@ export default defineNuxtPlugin(() => {
       container.get('AuthorizationService'),
       container.get('TokenStorage')
     );
+
+    // Restaurar sesión automáticamente al iniciar la aplicación
+    await authStore.restoreSession();
   } catch (error) {
     console.warn('Error initializing auth dependencies:', error);
   }

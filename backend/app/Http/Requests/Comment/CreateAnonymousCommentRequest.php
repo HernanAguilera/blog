@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
-use RyanChandler\LaravelCloudflare\Rules\Turnstile;
 
 class CreateAnonymousCommentRequest extends FormRequest
 {
@@ -51,8 +50,8 @@ class CreateAnonymousCommentRequest extends FormRequest
                 'exists:comments,id'
             ],
             'cf-turnstile-response' => [
-                'required',
-                new Turnstile()
+                'nullable',
+                'string'
             ]
         ];
     }
@@ -97,7 +96,7 @@ class CreateAnonymousCommentRequest extends FormRequest
     /**
      * Get the turnstile token
      */
-    public function getTurnstileToken(): string
+    public function getTurnstileToken(): ?string
     {
         return $this->input('cf-turnstile-response');
     }

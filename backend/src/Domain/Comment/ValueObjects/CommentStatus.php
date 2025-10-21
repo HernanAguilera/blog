@@ -8,13 +8,13 @@ use InvalidArgumentException;
 
 final readonly class CommentStatus
 {
-    public const PENDING_APPROVAL = 'pending_approval';
+    public const PENDING = 'pending';
     public const APPROVED = 'approved';
     public const REJECTED = 'rejected';
     public const SPAM = 'spam';
 
     private const VALID_STATUSES = [
-        self::PENDING_APPROVAL,
+        self::PENDING,
         self::APPROVED,
         self::REJECTED,
         self::SPAM,
@@ -56,7 +56,7 @@ final readonly class CommentStatus
 
     public function isPending(): bool
     {
-        return $this->value === self::PENDING_APPROVAL;
+        return $this->value === self::PENDING;
     }
 
     public function isApproved(): bool
@@ -74,9 +74,14 @@ final readonly class CommentStatus
         return $this->value === self::SPAM;
     }
 
+    public static function pending(): self
+    {
+        return new self(self::PENDING);
+    }
+
     public static function pendingApproval(): self
     {
-        return new self(self::PENDING_APPROVAL);
+        return self::pending();
     }
 
     public static function approved(): self
