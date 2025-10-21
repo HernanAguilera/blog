@@ -8,13 +8,34 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxt/eslint',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@nuxtjs/i18n'
   ],
 
   colorMode: {
     preference: 'system', // default theme
     dataValue: 'theme', // activate data-theme in <html> tag
     classSuffix: ''
+  },
+
+  i18n: {
+    locales: [
+      { code: 'es', iso: 'es-ES', name: 'Español', file: 'es.json' },
+      { code: 'en', iso: 'en-US', name: 'English', file: 'en.json' },
+      { code: 'pt', iso: 'pt-BR', name: 'Português', file: 'pt.json' }
+    ],
+    defaultLocale: 'es',
+    strategy: 'prefix_except_default', // URLs: / (es), /en/, /pt/
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+      alwaysRedirect: false,
+      fallbackLocale: 'es'
+    },
+    langDir: 'locales/',
+    lazy: true,
+    vueI18n: './i18n.config.ts'
   },
 
   components: [

@@ -17,11 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
             'turnstile' => \App\Http\Middleware\TurnstileMiddleware::class,
             'sanitize.html' => \Blog\Interface\Http\Middleware\SanitizeHtmlInput::class,
+            'locale' => \App\Http\Middleware\SetLocaleMiddleware::class,
         ]);
 
         // Configure CORS for API routes
         $middleware->api(append: [
             \Illuminate\Http\Middleware\HandleCors::class,
+            \App\Http\Middleware\SetLocaleMiddleware::class, // Apply locale to all API routes
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -170,6 +170,20 @@ export class HttpClientService implements HttpClientInterface {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
+        // Add locale header for i18n support
+        if (typeof window !== 'undefined') {
+            try {
+                const { locale } = useI18n();
+                headers['Accept-Language'] = locale.value || 'es';
+            } catch {
+                // i18n not available, use default locale
+                headers['Accept-Language'] = 'es';
+            }
+        } else {
+            // SSR context - use default locale
+            headers['Accept-Language'] = 'es';
+        }
+
         return headers;
     }
 

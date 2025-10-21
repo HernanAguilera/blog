@@ -1,0 +1,75 @@
+{
+  "common": {
+    "home": "Início",
+    "about": "Sobre",
+    "contact": "Contato",
+    "readMore": "Leia mais",
+    "backToHome": "Voltar ao início",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "notFound": "Não encontrado",
+    "allArticles": "Todos os artigos",
+    "share": "Compartilhar",
+    "shareArticle": "Gostou deste artigo? Compartilhe!"
+  },
+  "nav": {
+    "darkMode": "Modo escuro",
+    "lightMode": "Modo claro",
+    "theme": "Tema"
+  },
+  "hero": {
+    "welcome": "Bem-vindo ao",
+    "title": "BlogV2",
+    "description": "Descubra artigos interessantes, tutoriais e reflexões sobre tecnologia, desenvolvimento e mais.",
+    "searchPlaceholder": "Pesquisar artigos..."
+  },
+  "posts": {
+    "title": "Artigos",
+    "latestPosts": "Últimos Artigos",
+    "resultsFor": "Resultados para \"{query}\"",
+    "keepUpToDate": "Fique atualizado com nossas últimas publicações",
+    "readMore": "Leia mais",
+    "publishedOn": "Publicado em",
+    "byAuthor": "por {author}",
+    "noPostsFound": "Nenhum artigo encontrado",
+    "searchPlaceholder": "Pesquisar artigos...",
+    "clearSearch": "Limpar pesquisa",
+    "postNotFound": "Post não encontrado",
+    "postNotFoundDescription": "O artigo que você está procurando não existe ou foi movido.",
+    "postNotAvailable": "Artigo não disponível",
+    "postNotAvailableDescription": "Este artigo ainda não foi publicado ou está sendo revisado."
+  },
+  "comments": {
+    "title": "Comentários",
+    "leaveComment": "Deixe um comentário",
+    "yourName": "Seu nome",
+    "yourEmail": "Seu email",
+    "yourComment": "Seu comentário",
+    "submit": "Enviar",
+    "reply": "Responder",
+    "noComments": "Ainda não há comentários",
+    "pending": "Moderação pendente",
+    "approved": "Aprovado",
+    "rejected": "Rejeitado",
+    "spam": "Spam"
+  },
+  "pages": {
+    "pageNotFound": "Página não encontrada",
+    "pageNotFoundDescription": "A página que você está procurando não existe ou foi excluída."
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "email": "Deve ser um email válido",
+    "minLength": "Deve ter pelo menos {min} caracteres",
+    "maxLength": "Deve ter no máximo {max} caracteres"
+  },
+  "actions": {
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "save": "Salvar",
+    "close": "Fechar",
+    "retry": "Tentar novamente"
+  }
+}
