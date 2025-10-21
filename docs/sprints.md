@@ -174,6 +174,59 @@
 - Arquitectura limpia end-to-end (Domain → Application → Infrastructure → Presentation)
 - TypeScript type-safe en todo el frontend
 
+## ✅ Sprint 7.5: Mejoras UX y Clean Architecture - Sistema de Modales y Notificaciones (COMPLETADO)
+
+- [x] **Tarea Técnica:** Sistema de Modales y Abstracción de Notificaciones (Frontend)
+  - [x] Plan de acción: [sprint-7-5-sistema-modales.md](./action-plans/sprint-7-5-sistema-modales.md)
+
+  **Parte 1: Sistema de Modales** ✅
+  - [x] **Objetivo**: Reemplazar `alert()` y `confirm()` nativos por modales personalizados
+  - [x] **Componentes creados**:
+    - BaseModal.vue (componente base con Teleport, animaciones, accesibilidad)
+    - ConfirmModal.vue (confirmaciones con 4 variantes)
+    - AlertModal.vue (información/alertas)
+    - ModalContainer.vue (contenedor global integrado en app.vue)
+  - [x] **Composable**: useModal.ts con API Promise-based
+  - [x] **Características implementadas**:
+    - Diseño coherente con Tailwind CSS y dark mode
+    - Accesibilidad (ARIA labels, keyboard navigation, ESC key)
+    - Animaciones suaves (Vue Transition API)
+    - Variantes: success, error, warning, info, danger
+    - Backdrop clickable para cerrar
+    - TypeScript completamente tipado
+  - [x] **Refactorización**: 4 archivos actualizados (PostCard.vue, CommentModerationItem.vue, CommentBulkActions.vue)
+
+  **Parte 2: Abstracción NotificationService (Clean Architecture)** ✅
+  - [x] **Problema resuelto**: Eliminado acoplamiento directo a `vue-toastification`
+  - [x] **Arquitectura implementada**: Clean Architecture respetada
+  - [x] **Capas implementadas**:
+    - Application Layer: NotificationServiceInterface (contrato)
+    - Infrastructure Layer: ToastNotificationService (implementación)
+    - Interface Layer: useNotification() composable
+  - [x] **Service Container**: Registrado en plugins/container.client.ts
+  - [x] **Refactorización completada**: pages/admin/posts/create.vue actualizado
+  - [x] **Beneficio logrado**: Librería completamente intercambiable sin cambiar componentes
+
+  - [x] **Tiempo real**: ~4 horas
+
+**🎯 RESULTADO ALCANZADO:**
+- ✅ Sistema de modales profesional funcionando
+- ✅ 0 referencias a `alert()` o `confirm()` nativos
+- ✅ 0 referencias directas a `$toast`
+- ✅ Arquitectura desacoplada siguiendo Clean Architecture
+- ✅ TypeScript typecheck pasando sin errores
+- ✅ Código mantenible y fácilmente testeable
+
+**✅ LOGROS:**
+- 4 componentes Vue creados (BaseModal, ConfirmModal, AlertModal, ModalContainer)
+- 2 composables creados (useModal, useNotification)
+- 1 interfaz de servicio (NotificationServiceInterface)
+- 1 implementación de servicio (ToastNotificationService)
+- 5 archivos refactorizados para usar las nuevas abstracciones
+- Base sólida para futuras implementaciones de UI
+
+**📋 CONTEXTO:** Deuda técnica UX + Arquitectura completamente saldada. El proyecto ahora tiene un sistema de UI modular y desacoplado.
+
 ## Sprint 8: Multi-idioma
 
 - [ ] **Historia de Usuario:** [Historia 4: Multiidioma](./HU/historia-4-multiidioma.md)

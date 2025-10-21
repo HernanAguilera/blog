@@ -228,7 +228,13 @@ const handleSubmit = async () => {
         content: content.value,
         parentId: props.parentId,
       });
-      alert('Comentario publicado exitosamente');
+
+      const modal = useModal();
+      await modal.alert({
+        title: 'Éxito',
+        message: 'Comentario publicado exitosamente',
+        variant: 'success'
+      });
     } else {
       // Usuario anónimo
       await createAnonymousComment({
@@ -239,7 +245,13 @@ const handleSubmit = async () => {
         parentId: props.parentId,
         turnstileToken: turnstileToken.value!,
       });
-      alert('Comentario enviado. Será visible una vez aprobado por un moderador.');
+
+      const modal = useModal();
+      await modal.alert({
+        title: 'Comentario enviado',
+        message: 'Tu comentario será visible una vez aprobado por un moderador.',
+        variant: 'info'
+      });
     }
 
     // Emitir evento de éxito
@@ -259,7 +271,13 @@ const handleSubmit = async () => {
   } catch (error: any) {
     console.error('Error submitting comment:', error);
     errors.value.content = error.message || 'Error al enviar el comentario';
-    alert('Error: ' + (error.message || 'Error al enviar el comentario'));
+
+    const modal = useModal();
+    await modal.alert({
+      title: 'Error',
+      message: error.message || 'Error al enviar el comentario',
+      variant: 'error'
+    });
   } finally {
     isSubmitting.value = false;
   }

@@ -3,6 +3,7 @@ import type { ContainerInterface } from '../contracts/container';
 // Infrastructure imports
 import { LocalTokenStorage } from '../../infrastructure/storage/local-token.storage';
 import { HttpClientService } from '../../infrastructure/services/http-client.service';
+import { ToastNotificationService } from '../../infrastructure/services/toast-notification.service';
 import { HttpUserRepository } from '../../infrastructure/repositories/http-user.repository';
 import { HttpPostRepository } from '../../infrastructure/repositories/http-post.repository';
 import { HttpCommentRepository } from '../../infrastructure/repositories/http-comment-repository';
@@ -11,6 +12,7 @@ import { CommentAPI } from '../../infrastructure/api/comment-api';
 // Infrastructure types
 import type { TokenStorageInterface } from '../../infrastructure/storage/token-storage.interface';
 import type { HttpClientInterface } from '../../infrastructure/services/http-client.interface';
+import type { NotificationServiceInterface } from '../../application/services/notification-service.interface';
 import type { UserRepositoryInterface } from '../../domain/repositories/user-repository.interface';
 import type { PostRepositoryInterface } from '../../domain/repositories/post-repository.interface';
 import type { CommentRepositoryInterface } from '../../domain/repositories/comment-repository.interface';
@@ -51,6 +53,10 @@ import { BulkDeleteCommentsUseCase } from '../../application/use-cases/comment/b
 export const configureContainer = (container: ContainerInterface) => {
     // ========== STORAGE SERVICES ==========
     container.singleton('TokenStorage', () => new LocalTokenStorage());
+
+    // ========== NOTIFICATION SERVICE ==========
+    // El servicio de notificaciones se registrará desde el plugin de Nuxt
+    // para tener acceso a $toast. Ver: plugins/container.client.ts
 
     // ========== HTTP CLIENT ==========
     container.singleton('HttpClient', () => {

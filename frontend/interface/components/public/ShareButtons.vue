@@ -100,10 +100,11 @@ const shareOnWhatsApp = () => {
 }
 
 const copyLink = async () => {
+  const notification = useNotification()
+
   try {
     await navigator.clipboard.writeText(props.url)
-    // TODO: Mostrar toast de confirmación
-    alert('Enlace copiado al portapapeles')
+    notification.success('Enlace copiado al portapapeles')
   } catch (err) {
     console.error('Error al copiar el enlace:', err)
     // Fallback para navegadores que no soportan clipboard API
@@ -114,9 +115,10 @@ const copyLink = async () => {
     textArea.select()
     try {
       document.execCommand('copy')
-      alert('Enlace copiado al portapapeles')
+      notification.success('Enlace copiado al portapapeles')
     } catch (fallbackErr) {
       console.error('Error en fallback de copia:', fallbackErr)
+      notification.error('No se pudo copiar el enlace')
     }
     document.body.removeChild(textArea)
   }

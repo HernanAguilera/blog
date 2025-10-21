@@ -262,11 +262,13 @@ const resendVerificationEmail = async () => {
     // Simulate API call for now
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Show success message (you might want to use a toast or notification)
-    alert('Email de verificación enviado. Por favor revisa tu bandeja de entrada.');
+    // Show success message
+    const notification = useNotification();
+    notification.success('Email de verificación enviado. Por favor revisa tu bandeja de entrada.');
   } catch (error) {
     // Show error message
-    alert('Error al enviar el email de verificación. Por favor intenta de nuevo.');
+    const notification = useNotification();
+    notification.error('Error al enviar el email de verificación. Por favor intenta de nuevo.');
   } finally {
     isResendingEmail.value = false;
   }

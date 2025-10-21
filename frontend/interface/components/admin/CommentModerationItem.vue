@@ -160,7 +160,16 @@ const handleSelectionChange = (event: Event) => {
 };
 
 const handleApprove = async () => {
-  if (confirm('¿Aprobar este comentario?')) {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Aprobar comentario',
+    message: '¿Aprobar este comentario?',
+    variant: 'success',
+    confirmText: 'Aprobar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('action-performed', 'approve', props.comment.id);
     // isProcessing se resetea cuando el componente padre actualice los datos
@@ -168,21 +177,48 @@ const handleApprove = async () => {
 };
 
 const handleReject = async () => {
-  if (confirm('¿Rechazar este comentario?')) {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Rechazar comentario',
+    message: '¿Rechazar este comentario?',
+    variant: 'warning',
+    confirmText: 'Rechazar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('action-performed', 'reject', props.comment.id);
   }
 };
 
 const handleMarkSpam = async () => {
-  if (confirm('¿Marcar este comentario como spam?')) {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Marcar como spam',
+    message: '¿Marcar este comentario como spam?',
+    variant: 'danger',
+    confirmText: 'Marcar como spam',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('action-performed', 'spam', props.comment.id);
   }
 };
 
 const handleDelete = async () => {
-  if (confirm('¿Eliminar permanentemente este comentario? Esta acción no se puede deshacer.')) {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Eliminar comentario',
+    message: '¿Eliminar permanentemente este comentario? Esta acción no se puede deshacer.',
+    variant: 'danger',
+    confirmText: 'Sí, eliminar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('action-performed', 'delete', props.comment.id);
   }

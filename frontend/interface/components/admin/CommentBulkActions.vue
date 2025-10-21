@@ -78,26 +78,49 @@ const emit = defineEmits<Emits>();
 
 const isProcessing = ref(false);
 
-const handleBulkApprove = () => {
-  if (confirm(`¿Aprobar ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}?`)) {
+const handleBulkApprove = async () => {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Aprobar comentarios',
+    message: `¿Aprobar ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}?`,
+    variant: 'success',
+    confirmText: 'Aprobar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('bulk-approve', props.selectedIds);
   }
 };
 
-const handleBulkReject = () => {
-  if (confirm(`¿Rechazar ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}?`)) {
+const handleBulkReject = async () => {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Rechazar comentarios',
+    message: `¿Rechazar ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}?`,
+    variant: 'warning',
+    confirmText: 'Rechazar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('bulk-reject', props.selectedIds);
   }
 };
 
-const handleBulkDelete = () => {
-  if (
-    confirm(
-      `¿Eliminar permanentemente ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}? Esta acción no se puede deshacer.`
-    )
-  ) {
+const handleBulkDelete = async () => {
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Eliminar comentarios',
+    message: `¿Eliminar permanentemente ${props.selectedCount} comentario${props.selectedCount > 1 ? 's' : ''}? Esta acción no se puede deshacer.`,
+    variant: 'danger',
+    confirmText: 'Sí, eliminar',
+    cancelText: 'Cancelar'
+  });
+
+  if (confirmed) {
     isProcessing.value = true;
     emit('bulk-delete', props.selectedIds);
   }

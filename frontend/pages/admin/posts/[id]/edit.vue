@@ -375,12 +375,18 @@ useHead({
 });
 
 // Warn about unsaved changes when leaving the page
-onBeforeRouteLeave((to, from, next) => {
+onBeforeRouteLeave(async (to, from, next) => {
   if (postsStore.hasUnsavedChanges) {
-    const answer = window.confirm(
-      'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?'
-    );
-    if (answer) {
+    const modal = useModal();
+    const confirmed = await modal.confirm({
+      title: 'Cambios sin guardar',
+      message: 'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?',
+      variant: 'warning',
+      confirmText: 'Sí, salir',
+      cancelText: 'Cancelar'
+    });
+
+    if (confirmed) {
       next();
     } else {
       next(false);

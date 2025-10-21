@@ -1,10 +1,17 @@
 import container from '~/shared/container/simple-container';
 import { configureContainer } from '~/shared/container/bindings';
 import { useAuthStore } from '~/interface/stores/auth.store';
+import { ToastNotificationService } from '~/infrastructure/services/toast-notification.service';
+import type { NotificationServiceInterface } from '~/application/services/notification-service.interface';
 
-export default defineNuxtPlugin(async () => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   // Configurar bindings en el contenedor por defecto
   configureContainer(container);
+
+  // Registrar NotificationService con acceso a $toast
+  container.singleton<NotificationServiceInterface>('NotificationService', () => {
+    return new ToastNotificationService(nuxtApp.$toast as any);
+  });
 
   // Inicializar dependencias del auth store directamente
   try {

@@ -317,8 +317,15 @@ const handleQuickAction = async (status: string) => {
 const handleDelete = async () => {
   showQuickActions.value = false;
 
-  // TODO: Show confirmation modal
-  const confirmed = confirm('¿Estás seguro de que quieres eliminar este post?');
+  const modal = useModal();
+  const confirmed = await modal.confirm({
+    title: 'Eliminar post',
+    message: '¿Estás seguro de que quieres eliminar este post?',
+    variant: 'danger',
+    confirmText: 'Sí, eliminar',
+    cancelText: 'Cancelar'
+  });
+
   if (!confirmed) return;
 
   try {

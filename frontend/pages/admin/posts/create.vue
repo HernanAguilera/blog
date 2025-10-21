@@ -90,8 +90,7 @@ definePageMeta({
 
 // Composables
 const router = useRouter();
-const instance = getCurrentInstance();
-const toast = instance?.appContext.config.globalProperties.$toast;
+const notification = useNotification();
 const postsStore = import.meta.client ? usePostsStore() : null;
 
 // Breadcrumb items
@@ -129,13 +128,13 @@ const handleManualSave = async () => {
 const createPost = async (data: { title: string; content: string }) => {
   try {
     if (!postsStore) {
-      toast?.error('Store not available. Please refresh the page.');
+      notification.error('Store not available. Please refresh the page.');
       return;
     }
 
     // Validate minimum requirements
     if (!data.title.trim()) {
-      toast?.error('El título es requerido para crear un post.');
+      notification.error('El título es requerido para crear un post.');
       return;
     }
 
@@ -148,14 +147,14 @@ const createPost = async (data: { title: string; content: string }) => {
     if (newPost) {
       hasChanges.value = false;
 
-      // Show success toast
-      toast?.success('Post creado exitosamente como borrador');
+      // Show success notification
+      notification.success('Post creado exitosamente como borrador');
 
       // Immediate redirect to posts list
       await router.push('/admin/posts');
     }
   } catch (error) {
-    toast?.error(error instanceof Error ? error.message : 'Error desconocido al crear el post');
+    notification.error(error instanceof Error ? error.message : 'Error desconocido al crear el post');
   }
 };
 
@@ -171,12 +170,18 @@ useHead({
 });
 
 // Warn about unsaved changes when leaving the page
-onBeforeRouteLeave((to, from, next) => {
+onBeforeRouteLeave(async (to, from, next) => {
   if (hasChanges.value) {
-    const answer = window.confirm(
-      'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?'
-    );
-    if (answer) {
+    const modal = useModal();
+    const confirmed = await modal.confirm({
+      title: 'Cambios sin guardar',
+      message: 'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?',
+      variant: 'warning',
+      confirmText: 'Sí, salir',
+      cancelText: 'Cancelar'
+    });
+
+    if (confirmed) {
       next();
     } else {
       next(false);
