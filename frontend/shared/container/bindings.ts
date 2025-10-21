@@ -50,6 +50,18 @@ import { BulkApproveCommentsUseCase } from '../../application/use-cases/comment/
 import { BulkRejectCommentsUseCase } from '../../application/use-cases/comment/bulk-reject-comments.use-case';
 import { BulkDeleteCommentsUseCase } from '../../application/use-cases/comment/bulk-delete-comments.use-case';
 
+// Page imports
+import { PageAPI } from '~/infrastructure/page/api/PageAPI';
+import { HttpPageRepository } from '~/infrastructure/page/repositories/HttpPageRepository';
+import type { PageRepositoryInterface } from '~/domain/page/repositories/page-repository.interface';
+import { GetAllPagesUseCase } from '~/application/page/use-cases/GetAllPagesUseCase';
+import { GetPublishedPagesUseCase } from '~/application/page/use-cases/GetPublishedPagesUseCase';
+import { GetPageBySlugUseCase } from '~/application/page/use-cases/GetPageBySlugUseCase';
+import { GetPublishedPageBySlugUseCase } from '~/application/page/use-cases/GetPublishedPageBySlugUseCase';
+import { CreatePageUseCase } from '~/application/page/use-cases/CreatePageUseCase';
+import { UpdatePageUseCase } from '~/application/page/use-cases/UpdatePageUseCase';
+import { DeletePageUseCase } from '~/application/page/use-cases/DeletePageUseCase';
+
 export const configureContainer = (container: ContainerInterface) => {
     // ========== STORAGE SERVICES ==========
     container.singleton('TokenStorage', () => new LocalTokenStorage());
@@ -229,5 +241,54 @@ export const configureContainer = (container: ContainerInterface) => {
     container.bind('BulkDeleteCommentsUseCase', () => {
         const commentRepository = container.get('CommentRepository') as CommentRepositoryInterface;
         return new BulkDeleteCommentsUseCase(commentRepository);
+    });
+
+    // ========== API CLIENTS - PAGES ==========
+    container.singleton('PageAPI', () => {
+        const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8000';
+        return new PageAPI(apiBaseUrl);
+    });
+
+    // ========== REPOSITORIES - PAGES ==========
+    container.singleton('PageRepository', () => {
+        const pageAPI = container.get('PageAPI') as PageAPI;
+        const tokenStorage = container.get('TokenStorage') as TokenStorageInterface;
+        return new HttpPageRepository(pageAPI, () => tokenStorage.getToken());
+    });
+
+    // ========== USE CASES - PAGES ==========
+    container.bind('GetAllPagesUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new GetAllPagesUseCase(pageRepository);
+    });
+
+    container.bind('GetPublishedPagesUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new GetPublishedPagesUseCase(pageRepository);
+    });
+
+    container.bind('GetPageBySlugUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new GetPageBySlugUseCase(pageRepository);
+    });
+
+    container.bind('GetPublishedPageBySlugUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new GetPublishedPageBySlugUseCase(pageRepository);
+    });
+
+    container.bind('CreatePageUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new CreatePageUseCase(pageRepository);
+    });
+
+    container.bind('UpdatePageUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new UpdatePageUseCase(pageRepository);
+    });
+
+    container.bind('DeletePageUseCase', () => {
+        const pageRepository = container.get('PageRepository') as PageRepositoryInterface;
+        return new DeletePageUseCase(pageRepository);
     });
 };

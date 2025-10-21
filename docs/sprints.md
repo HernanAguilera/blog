@@ -244,11 +244,49 @@
   - [ ] [Tarea 5.3: Envío Manual de Newsletters](./task/tarea-5-3-envio-manual-de-newsletters.md)
   - [ ] [Tarea 5.4: Seguridad y Validaciones](./task/tarea-5-4-seguridad-y-validaciones.md)
   - [ ] [Tarea 5.5: Frontend Newsletter](./task/tarea-5-5-frontend-newsletter.md)
-- [ ] **Historia de Usuario:** [Historia 6: Páginas Estáticas](./HU/historia-6-paginas-estaticas.md)
-  - [ ] [Tarea 6.1: Dominio de Páginas (Backend)](./task/tarea-6-1-dominio-de-paginas-backend.md)
-  - [ ] [Tarea 6.2: Editor de Páginas](./task/tarea-6-2-editor-de-paginas.md)
-  - [ ] [Tarea 6.3: Páginas Por Defecto](./task/tarea-6-3-paginas-por-defecto.md)
-  - [ ] [Tarea 6.4: Frontend Páginas Estáticas](./task/tarea-6-4-frontend-paginas-estaticas.md)
+
+## ✅ Sprint 9.5: Páginas Estáticas (COMPLETADO)
+
+- [x] **Historia de Usuario:** [Historia 6: Páginas Estáticas](./HU/historia-6-paginas-estaticas.md)
+  - [x] **Plan de Acción:** [plan-paginas-estaticas-about-contact.md](./action-plans/plan-paginas-estaticas-about-contact.md)
+
+  **Backend (Laravel + Clean Architecture):** ✅
+  - [x] **Domain Layer**: Value Objects (PageId, PageSlug, PageTitle, PageContent, PageStatus, PageTranslation), Entidad Page, PageRepositoryInterface, 3 Excepciones
+  - [x] **Application Layer**: 3 DTOs (CreatePageDTO, UpdatePageDTO, PageResponseDTO), 8 Use Cases (Create, Update, GetBySlug, GetPublishedBySlug, GetAll, GetPublished, Publish, Delete)
+  - [x] **Infrastructure Layer**: Migrations (pages, page_translations), 2 Models Eloquent, PageMapper, EloquentPageRepository, DefaultPagesSeeder
+  - [x] **Presentation Layer**: 2 Form Requests, PageResource, 2 Controllers (PageController público, AdminPageController), Rutas API
+  - [x] **Service Provider**: Bindings configurados en BlogServiceProvider
+  - [x] **Composer**: Namespace `Src\` agregado al autoload PSR-4
+
+  **Frontend (Nuxt 4 + TypeScript):** ✅
+  - [x] **Domain Layer**: 6 Value Objects, Entidad Page, PageRepositoryInterface, Types (CreatePageData, UpdatePageData, PageFilters)
+  - [x] **Application Layer**: 6 Use Cases (GetAll, GetPublished, GetBySlug, GetPublishedBySlug, Create, Update, Delete)
+  - [x] **Infrastructure Layer**: PageAPI, HttpPageRepository
+  - [x] **Interface Layer**: Composable usePages(), Página pública dinámica [slug].vue, 2 páginas admin (index, create)
+  - [x] **Service Container**: Bindings completos configurados en bindings.ts
+
+  **Seeder:** ✅
+  - [x] Páginas About y Contact creadas con contenido en español e inglés
+  - [x] Ambas páginas publicadas y accesibles vía API
+
+  **Testing:** ✅
+  - [x] Migraciones ejecutadas exitosamente
+  - [x] Seeder ejecutado correctamente
+  - [x] Endpoints probados: GET /api/pages (lista), GET /api/pages/{slug} (individual)
+  - [x] Backend funcionando correctamente con multiidioma
+
+**🎯 RESULTADO:** Sistema completo de páginas estáticas funcionando con Clean Architecture end-to-end.
+
+**✅ LOGROS:**
+- Páginas About y Contact accesibles públicamente
+- Sistema CRUD completo para administración
+- Multiidioma incorporado desde el diseño (ES/EN)
+- SEO meta tags personalizables por página y por idioma
+- URLs limpias sin prefijo `/pages/`
+- Arquitectura desacoplada siguiendo Clean Architecture
+- ~60 archivos implementados (35 backend + 25 frontend)
+
+**📋 CONTEXTO:** Implementación basada en el patrón establecido con Posts y Comments. Sistema escalable para agregar más páginas estáticas según necesidad.
 
 ## Sprint 10: Media, SEO y Performance
 

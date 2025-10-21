@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SocialAuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\Admin\AdminCommentController;
+use App\Http\Controllers\Api\Admin\AdminPageController;
 use Blog\Interface\Http\Controllers\PostController;
 use Blog\Interface\Http\Controllers\EditorController;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,12 @@ Route::prefix('posts')->group(function () {
         Route::post('anonymous', [CommentController::class, 'storeAnonymous'])
             ->middleware(['throttle:comments', 'turnstile']);
     });
+});
+
+// Public pages routes
+Route::prefix('pages')->group(function () {
+    Route::get('/', [PageController::class, 'index']);
+    Route::get('{slug}', [PageController::class, 'show']);
 });
 
 // Public preview route (no auth required)
@@ -95,4 +103,7 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
         Route::post('bulk-reject', [AdminCommentController::class, 'bulkReject']);
         Route::post('bulk-delete', [AdminCommentController::class, 'bulkDelete']);
     });
+
+    // Admin pages routes
+    Route::apiResource('pages', AdminPageController::class);
 });

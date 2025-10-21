@@ -6,6 +6,9 @@ use Blog\Domain\Post\Repositories\PostRepositoryInterface;
 use Blog\Domain\Comment\Repositories\CommentRepositoryInterface;
 use Blog\Infrastructure\Persistence\Eloquent\Repositories\EloquentPostRepository;
 use Blog\Infrastructure\Persistence\Eloquent\Repositories\EloquentCommentRepository;
+use Src\Domain\Page\Contracts\PageRepositoryInterface;
+use Src\Infrastructure\Page\Repositories\EloquentPageRepository;
+use Src\Infrastructure\Page\Mappers\PageMapper;
 use Blog\Application\UseCases\Post\CreatePostUseCase;
 use Blog\Application\UseCases\Post\UpdatePostUseCase;
 use Blog\Application\UseCases\Post\DeletePostUseCase;
@@ -17,6 +20,14 @@ use Blog\Application\UseCases\Post\GetArchivedPostsUseCase;
 use Blog\Application\UseCases\Post\AutoSavePostUseCase;
 use Blog\Application\UseCases\Post\PreviewPostUseCase;
 use Blog\Application\UseCases\Post\ChangePostStatusUseCase;
+use Src\Application\Page\UseCases\CreatePageUseCase;
+use Src\Application\Page\UseCases\UpdatePageUseCase;
+use Src\Application\Page\UseCases\GetPageBySlugUseCase;
+use Src\Application\Page\UseCases\GetPublishedPageBySlugUseCase;
+use Src\Application\Page\UseCases\GetAllPagesUseCase;
+use Src\Application\Page\UseCases\GetPublishedPagesUseCase;
+use Src\Application\Page\UseCases\PublishPageUseCase;
+use Src\Application\Page\UseCases\DeletePageUseCase;
 use Blog\Domain\Post\Services\HtmlSanitizerInterface;
 use Blog\Infrastructure\Services\HtmlSanitizerService;
 use Blog\Interface\Console\Commands\CleanupDraftsCommand;
@@ -46,6 +57,13 @@ class BlogServiceProvider extends ServiceProvider
             CommentRepositoryInterface::class,
             EloquentCommentRepository::class
         );
+
+        $this->app->bind(
+            PageRepositoryInterface::class,
+            EloquentPageRepository::class
+        );
+
+        $this->app->singleton(PageMapper::class);
 
         // Service bindings
         $this->app->bind(
@@ -136,6 +154,55 @@ class BlogServiceProvider extends ServiceProvider
             return new ChangePostStatusUseCase(
                 $app->make(PostRepositoryInterface::class),
                 $app->make(EventDispatcherInterface::class)
+            );
+        });
+
+        // Page Use Cases bindings
+        $this->app->bind(CreatePageUseCase::class, function ($app) {
+            return new CreatePageUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(UpdatePageUseCase::class, function ($app) {
+            return new UpdatePageUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(GetPageBySlugUseCase::class, function ($app) {
+            return new GetPageBySlugUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(GetPublishedPageBySlugUseCase::class, function ($app) {
+            return new GetPublishedPageBySlugUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(GetAllPagesUseCase::class, function ($app) {
+            return new GetAllPagesUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(GetPublishedPagesUseCase::class, function ($app) {
+            return new GetPublishedPagesUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(PublishPageUseCase::class, function ($app) {
+            return new PublishPageUseCase(
+                $app->make(PageRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(DeletePageUseCase::class, function ($app) {
+            return new DeletePageUseCase(
+                $app->make(PageRepositoryInterface::class)
             );
         });
 

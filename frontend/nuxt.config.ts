@@ -48,10 +48,14 @@ export default defineNuxtConfig({
     }
   },
 
-  // Force client-side rendering for admin routes
+  // Route rules for SSR
   nitro: {
     routeRules: {
-      '/admin/**': { ssr: false }
+      '/admin/**': { ssr: false },
+      // Disable SSR for dynamic pages that fetch data from API
+      // This avoids issues with API calls during SSR and hydration mismatches
+      '/about': { ssr: false },
+      '/contact': { ssr: false }
     }
   },
 
