@@ -16,6 +16,7 @@ use Blog\Application\UseCases\Post\GetPublishedPostsUseCase;
 use Blog\Application\UseCases\Post\GetAllPostsUseCase;
 use Blog\Application\UseCases\Post\ChangePostStatusUseCase;
 use Blog\Application\UseCases\Post\GetPostTransitionsUseCase;
+use Blog\Application\UseCases\Post\GetPostsByLocaleUseCase;
 use Blog\Interface\Http\Requests\CreatePostRequest;
 use Blog\Interface\Http\Requests\UpdatePostRequest;
 use App\Http\Requests\ChangePostStatusRequest;
@@ -38,15 +39,32 @@ class PostController
         private GetPublishedPostsUseCase $getPublishedPostsUseCase,
         private GetAllPostsUseCase $getAllPostsUseCase,
         private ChangePostStatusUseCase $changePostStatusUseCase,
-        private GetPostTransitionsUseCase $getPostTransitionsUseCase
+        private GetPostTransitionsUseCase $getPostTransitionsUseCase,
+        private GetPostsByLocaleUseCase $getPostsByLocaleUseCase
     ) {}
 
     /**
      * Get public list of published posts
+     * Supports filtering by locale via ?locale=es query parameter
      */
     public function index(Request $request): JsonResponse
     {
         try {
+            $locale = $request->query('locale');
+
+            // If locale parameter is provided, use GetPostsByLocaleUseCase
+            if ($locale) {
+                $page = (int) $request->get('page', 1);
+                $perPage = (int) $request->get('per_page', 15);
+
+                $result = $this->getPostsByLocaleUseCase->execute($locale, $page, $perPage);
+
+                return response()->json(
+                    new PostCollection($result['posts'], $result)
+                );
+            }
+
+            // Otherwise, use the default published posts query
             $filter = new PostFilterDTO(
                 page: (int) $request->get('page', 1),
                 perPage: (int) $request->get('per_page', 15),

@@ -7,6 +7,7 @@ namespace Blog\Infrastructure\Persistence\Eloquent\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PostModel extends Model
 {
@@ -39,5 +40,10 @@ class PostModel extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(UserModel::class, 'author_id');
+    }
+
+    public function translations(): HasMany
+    {
+        return $this->hasMany(PostTranslationModel::class, 'post_id');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\Admin\AdminCommentController;
 use App\Http\Controllers\Api\Admin\AdminPageController;
+use App\Http\Controllers\Api\Admin\AdminPostTranslationController;
 use Blog\Interface\Http\Controllers\PostController;
 use Blog\Interface\Http\Controllers\EditorController;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,18 @@ Route::prefix('admin')->middleware(['auth.jwt'])->group(function () {
         // Draft management
         Route::get('drafts', [EditorController::class, 'getDrafts']);
         Route::get('drafts/{id}', [EditorController::class, 'restoreDraft'])->where('id', '[0-9]+');
+
+        // Post translations
+        Route::get('{id}/translations', [AdminPostTranslationController::class, 'index'])
+            ->where('id', '[0-9]+');
+        Route::post('{id}/translations', [AdminPostTranslationController::class, 'store'])
+            ->where('id', '[0-9]+');
+        Route::put('{id}/translations/{locale}', [AdminPostTranslationController::class, 'update'])
+            ->where('id', '[0-9]+')
+            ->where('locale', '[a-z]{2}');
+        Route::delete('{id}/translations/{locale}', [AdminPostTranslationController::class, 'destroy'])
+            ->where('id', '[0-9]+')
+            ->where('locale', '[a-z]{2}');
     });
 
     // Admin comment moderation routes

@@ -20,6 +20,11 @@ use Blog\Application\UseCases\Post\GetArchivedPostsUseCase;
 use Blog\Application\UseCases\Post\AutoSavePostUseCase;
 use Blog\Application\UseCases\Post\PreviewPostUseCase;
 use Blog\Application\UseCases\Post\ChangePostStatusUseCase;
+use Blog\Application\UseCases\Post\CreatePostTranslationUseCase;
+use Blog\Application\UseCases\Post\UpdatePostTranslationUseCase;
+use Blog\Application\UseCases\Post\DeletePostTranslationUseCase;
+use Blog\Application\UseCases\Post\GetPostTranslationsUseCase;
+use Blog\Application\UseCases\Post\GetPostsByLocaleUseCase;
 use Src\Application\Page\UseCases\CreatePageUseCase;
 use Src\Application\Page\UseCases\UpdatePageUseCase;
 use Src\Application\Page\UseCases\GetPageBySlugUseCase;
@@ -155,6 +160,33 @@ class BlogServiceProvider extends ServiceProvider
                 $app->make(PostRepositoryInterface::class),
                 $app->make(EventDispatcherInterface::class)
             );
+        });
+
+        // Post Translation Use Cases bindings
+        $this->app->bind(CreatePostTranslationUseCase::class, function ($app) {
+            return new CreatePostTranslationUseCase(
+                $app->make(PostRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(UpdatePostTranslationUseCase::class, function ($app) {
+            return new UpdatePostTranslationUseCase(
+                $app->make(PostRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(DeletePostTranslationUseCase::class, function ($app) {
+            return new DeletePostTranslationUseCase();
+        });
+
+        $this->app->bind(GetPostTranslationsUseCase::class, function ($app) {
+            return new GetPostTranslationsUseCase(
+                $app->make(PostRepositoryInterface::class)
+            );
+        });
+
+        $this->app->bind(GetPostsByLocaleUseCase::class, function ($app) {
+            return new GetPostsByLocaleUseCase();
         });
 
         // Page Use Cases bindings
