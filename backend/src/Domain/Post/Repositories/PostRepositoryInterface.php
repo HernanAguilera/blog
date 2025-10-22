@@ -20,8 +20,12 @@ interface PostRepositoryInterface
 
     /**
      * Find a post by their slug.
+     *
+     * @param PostSlug $slug The slug to search for
+     * @param string|null $locale Optional locale to search in post_translations (e.g., 'es', 'en')
+     * @return Post|null The post if found, null otherwise
      */
-    public function findBySlug(PostSlug $slug): ?Post;
+    public function findBySlug(PostSlug $slug, ?string $locale = null): ?Post;
 
     /**
      * Save a post (create or update).

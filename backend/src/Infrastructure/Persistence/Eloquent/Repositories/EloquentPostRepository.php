@@ -24,9 +24,20 @@ final class EloquentPostRepository implements PostRepositoryInterface
         return $model ? PostMapper::toDomain($model) : null;
     }
 
-    public function findBySlug(PostSlug $slug): ?Post
+    public function findBySlug(PostSlug $slug, ?string $locale = null): ?Post
     {
-        $model = PostModel::where('slug', $slug->value())->first();
+        // Search in post_translations table (multiidioma support)
+        $query = PostModel::query()
+            ->whereHas('translations', function ($q) use ($slug, $locale) {
+                $q->where('slug', $slug->value());
+
+                // If locale is specified, filter by it
+                if ($locale !== null) {
+                    $q->where('locale', $locale);
+                }
+            });
+
+        $model = $query->first();
 
         return $model ? PostMapper::toDomain($model) : null;
     }
@@ -59,7 +70,11 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function existsBySlug(PostSlug $slug): bool
     {
-        return PostModel::where('slug', $slug->value())->exists();
+        return PostModel::query()
+            ->whereHas('translations', function ($q) use ($slug) {
+                $q->where('slug', $slug->value());
+            })
+            ->exists();
     }
 
     public function findWithFilters(PostFilterDTO $filter): array
