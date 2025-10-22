@@ -63,7 +63,7 @@
           </header>
 
           <!-- Page Content -->
-          <div class="prose prose-lg dark:prose-invert max-w-none">
+          <div class="prose prose-lg dark:prose-invert max-w-none page-content">
             <div v-html="pageContent"></div>
           </div>
 
@@ -135,3 +135,43 @@ useHead({
   ],
 });
 </script>
+
+<style scoped>
+/* Asegurar visibilidad del contenido en dark mode */
+.page-content :deep(p),
+.page-content :deep(li),
+.page-content :deep(span),
+.page-content :deep(div) {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.page-content :deep(h1),
+.page-content :deep(h2),
+.page-content :deep(h3),
+.page-content :deep(h4),
+.page-content :deep(h5),
+.page-content :deep(h6) {
+  @apply text-gray-900 dark:text-gray-100;
+}
+
+.page-content :deep(a) {
+  @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300;
+}
+
+.page-content :deep(strong),
+.page-content :deep(b) {
+  @apply text-gray-900 dark:text-gray-100 font-semibold;
+}
+
+.page-content :deep(code) {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded;
+}
+
+.page-content :deep(pre) {
+  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 dark:text-gray-200;
+}
+
+.page-content :deep(blockquote) {
+  @apply border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300;
+}
+</style>

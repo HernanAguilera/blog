@@ -58,55 +58,34 @@ const handleCancel = () => {
 
 <style scoped>
 .comment-reply-form {
-  margin: 1rem 0;
-  padding: 1rem;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  @apply my-4 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg;
 }
 
 .comment-reply-form__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  @apply flex justify-between items-center mb-4 pb-3 border-b border-gray-200 dark:border-gray-700;
 }
 
 .comment-reply-form__replying-to {
-  font-size: 0.875rem;
-  color: #6b7280;
+  @apply text-sm text-gray-600 dark:text-gray-400;
 }
 
 .comment-reply-form__replying-to strong {
-  color: #3b82f6;
-  font-weight: 600;
+  @apply text-blue-600 dark:text-blue-400 font-semibold;
 }
 
 .comment-reply-form__close {
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6b7280;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply p-1 bg-transparent border-0 cursor-pointer text-gray-500 dark:text-gray-400 transition-colors flex items-center justify-center;
 }
 
 .comment-reply-form__close:hover:not(:disabled) {
-  color: #ef4444;
+  @apply text-red-500 dark:text-red-400;
 }
 
 .comment-reply-form__close:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  @apply opacity-50 cursor-not-allowed;
 }
 
 .comment-reply-form__close-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  @apply w-5 h-5;
 }
 </style>
