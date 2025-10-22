@@ -230,8 +230,32 @@
 ## Sprint 8: Multi-idioma
 
 - [ ] **Historia de Usuario:** [Historia 4: Multiidioma](./HU/historia-4-multiidioma.md)
-  - [ ] [Tarea 4.1: Configuración Base Multiidioma](./task/tarea-4-1-configuracion-base-multiidioma.md)
-  - [ ] [Tarea 4.2: Traducción de Contenido (Backend)](./task/tarea-4-2-traduccion-de-contenido-backend.md)
+  - [x] [Tarea 4.1: Configuración Base Multiidioma](./task/tarea-4-1-configuracion-base-multiidioma.md)
+  - [ ] [Tarea 4.2: Traducción de Contenido (Backend)](./task/tarea-4-2-traduccion-de-contenido-backend.md) - **EN PROGRESO (43% completado)**
+    - [x] **Plan de Acción:** [plan-tarea-4-2-traduccion-contenido-backend.md](./action-plans/plan-tarea-4-2-traduccion-contenido-backend.md)
+    - [x] **Fase 1 - Domain Layer (100%)**:
+      * config/locales.php con fail-fast validation
+      * PostLocale Value Object
+      * 4 Excepciones (LocaleConfiguration, InvalidPostLocale, TranslationNotFound, TranslationAlreadyExists)
+    - [x] **Fase 2 - Application DTOs (100%)**:
+      * CreatePostTranslationDTO, UpdatePostTranslationDTO, PostTranslationResponseDTO
+    - [x] **Fase 3 - Application Use Cases (100%)**:
+      * CreatePostTranslationUseCase (validación completa)
+      * UpdatePostTranslationUseCase (slug único)
+      * DeletePostTranslationUseCase (protege idioma default)
+      * GetPostTranslationsUseCase (lista traducciones)
+      * GetPostsByLocaleUseCase (filtro + paginación)
+    - [ ] **Fase 4 - Form Requests (0%)**:
+      * CreatePostTranslationRequest
+      * UpdatePostTranslationRequest
+    - [ ] **Fase 5 - Controllers + Rutas (0%)**:
+      * AdminPostTranslationController (CRUD traducciones)
+      * Actualizar PostController (filtro por locale)
+      * Rutas API
+    - [ ] **Fase 6 - Service Provider (0%)**:
+      * Bindings de Use Cases
+    - [ ] **Fase 7 - Testing (0%)**:
+      * Testing manual de endpoints
   - [ ] [Tarea 4.3: SEO Multiidioma](./task/tarea-4-3-seo-multiidioma.md)
   - [ ] [Tarea 4.4: Traducción de Interface](./task/tarea-4-4-traduccion-de-interface.md)
   - [ ] [Tarea 4.5: Gestión de Contenido Multiidioma](./task/tarea-4-5-gestion-de-contenido-multiidioma.md)
