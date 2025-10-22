@@ -1,6 +1,7 @@
 import type { TokenStorageInterface } from '../storage/token-storage.interface';
 import type { HttpClientInterface } from './http-client.interface';
 import type { HttpClientConfig, HttpError } from '../types/http.types';
+import { useI18n } from 'vue-i18n';
 
 // Import loading store - will be available globally in browser context
 let loadingStore: any = null;

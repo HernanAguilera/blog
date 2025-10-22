@@ -15,7 +15,14 @@
   "nav": {
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
-    "theme": "Theme"
+    "theme": "Theme",
+    "language": "Language",
+    "openMenu": "Open main menu"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English",
+    "pt": "Português"
   },
   "hero": {
     "welcome": "Welcome to",

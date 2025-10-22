@@ -10,7 +10,7 @@
         ]"
         @click="$emit('navigate')"
       >
-        Inicio
+        {{ $t('common.home') }}
       </NuxtLink>
 
       <NuxtLink
@@ -21,7 +21,7 @@
         ]"
         @click="$emit('navigate')"
       >
-        Acerca de
+        {{ $t('common.about') }}
       </NuxtLink>
 
       <NuxtLink
@@ -32,7 +32,7 @@
         ]"
         @click="$emit('navigate')"
       >
-        Contacto
+        {{ $t('common.contact') }}
       </NuxtLink>
 
       <!-- Separador solo en móvil -->
@@ -49,7 +49,7 @@
             'text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors font-medium flex items-center',
             mobile ? 'px-3 py-2 rounded-md text-base hover:bg-gray-100 dark:hover:bg-gray-700 justify-start' : 'text-sm'
           ]"
-          :title="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          :title="isDarkMode ? $t('nav.lightMode') : $t('nav.darkMode')"
         >
           <svg
             class="w-4 h-4 mr-1"
@@ -74,7 +74,7 @@
             ></path>
           </svg>
           <span v-if="mobile">
-            {{ isDarkMode ? 'Modo claro' : 'Modo oscuro' }}
+            {{ isDarkMode ? $t('nav.lightMode') : $t('nav.darkMode') }}
           </span>
         </button>
 
@@ -85,7 +85,7 @@
               'text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors font-medium flex items-center',
               mobile ? 'px-3 py-2 rounded-md text-base hover:bg-gray-100 dark:hover:bg-gray-700 justify-start' : 'text-sm'
             ]"
-            title="Tema"
+            :title="$t('nav.theme')"
           >
             <svg
               class="w-4 h-4 mr-1"
@@ -101,9 +101,14 @@
                 d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
               ></path>
             </svg>
-            <span v-if="mobile">Tema</span>
+            <span v-if="mobile">{{ $t('nav.theme') }}</span>
           </button>
         </template>
+      </ClientOnly>
+
+      <!-- Language Switcher -->
+      <ClientOnly>
+        <LanguageSwitcher :mobile="mobile" />
       </ClientOnly>
     </div>
   </nav>

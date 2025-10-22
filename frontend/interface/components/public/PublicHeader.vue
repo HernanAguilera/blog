@@ -24,7 +24,7 @@
             aria-controls="mobile-menu"
             :aria-expanded="mobileMenuOpen"
           >
-            <span class="sr-only">Abrir menú principal</span>
+            <span class="sr-only">{{ $t('nav.openMenu') }}</span>
             <!-- Hamburger icon -->
             <svg
               class="h-6 w-6"

@@ -34,7 +34,6 @@ export default defineNuxtConfig({
       fallbackLocale: 'es'
     },
     langDir: 'locales/',
-    lazy: true,
     vueI18n: './i18n.config.ts'
   },
 
