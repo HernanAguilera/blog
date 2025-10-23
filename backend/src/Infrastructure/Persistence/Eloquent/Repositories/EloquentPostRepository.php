@@ -17,9 +17,17 @@ use DateTimeInterface;
 
 final class EloquentPostRepository implements PostRepositoryInterface
 {
+    /**
+     * Helper to get base query with translations eager loaded
+     */
+    private function queryWithTranslations(): \Illuminate\Database\Eloquent\Builder
+    {
+        return PostModel::query()->with('translations');
+    }
+
     public function findById(PostId $id): ?Post
     {
-        $model = PostModel::find($id->value());
+        $model = PostModel::with('translations')->find($id->value());
 
         return $model ? PostMapper::toDomain($model) : null;
     }
@@ -28,6 +36,7 @@ final class EloquentPostRepository implements PostRepositoryInterface
     {
         // Search in post_translations table (multiidioma support)
         $query = PostModel::query()
+            ->with('translations')
             ->whereHas('translations', function ($q) use ($slug, $locale) {
                 $q->where('slug', $slug->value());
 
@@ -55,7 +64,7 @@ final class EloquentPostRepository implements PostRepositoryInterface
             return $post;
         } else {
             // Update existing post
-            $model = PostModel::findOrFail($post->getId()->value());
+            $model = PostModel::with('translations')->findOrFail($post->getId()->value());
             $model = PostMapper::updateEloquentFromDomain($model, $post);
             $model->save();
 
@@ -79,11 +88,11 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function findWithFilters(PostFilterDTO $filter): array
     {
-        $query = PostModel::query();
+        $query = PostModel::query()->with('translations');
 
-        // Apply search filter
+        // Apply search filter (search in translations table)
         if ($filter->search) {
-            $query->where(function($q) use ($filter) {
+            $query->whereHas('translations', function($q) use ($filter) {
                 $q->where('title', 'LIKE', '%' . $filter->search . '%')
                   ->orWhere('content', 'LIKE', '%' . $filter->search . '%')
                   ->orWhere('excerpt', 'LIKE', '%' . $filter->search . '%');
@@ -123,7 +132,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
         $offset = ($page - 1) * $perPage;
         $total = PostModel::count();
 
-        $models = PostModel::orderBy('created_at', 'desc')
+        $models = PostModel::with('translations')
+            ->orderBy('created_at', 'desc')
             ->offset($offset)
             ->limit($perPage)
             ->get();
@@ -141,7 +151,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
         $offset = ($page - 1) * $perPage;
         $total = PostModel::where('status', $status->value())->count();
 
-        $models = PostModel::where('status', $status->value())
+        $models = PostModel::with('translations')
+            ->where('status', $status->value())
             ->orderBy('created_at', 'desc')
             ->offset($offset)
             ->limit($perPage)
@@ -163,7 +174,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
             ->where('published_at', '<=', now())
             ->count();
 
-        $models = PostModel::where('status', 'published')
+        $models = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->orderBy('published_at', 'desc')
@@ -194,7 +206,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
         $offset = ($page - 1) * $perPage;
         $total = PostModel::where('author_id', $authorId->value())->count();
 
-        $models = PostModel::where('author_id', $authorId->value())
+        $models = PostModel::with('translations')
+            ->where('author_id', $authorId->value())
             ->orderBy('created_at', 'desc')
             ->offset($offset)
             ->limit($perPage)
@@ -219,7 +232,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
             ->where('status', $status->value())
             ->count();
 
-        $models = PostModel::where('author_id', $authorId->value())
+        $models = PostModel::with('translations')
+            ->where('author_id', $authorId->value())
             ->where('status', $status->value())
             ->orderBy('created_at', 'desc')
             ->offset($offset)
@@ -238,11 +252,12 @@ final class EloquentPostRepository implements PostRepositoryInterface
     {
         $offset = ($page - 1) * $perPage;
 
-        $queryBuilder = PostModel::where(function($q) use ($query) {
-            $q->where('title', 'LIKE', "%{$query}%")
-              ->orWhere('content', 'LIKE', "%{$query}%")
-              ->orWhere('excerpt', 'LIKE', "%{$query}%");
-        });
+        $queryBuilder = PostModel::with('translations')
+            ->whereHas('translations', function($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('content', 'LIKE', "%{$query}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$query}%");
+            });
 
         $total = $queryBuilder->count();
 
@@ -263,10 +278,11 @@ final class EloquentPostRepository implements PostRepositoryInterface
     {
         $offset = ($page - 1) * $perPage;
 
-        $queryBuilder = PostModel::where('status', 'published')
+        $queryBuilder = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
-            ->where(function($q) use ($query) {
+            ->whereHas('translations', function($q) use ($query) {
                 $q->where('title', 'LIKE', "%{$query}%")
                   ->orWhere('content', 'LIKE', "%{$query}%")
                   ->orWhere('excerpt', 'LIKE', "%{$query}%");
@@ -289,7 +305,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function findRecentPublished(int $limit = 10): array
     {
-        $models = PostModel::where('status', 'published')
+        $models = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->orderBy('published_at', 'desc')
@@ -345,7 +362,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
         $offset = ($page - 1) * $perPage;
         $total = PostModel::whereBetween('created_at', [$from, $to])->count();
 
-        $models = PostModel::whereBetween('created_at', [$from, $to])
+        $models = PostModel::with('translations')
+            ->whereBetween('created_at', [$from, $to])
             ->orderBy('created_at', 'desc')
             ->offset($offset)
             ->limit($perPage)
@@ -371,7 +389,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
             ->whereBetween('published_at', [$from, $to])
             ->count();
 
-        $models = PostModel::where('status', 'published')
+        $models = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->whereBetween('published_at', [$from, $to])
             ->orderBy('published_at', 'desc')
@@ -395,7 +414,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
             ->where('published_at', '>', now())
             ->count();
 
-        $models = PostModel::where('status', 'published')
+        $models = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '>', now())
             ->orderBy('published_at', 'asc')
@@ -419,7 +439,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function findReadyToPublish(): array
     {
-        $models = PostModel::where('status', 'published')
+        $models = PostModel::with('translations')
+            ->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->get();
@@ -429,7 +450,8 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function findScheduledReadyToPublish(): array
     {
-        $models = PostModel::where('status', 'scheduled')
+        $models = PostModel::with('translations')
+            ->where('status', 'scheduled')
             ->whereNotNull('scheduled_at')
             ->where('scheduled_at', '<=', now())
             ->get();
@@ -439,7 +461,10 @@ final class EloquentPostRepository implements PostRepositoryInterface
 
     public function isSlugUniqueForPost(PostSlug $slug, ?PostId $excludePostId = null): bool
     {
-        $query = PostModel::where('slug', $slug->value());
+        // Search in post_translations table
+        $query = PostModel::whereHas('translations', function($q) use ($slug) {
+            $q->where('slug', $slug->value());
+        });
 
         if ($excludePostId !== null) {
             $query->where('id', '!=', $excludePostId->value());

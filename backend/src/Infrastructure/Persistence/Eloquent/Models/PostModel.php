@@ -17,11 +17,6 @@ class PostModel extends Model
 
     protected $fillable = [
         'author_id',
-        'title',
-        'slug',
-        'content',
-        'excerpt',
-        'meta_description',
         'status',
         'featured_image',
         'reading_time',

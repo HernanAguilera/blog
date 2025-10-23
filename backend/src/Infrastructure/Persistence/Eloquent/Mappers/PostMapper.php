@@ -12,14 +12,24 @@ final class PostMapper
 {
     public static function toDomain(PostModel $model): Post
     {
+        // Obtener traducción por defecto
+        $defaultLocale = config('locales.default', 'es');
+        $translation = $model->translations->firstWhere('locale', $defaultLocale);
+
+        if (!$translation) {
+            throw new \RuntimeException(
+                "Post {$model->id} does not have a default translation (locale: {$defaultLocale})"
+            );
+        }
+
         return Post::fromPrimitives(
             id: $model->id,
-            title: $model->title,
-            slug: $model->slug,
-            content: $model->content,
+            title: $translation->title,
+            slug: $translation->slug,
+            content: $translation->content,
             status: $model->status,
             authorId: $model->author_id,
-            metaDescription: $model->meta_description,
+            metaDescription: $translation->meta_description,
             createdAt: $model->created_at?->format('Y-m-d H:i:s'),
             updatedAt: $model->updated_at?->format('Y-m-d H:i:s'),
             publishedAt: $model->published_at?->format('Y-m-d H:i:s'),
@@ -39,15 +49,15 @@ final class PostMapper
             $model->exists = true;
         }
 
-        $model->title = $primitives['title'];
-        $model->slug = $primitives['slug'];
-        $model->content = $primitives['content'];
+        // Solo campos NO traducibles
         $model->status = $primitives['status'];
         $model->author_id = $primitives['author_id'];
-        $model->meta_description = $primitives['meta_description'];
         $model->reading_time = $primitives['reading_time'];
         $model->published_at = $primitives['published_at'];
         $model->scheduled_at = $primitives['scheduled_at'];
+
+        // Los campos traducibles (title, slug, content, meta_description)
+        // se manejan en post_translations, no aquí
 
         return $model;
     }
@@ -56,15 +66,15 @@ final class PostMapper
     {
         $primitives = $post->toPrimitives();
 
-        $model->title = $primitives['title'];
-        $model->slug = $primitives['slug'];
-        $model->content = $primitives['content'];
+        // Solo actualizar campos NO traducibles
         $model->status = $primitives['status'];
         $model->author_id = $primitives['author_id'];
-        $model->meta_description = $primitives['meta_description'];
         $model->reading_time = $primitives['reading_time'];
         $model->published_at = $primitives['published_at'];
         $model->scheduled_at = $primitives['scheduled_at'];
+
+        // Los campos traducibles (title, slug, content, meta_description)
+        // se manejan en post_translations, no aquí
 
         return $model;
     }
