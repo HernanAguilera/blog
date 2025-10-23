@@ -258,6 +258,14 @@
       * Migración post_translations
       * PostTranslationModel en Infrastructure layer
       * Relación translations() en PostModel
+    - [x] **Refactorización Arquitectónica (100%)** - [Plan](./action-plans/refactor-post-translations-schema.md):
+      * ✅ Eliminada duplicación de campos traducibles
+      * ✅ Migración de datos: 20 posts → 20 traducciones (es)
+      * ✅ Tabla `posts` solo con campos NO traducibles
+      * ✅ Tabla `post_translations` como ÚNICA fuente de verdad
+      * ✅ PostMapper actualizado (mapea desde translations)
+      * ✅ EloquentPostRepository con eager loading y búsquedas en translations
+      * ✅ Endpoint `/api/posts/{slug}` funcionando correctamente
   - [ ] [Tarea 4.3: SEO Multiidioma](./task/tarea-4-3-seo-multiidioma.md)
   - [ ] [Tarea 4.4: Traducción de Interface](./task/tarea-4-4-traduccion-de-interface.md)
   - [ ] [Tarea 4.5: Gestión de Contenido Multiidioma](./task/tarea-4-5-gestion-de-contenido-multiidioma.md)
